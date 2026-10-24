@@ -1,0 +1,517 @@
+/**
+ * 13 Agreement Categories mapped to the 14 delivered packages
+ * Source: Signed Agreement §02 and Client Delivery (Kreovi-NavBrahmi2026-10-17.zip)
+ * Reference: docs/production/13-product-catalog-and-package-matrix.md
+ */
+
+export interface ProductCategory {
+  id: string;
+  categoryNumber: number;
+  agreementName: string;
+  slug: string;
+  deliveredFolders: string[];
+  scriptName: string;
+  bcp47Tag: string;
+  iso15924: string;
+  specimenGlyphs: string;
+  specimenSource: 'CLIENT_MANUAL' | 'UNSUPPLIED';
+  logoSvg: string;
+  overview: string;
+  features: string[];
+  specifications: {
+    architecturesDelivered: string[];
+    supportedWindows: string;
+    inputMethod: string;
+    encoding: string;
+    shortcut: string;
+  };
+  openQuestions: string[];
+  screenshots: string;
+  videos: string;
+  fontLinks: string;
+  manualAsset: string;
+  stickerAsset: string;
+}
+
+export const productCategories: ProductCategory[] = [
+  {
+    id: 'cat-1',
+    categoryNumber: 1,
+    agreementName: 'Ashokan Brahmi and Devanagari',
+    slug: 'ashokan-brahmi',
+    deliveredFolders: ['Ashokan Brahmi'],
+    scriptName: 'Ashokan Brahmi',
+    bcp47Tag: 'pra-Brah',
+    iso15924: 'Brah',
+    specimenGlyphs: '𑀦𑀯 𑀩𑁆𑀭𑀸𑀳𑁆𑀫𑀻',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-AshokanBrahmi-IndicLanguageTypingMadeEasy-object.svg',
+    overview:
+      'Ashokan Brahmi is an ancient Indian abugida writing system dating from the 3rd century BCE, foundational to the development of most Indic writing systems. The Nav Brahmi layout follows the phonetic and structural order of Sanskrit.',
+    features: [
+      'Row 1 (Number Row): Vowel set mapping (𑀅 𑀆 𑀇 𑀈 𑀉 𑀊 𑀋 𑀌 𑀏 𑀐 𑀑 𑀒 𑀁)',
+      'Row 2 (QWERTY Row): Initial consonant series (𑀓 𑀔 𑀕 𑀖 𑀗 | 𑀘 𑀙 𑀚 𑀛 𑀜)',
+      'Row 3 (Home Row): Consonant series with dedicated virama (𑁆) positioning',
+      'System-wide Unicode text input across all Windows applications',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11 (AMD64 & x86)',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode 7.0+ (Brahmi Block U+11000–U+1107F)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Does customer also receive Devanagari as a bundle or separate download?',
+      'C-02: Price confirmation pending (Manual states ₹480 vs invoice ₹472)',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'AshokanBrahmi-Manual.pdf',
+    stickerAsset: 'Ashokan-Brahmi-Sticker.pdf',
+  },
+  {
+    id: 'cat-2',
+    categoryNumber: 2,
+    agreementName: 'Bengali and Devanagari',
+    slug: 'bengali',
+    deliveredFolders: ['Bengali'],
+    scriptName: 'Bengali',
+    bcp47Tag: 'bn-Beng',
+    iso15924: 'Beng',
+    specimenGlyphs: 'নব ব্রাহ্মী',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-Bengali-IndicLanguageTypingMadeEasy-Object.svg',
+    overview:
+      'Native Bengali keyboard layout driver for Microsoft Windows, designed for rapid, intuitive typing of Bengali script with standard Windows language bar integration.',
+    features: [
+      'Phonetically organized Bengali conjunct and vowel input',
+      'Seamless switching between English and Bengali using standard shortcut',
+      'Full compatibility with word processors, browsers, and design software',
+      'Native MSKLC Windows driver installation',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Bengali Block (U+0980–U+09FF)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Does customer also receive Devanagari as a bundle?',
+      'C-02: Price confirmation pending',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Bengali-Manual.pdf',
+    stickerAsset: 'Bengali-Sticker.pdf',
+  },
+  {
+    id: 'cat-3',
+    categoryNumber: 3,
+    agreementName: 'Devanagari/Hindi',
+    slug: 'devanagari-hindi',
+    deliveredFolders: ['Devanagari'],
+    scriptName: 'Devanagari / Hindi',
+    bcp47Tag: 'hi-Deva',
+    iso15924: 'Deva',
+    specimenGlyphs: 'नव ब्राह्मी',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-नव् ब्राह्मी-Devanagari-IndicLanguageTypingMadeEasy-Objects.svg',
+    overview:
+      'Standard bilingual Devanagari keyboard driver for Hindi and Sanskrit typing. Built for logical, fast input following the traditional varnamala order.',
+    features: [
+      'Varnamala-ordered consonant and vowel keystrokes',
+      'Accurate halant (virama), matra, and conjunct formation',
+      'Compatible with Microsoft Office, Adobe Creative Cloud, and web browsers',
+      'Includes architecture-specific Windows installation packages',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Devanagari Block (U+0900–U+097F)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-02: Price confirmation pending (Manual: ₹480 vs invoice: ₹472)',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Devanagari-Manual.pdf',
+    stickerAsset: 'Devanagari-Sticker.pdf',
+  },
+  {
+    id: 'cat-4',
+    categoryNumber: 4,
+    agreementName: 'Gujarati and Devanagari',
+    slug: 'gujarati',
+    deliveredFolders: ['Gujarati'],
+    scriptName: 'Gujarati',
+    bcp47Tag: 'gu-Gujr',
+    iso15924: 'Gujr',
+    specimenGlyphs: 'નવ બ્રાહ્મી',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-Gujarati-IndicLanguageTypingMadeEasy-object.svg',
+    overview:
+      'Gujarati bilingual keyboard layout driver designed to simplify Gujarati typography across desktop publishing and everyday office computing.',
+    features: [
+      'Intuitive Gujarati vowel signs, matras, and conjunct formation',
+      'Works in all Windows text fields and applications',
+      'Simple toggle between English and Gujarati',
+      'Standard MSKLC driver delivery',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Gujarati Block (U+0A80–U+0AFF)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Does customer also receive Devanagari as a bundle?',
+      'C-02: Price confirmation pending',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Gujarati-Manual.pdf',
+    stickerAsset: 'Gujarati-Sticker.pdf',
+  },
+  {
+    id: 'cat-5',
+    categoryNumber: 5,
+    agreementName: 'Kannada, Tulu and Devanagari',
+    slug: 'kannada',
+    deliveredFolders: ['Kannada', 'Tulu'],
+    scriptName: 'Kannada',
+    bcp47Tag: 'kn-Knda',
+    iso15924: 'Knda',
+    specimenGlyphs: 'ನವ್ ಬ್ರಾಹ್ಮಿ',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-ನವ್ ಬ್ರಾಹ್ಮಿ-Kannada-IndicLanguageTypingMadeEasy-Objects.svg',
+    overview:
+      'Kannada keyboard layout driver enabling effortless Kannada typing on Microsoft Windows. Configured with classical and modern Kannada orthography support.',
+    features: [
+      'Native Kannada ottakshara (conjunct) and matra input logic',
+      'System-wide integration with Windows language bar',
+      'Designed for administrative, academic, and publishing workflows',
+      'Supports Windows 11 and Windows 10',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Kannada Block (U+0C80–U+0CFF)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Is Category 5 a bundle of Kannada + Tulu (+ Devanagari), or sold individually?',
+      'C-36: Kannada and Malayalam share an installer build in client delivery; verify canonical files',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Kannada-Manual.pdf',
+    stickerAsset: 'Kannada-Sticker.pdf',
+  },
+  {
+    id: 'cat-6',
+    categoryNumber: 6,
+    agreementName: 'Malayalam and Devanagari',
+    slug: 'malayalam',
+    deliveredFolders: ['Malayalam'],
+    scriptName: 'Malayalam',
+    bcp47Tag: 'ml-Mlym',
+    iso15924: 'Mlym',
+    specimenGlyphs: 'നവ് ബ്രാഹ്മി',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-നവ് ബ്രാഹ്മി-MalayalamLanguageTypingMadeEasy-Objects.svg',
+    overview:
+      'Malayalam keyboard layout driver engineered for seamless typing of Malayalam characters, chillu letters, and complex conjuncts on Windows.',
+    features: [
+      'Effortless typing of traditional and reformed Malayalam orthography',
+      'Dedicated handling for chillaksharam and chandrakkala (virama)',
+      'Full integration across Microsoft Office and browser environments',
+      'Architecture-specific MSI installation',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Malayalam Block (U+0D00–U+0D7F)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Does customer also receive Devanagari as a bundle?',
+      'C-36: Malayalam fonts folder contains a copy of Kannada installer; verify canonical package contents',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Malayalam-Manual.pdf',
+    stickerAsset: 'Malayalam-Sticker.pdf',
+  },
+  {
+    id: 'cat-7',
+    categoryNumber: 7,
+    agreementName: 'Modi/Marathi and Devanagari',
+    slug: 'modi-marathi',
+    deliveredFolders: ['Modi-Marathi'],
+    scriptName: 'Modi / Marathi',
+    bcp47Tag: 'mr-Modi',
+    iso15924: 'Modi',
+    specimenGlyphs: '𑘡𑘪 𑘤𑘿𑘨𑘰𑘮𑘿𑘦𑘲',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-Modi-Marathi-IndicLanguageTypingMadeEasy-Object.svg',
+    overview:
+      'Historical Modi script keyboard layout driver for archival, research, and scholarly typing of Marathi in its historical Modi script, compliant with Unicode standards.',
+    features: [
+      'Authentic Unicode Modi script mapping (U+11600–U+1165F)',
+      'Enables digital transcription of historical Maratha-era documents',
+      'Phonetically aligned with Marathi sound structure',
+      'Works in all modern Windows text applications',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Modi Block (U+11600–U+1165F)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Does customer also receive Devanagari as a bundle?',
+      'C-02: Price confirmation pending',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Modi-Marathi-Manual.pdf',
+    stickerAsset: 'Modi-Marathi-Sticker.pdf',
+  },
+  {
+    id: 'cat-8',
+    categoryNumber: 8,
+    agreementName: 'Oriya/Odia and Devanagari',
+    slug: 'oriya-odia',
+    deliveredFolders: ['Oriya-Odia'],
+    scriptName: 'Odia',
+    bcp47Tag: 'or-Orya',
+    iso15924: 'Orya',
+    specimenGlyphs: 'ନବ ବ୍ରାହ୍ମୀ',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-Oriya-IndicLanguageTypingMadeEasy-objects.svg',
+    overview:
+      'Odia bilingual keyboard layout driver providing fluent typing of Odia characters, matras, and conjuncts with standard Windows keyboard integration.',
+    features: [
+      'Logical placement of Odia vowels and consonants',
+      'Direct input into desktop word processors and online portals',
+      'Reliable halant and yuktakshara formation',
+      'Native Windows layout driver',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Odia Block (U+0B00–U+0B7F)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Does customer also receive Devanagari as a bundle?',
+      'C-36: Oriya sticker delivered as SVG instead of PDF; client confirmation pending',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Oriya-Manual.pdf',
+    stickerAsset: 'Oriya-Sticker.svg',
+  },
+  {
+    id: 'cat-9',
+    categoryNumber: 9,
+    agreementName: 'Punjabi/Gurmukhi and Devanagari',
+    slug: 'punjabi-gurmukhi',
+    deliveredFolders: ['Punjabi-Gurumuki'],
+    scriptName: 'Gurmukhi',
+    bcp47Tag: 'pa-Guru',
+    iso15924: 'Guru',
+    specimenGlyphs: 'ਨਵ ਬ੍ਰਾਹਮੀ',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-Punjabi-IndicLanguageTypingMadeEasy-object.svg',
+    overview:
+      'Gurmukhi keyboard layout driver engineered for fast, accurate typing of Punjabi on Windows platforms with comprehensive Unicode support.',
+    features: [
+      'Systematic mapping for Gurmukhi vowels, consonants, and diacritics (tippi, bindi, addak)',
+      'Seamless layout toggling using standard keyboard shortcut',
+      'Compatible with Microsoft Office and standard software',
+      'Clean MSKLC packaging',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Gurmukhi Block (U+0A00–U+0A7F)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Does customer also receive Devanagari as a bundle?',
+      'C-02: Price confirmation pending',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Punjabi-Manual.pdf',
+    stickerAsset: 'Punjabi-Sticker.pdf',
+  },
+  {
+    id: 'cat-10',
+    categoryNumber: 10,
+    agreementName: 'Tamil and Tamil Grantha',
+    slug: 'tamil-and-grantha',
+    deliveredFolders: ['Tamil', 'Tamil Grantha'],
+    scriptName: 'Tamil & Tamil Grantha',
+    bcp47Tag: 'ta-Taml',
+    iso15924: 'Taml',
+    specimenGlyphs: 'நவ் பிராமி',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-நவ் பிராமி-TamilLanguageTypingMadeEasy-Object.svg',
+    overview:
+      'Comprehensive dual-layout suite covering both modern standard Tamil and classical Tamil Grantha script used in epigraphy and traditional Sanskrit texts in Tamil Nadu.',
+    features: [
+      'Modern Tamil layout with standard pulli (virama) and uyirmey letters',
+      'Grantha script layout for historical and Vedic Sanskrit texts',
+      'Windows language bar integration for rapid script toggling',
+      'Delivered as two dedicated product packages',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Tamil (U+0B80–U+0BFF) & Grantha (U+11300–U+1137F)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Are Tamil and Tamil Grantha sold as a single bundle or two independent products?',
+      'C-39: Grantha package includes 2 .otf fonts not registered by default installer; client confirmation pending',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Tamil-Manual.pdf / TamilGrantha-Manual.pdf',
+    stickerAsset: 'Tamil-Sticker.pdf / TamilGrantha-Sticker.pdf',
+  },
+  {
+    id: 'cat-11',
+    categoryNumber: 11,
+    agreementName: 'Telugu and Devanagari',
+    slug: 'telugu',
+    deliveredFolders: ['Telugu'],
+    scriptName: 'Telugu',
+    bcp47Tag: 'te-Telu',
+    iso15924: 'Telu',
+    specimenGlyphs: 'నవ్ బ్రాహ్మి',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-నవ్ బ్రాహ్మి-TeluguLanguageTypingMadeEasy-Objects.svg',
+    overview:
+      'Telugu keyboard layout driver providing intuitive, fluid typing for Telugu script on Windows systems with native conjunct and vowel-mark support.',
+    features: [
+      'Natural gunintamu (vowel sign) and vattulu (consonant conjunct) typing',
+      'Works in all Windows text-enabled programs and web applications',
+      'Instant language switching with Windows Key + Spacebar',
+      'Native MSKLC Windows driver installation',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Telugu Block (U+0C00–U+0C7F)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Does customer also receive Devanagari as a bundle?',
+      'C-02: Price confirmation pending',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Telugu-Manual.pdf',
+    stickerAsset: 'Telugu-Sticker.pdf',
+  },
+  {
+    id: 'cat-12',
+    categoryNumber: 12,
+    agreementName: 'Tulu and Devanagari',
+    slug: 'tulu',
+    deliveredFolders: ['Tulu'],
+    scriptName: 'Tulu (Tigalari)',
+    bcp47Tag: 'tcy-Tglr',
+    iso15924: 'Tglr',
+    specimenGlyphs: '𑎡𑎰 𑎪𑎳𑎵𑎱𑎬',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-Tulu-LanguageTypingMadeEasy-Object.svg',
+    overview:
+      'Tulu Tigalari keyboard driver supporting the indigenous historical Tigalari script of the Tulu Nadu region, recently encoded in the Unicode standard.',
+    features: [
+      'First-of-its-kind digital typing interface for Tulu Tigalari script',
+      'Preserves classical Tulu epigraphic and manuscript traditions',
+      'Windows layout driver with standard language bar switching',
+      'Custom Tigalari font integration included in delivery',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Tigalari Block (U+11380–U+113DF)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Is Category 12 separate from Category 5 (Kannada, Tulu and Devanagari)?',
+      'C-29: Custom Tigalari font licence needs confirmation prior to public web distribution',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Tulu-Manual.pdf',
+    stickerAsset: 'Tulu-Sticker.pdf',
+  },
+  {
+    id: 'cat-13',
+    categoryNumber: 13,
+    agreementName: 'Sharada (Kashmiri) and Devanagari',
+    slug: 'sharada',
+    deliveredFolders: ['Sharada'],
+    scriptName: 'Sharada',
+    bcp47Tag: 'ks-Shrd',
+    iso15924: 'Shrd',
+    specimenGlyphs: '𑆤𑆮 𑆧𑇀𑆫𑆳𑆲𑇀𑆩𑆵',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-Sharada-IndicLanguageTypingMadeEasy-Objects.svg',
+    overview:
+      'Sharada script keyboard layout driver for the historical Kashmiri script used across northwest South Asia from the 8th century onward.',
+    features: [
+      'Full Unicode Sharada character and conjunct support (U+11180–U+111DF)',
+      'Essential for researchers, universities, and manuscript digital archives',
+      'Phonetically structured for intuitive Sanskrit and Kashmiri typing',
+      'Standard Windows MSKLC keyboard driver',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 10 / Windows 11',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Sharada Block (U+11180–U+111DF)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    openQuestions: [
+      'C-03: Does customer also receive Devanagari as a bundle?',
+      'C-02: Price confirmation pending',
+    ],
+    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
+    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
+    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
+    manualAsset: 'Sharada-Manual.pdf',
+    stickerAsset: 'Sharada-Sticker.pdf',
+  },
+];

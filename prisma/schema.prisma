@@ -1,0 +1,245 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum OrderStatus {
+  CREATED
+  PAYMENT_PENDING
+  PAID
+  LICENSE_ISSUED
+  DELIVERED
+  FAILED
+  EXPIRED
+  REFUNDED
+  DISPUTED
+  REVOKED
+  NEEDS_ATTENTION
+  PAYMENT_MISMATCH
+}
+
+enum PaymentStatus {
+  CREATED
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
+enum LicenseStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+  SUSPENDED
+}
+
+enum ActivationStatus {
+  ACTIVE
+  REVOKED
+}
+
+enum EmailOutboxStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+model Product {
+  id           String           @id @default(cuid())
+  name         String
+  description  String
+  price        Float            // Kept for backward compatibility with existing prototype routes
+  priceMinor   Int?             // Paise; C-02 open; nullable with NO default
+  currency     String?          @default("INR")
+  taxInclusive Boolean?         // C-02 open; nullable with NO default
+  slug         String?          @unique
+  code         String?          @unique
+  isActive     Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  licenses     License[]
+  purchases    Purchase[]       // Kept for backward compatibility with existing prototype routes
+  orders       Order[]
+  packages     ProductPackage[]
+  assets       ProductAsset[]
+}
+
+model Purchase {
+  id        String   @id @default(cuid())
+  email     String
+  productId String
+  status    String   @default("COMPLETED")
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model ProductPackage {
+  id           String   @id @default(cuid())
+  productId    String
+  version      String
+  architecture String   // Allowed values come from C-06 (open decision); do not list arm64 or ia64 as supported
+  objectKey    String
+  sha256       String
+  sizeBytes    BigInt
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  product      Product  @relation(fields: [productId], references: [id])
+
+  @@unique([productId, architecture, version])
+}
+
+model ProductAsset {
+  id        String   @id @default(cuid())
+  productId String
+  kind      String   // manual, sticker, logo
+  objectKey String
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id            String         @id @default(cuid())
+  publicToken   String         @unique
+  customerEmail String
+  customerName  String?
+  productId     String
+  status        OrderStatus    @default(CREATED)
+  amountMinor   Int
+  currency      String         @default("INR")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  product       Product        @relation(fields: [productId], references: [id])
+  payments      Payment[]
+  licenses      License[]
+  webhookEvents WebhookEvent[]
+
+  @@index([customerEmail])
+  @@index([status, createdAt])
+}
+
+model Payment {
+  id                String         @id @default(cuid())
+  orderId           String
+  provider          String         @default("RAZORPAY")
+  providerOrderId   String?
+  providerPaymentId String?        @unique
+  status            PaymentStatus
+  amountMinor       Int
+  currency          String         @default("INR")
+  rawStatus         String?
+  verifiedAt        DateTime?
+  createdAt         DateTime       @default(now())
+  order             Order          @relation(fields: [orderId], references: [id])
+  webhookEvents     WebhookEvent[]
+
+  @@unique([provider, providerPaymentId])
+}
+
+model WebhookEvent {
+  id              String    @id @default(cuid())
+  provider        String
+  providerEventId String    @unique
+  type            String
+  receivedAt      DateTime  @default(now())
+  processedAt     DateTime?
+  orderId         String?
+  paymentId       String?
+  payload         Json?
+  order           Order?    @relation(fields: [orderId], references: [id])
+  payment         Payment?  @relation(fields: [paymentId], references: [id])
+
+  @@index([provider, type])
+}
+
+model License {
+  id               String        @id @default(cuid())
+  email            String
+  productId        String
+  licenseKey       String?
+  keyLookupHash    String?       @unique
+  encryptedKey     String?
+  keyIv            String?
+  keyTag           String?
+  keyVersion       String?       @default("v1")
+  status           LicenseStatus @default(ACTIVE)
+  activationStatus String        @default("UNACTIVATED") // Kept for backward compatibility
+  machineId        String?       // Kept for backward compatibility
+  maxActivations   Int?          @default(1) // Confirmed rule: 1 active machine per license
+  createdAt        DateTime      @default(now())
+  activatedAt      DateTime?
+  revokedAt        DateTime?
+  revokeReason     String?
+  orderId          String?
+  product          Product       @relation(fields: [productId], references: [id])
+  order            Order?        @relation(fields: [orderId], references: [id])
+  activations      Activation[]
+
+  @@index([email])
+  @@index([orderId])
+}
+
+model Activation {
+  id            String           @id @default(cuid())
+  licenseId     String
+  machineIdHash String
+  status        ActivationStatus @default(ACTIVE)
+  firstSeenAt   DateTime         @default(now())
+  lastSeenAt    DateTime         @default(now())
+  license       License          @relation(fields: [licenseId], references: [id])
+
+  @@unique([licenseId, machineIdHash])
+}
+
+model AuditEvent {
+  id        String   @id @default(cuid())
+  at        DateTime @default(now())
+  type      String
+  actorType String   // SYSTEM, ANONYMOUS, ADMIN
+  actorId   String?
+  refType   String?  // ORDER, LICENSE, ACTIVATION
+  refId     String?
+  metadata  Json?    // Redacted structured payload (no secrets)
+
+  @@index([refType, refId, at])
+  @@index([type, at])
+}
+
+model RateLimitBucket {
+  id          String   @id @default(cuid())
+  key         String
+  windowStart DateTime
+  count       Int      @default(1)
+
+  @@unique([key, windowStart])
+  @@index([key])
+}
+
+model EmailOutbox {
+  id            String            @id @default(cuid())
+  kind          String            // LICENSE_DELIVERY, RECOVERY_LINK, RECEIPT
+  toEmail       String
+  payloadRef    String?
+  status        EmailOutboxStatus @default(PENDING)
+  attempts      Int               @default(0)
+  nextAttemptAt DateTime          @default(now())
+  sentAt        DateTime?
+  createdAt     DateTime          @default(now())
+
+  @@index([status, nextAttemptAt])
+}
+
+model RecoveryToken {
+  id        String    @id @default(cuid())
+  email     String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([email, expiresAt])
+}

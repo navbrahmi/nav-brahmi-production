@@ -1,0 +1,68 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js build output
+/.next/
+/out/
+/build
+
+# Environment files
+.env*
+!.env.example
+
+# Key files, certificates and debug symbols
+*.pem
+*.key
+*.pfx
+*.p12
+*.pdb
+
+# Confidential packages, binaries, archives
+*.zip
+*.msi
+Software/
+doc.txt
+
+# OS and Editor
+.DS_Store
+.vscode/
+.idea/
+*.tsbuildinfo
+
+# Local environment and credentials
+.env*
+!.env.example
+!.env.*.example
+.npmrc
+.vercel/
+
+# Build artifacts and dependencies
+node_modules/
+.next/
+coverage/
+dist/
+build/
+
+# Confidential client software and binaries
+/Requirements/Software/
+/Requirements/software/
+/requirements/Software/
+/requirements/software/
+doc.txt
+*.pfx
+*.p12
+*.pem
+*.key
+*.exe
+*.msi
+*.sys
+*.cab
+*.dll
+*.ttf
+*.otf
+*.zip
