@@ -28,30 +28,18 @@ const PRODUCT_MAPPINGS: ProductMapping[] = [
   { slug: 'sharada', code: 'SHARADA', folderName: 'Sharada', msklcFolder: 'Sharada', isResolved: true },
   { slug: 'telugu', code: 'TELUGU', folderName: 'Telugu', msklcFolder: 'Telugu', isResolved: true },
 
-  // Unresolved Products pending client decision C-03
-  {
-    slug: 'kannada',
-    code: 'KANNADA',
-    folderName: 'Kannada',
-    msklcFolder: 'Kannada',
-    isResolved: false,
-    unresolvedReason: 'Blocked by C-03: Category 5 in agreement is "Kannada, Tulu and Devanagari". Delivered as two separate folders (Kannada, Tulu). Client must confirm whether sold as single bundle or separate products.',
-  },
-  {
-    slug: 'tulu',
-    code: 'TULU',
-    folderName: 'Tulu',
-    msklcFolder: 'Tulu',
-    isResolved: false,
-    unresolvedReason: 'Blocked by C-03: Category 12 is "Tulu and Devanagari" while Category 5 includes Tulu. Client must confirm if separate catalog entry exists.',
-  },
+  // Confirmed separate products per C-03:
+  { slug: 'kannada', code: 'KANNADA', folderName: 'Kannada', msklcFolder: 'Kannada', isResolved: true },
+  { slug: 'tulu', code: 'TULU', folderName: 'Tulu', msklcFolder: 'Tulu', isResolved: true },
+
+  // Unresolved Product pending client decision C-03:
   {
     slug: 'tamil-and-grantha',
     code: 'TAMIL_AND_GRANTHA',
     folderName: 'Tamil',
     msklcFolder: 'Tamil',
     isResolved: false,
-    unresolvedReason: 'Blocked by C-03: Category 10 is "Tamil and Tamil Grantha". Delivered as two separate folders ("Tamil" and "Tamil Grantha"). Client must confirm whether bundled into one package or split into two products.',
+    unresolvedReason: 'Blocked by C-03: Category 10 in agreement is "Tamil and Tamil Grantha". Delivered as two separate folders ("Tamil" and "Tamil Grantha"). Client confirmation of bundling remains open; product unavailable for checkout until confirmed.',
   },
 ];
 

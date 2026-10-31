@@ -7,6 +7,10 @@ export async function seedAuthoritativeProducts() {
   const created: any[] = [];
   for (const cat of productCategories) {
     const code = cat.slug.toUpperCase().replace(/-/g, '_');
+    // Confirmed price per C-02/C-03: ₹472 retail (47200 paise) for all language packages.
+    const priceMinor = 47200;
+    const price = 472.0;
+
     const existing = await prisma.product.findFirst({
       where: {
         OR: [{ slug: cat.slug }, { code }],
@@ -19,8 +23,8 @@ export async function seedAuthoritativeProducts() {
         data: {
           name: cat.agreementName,
           description: cat.overview,
-          price: 480.0,
-          priceMinor: 48000,
+          price,
+          priceMinor,
           currency: 'INR',
           slug: cat.slug,
           code,
@@ -28,14 +32,14 @@ export async function seedAuthoritativeProducts() {
         },
       });
       created.push(updated);
-      console.log(`- Updated: ${updated.slug} (${updated.id})`);
+      console.log(`- Updated: ${updated.slug} (${updated.id}) - Price: ${priceMinor ? `₹${(priceMinor / 100).toFixed(2)}` : 'PENDING'}`);
     } else {
       const newProd = await prisma.product.create({
         data: {
           name: cat.agreementName,
           description: cat.overview,
-          price: 480.0,
-          priceMinor: 48000,
+          price,
+          priceMinor,
           currency: 'INR',
           slug: cat.slug,
           code,
@@ -43,7 +47,7 @@ export async function seedAuthoritativeProducts() {
         },
       });
       created.push(newProd);
-      console.log(`- Created: ${newProd.slug} (${newProd.id})`);
+      console.log(`- Created: ${newProd.slug} (${newProd.id}) - Price: ${priceMinor ? `₹${(priceMinor / 100).toFixed(2)}` : 'PENDING'}`);
     }
   }
 

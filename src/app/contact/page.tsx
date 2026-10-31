@@ -59,14 +59,12 @@ export default function ContactPage() {
 
             <div>
               <strong style={{ display: 'block', color: 'var(--text-muted)', fontSize: '0.8rem', textTransform: 'uppercase' }}>
-                Working Hours
+                Telephone Support
               </strong>
-              <div>{contactContent.contactDetails.hours}</div>
+              <a href={`tel:${contactContent.contactDetails.phone}`} style={{ fontWeight: 600 }}>
+                {contactContent.contactDetails.phone}
+              </a>
             </div>
-          </div>
-
-          <div className="placeholder-notice" role="note" style={{ marginTop: '1.5rem' }}>
-            <div>{contactContent.contactDetails.phonePendingNotice}</div>
           </div>
         </section>
 

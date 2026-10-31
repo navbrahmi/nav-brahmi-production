@@ -65,4 +65,9 @@ Never commit packages (see doc 10 R1); `.gitignore` for `*.zip`, `*.msi`, `.env*
   - Tampered hash detection and invalid authorization rejection verified.
 - **Public Bucket Listing Blocked**: Direct public HTTP request to `https://s3.us-east-005.backblazeb2.com/navbrahmi-prod-packages/` returned HTTP 403 Forbidden (`AccessDenied`), verifying private access control.
 - **Real Client Packages**: Preserved unmodified in local filesystem. Registration tooling `scripts/register-package.ts` redacts confidential package filenames, paths, and hashes from logs.
+- **Phase 6 Package Separation (C-03)**:
+  - Kannada (`KANNADA`) and Tulu (`TULU`) packages are mapped to their respective distinct products in the database.
+  - Tamil and Tamil Grantha package registration remains isolated; checkout remains disabled pending C-03 bundle resolution.
+  - No cross-product package mappings exist in storage or database.
+
 

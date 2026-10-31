@@ -117,6 +117,7 @@ model Order {
   payments      Payment[]
   licenses      License[]
   webhookEvents WebhookEvent[]
+  refundRequests RefundRequest[]
 
   @@index([customerEmail])
   @@index([status, createdAt])
@@ -175,12 +176,42 @@ model License {
   revokedAt        DateTime?
   revokeReason     String?
   orderId          String?
+  installedAt      DateTime?     // Server-recorded installation timestamp (C-08/C-18)
+  lastResetAt      DateTime?     // Timestamp of last support-assisted machine reset (C-07)
+  resetCount       Int           @default(0) // Total support-assisted resets performed (C-07)
   product          Product       @relation(fields: [productId], references: [id])
   order            Order?        @relation(fields: [orderId], references: [id])
   activations      Activation[]
 
   @@index([email])
   @@index([orderId])
+}
+
+enum RefundRequestStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+model RefundRequest {
+  id              String              @id @default(cuid())
+  orderId         String
+  customerEmail   String
+  reason          String              // Customer issue description
+  supportingInfo  String?             // Supporting technical details / reproduction steps
+  status          RefundRequestStatus @default(PENDING_REVIEW)
+  installationAt  DateTime?           // Server-recorded installation timestamp if available
+  requestedAt     DateTime            @default(now())
+  reviewedAt      DateTime?
+  reviewedBy      String?             // Support representative identifier
+  reviewNotes     String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  order           Order               @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+  @@index([customerEmail])
+  @@index([status, requestedAt])
 }
 
 model Activation {

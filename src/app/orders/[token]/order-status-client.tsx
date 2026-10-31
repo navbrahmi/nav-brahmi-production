@@ -176,15 +176,178 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
         )}
       </div>
 
+      {/* 7-Day Refund Request Intake Section (C-08 & C-18) */}
+      {data.hasLicense && (
+        <RefundRequestSection orderToken={data.publicToken} />
+      )}
+
       <div className="card card-subtle" style={{ textAlign: 'center' }}>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
           Need assistance with this order? Contact our support team at{' '}
           <a href="mailto:support@brahmicomputing.in" style={{ color: 'var(--link)', textDecoration: 'underline' }}>
             support@brahmicomputing.in
           </a>{' '}
-          with reference <code>{data.publicToken.substring(0, 12)}...</code>
+          or call <strong>9632819063</strong> with reference <code>{data.publicToken.substring(0, 12)}...</code>
         </p>
       </div>
+    </div>
+  );
+}
+
+function RefundRequestSection({ orderToken }: { orderToken: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [reason, setReason] = useState('');
+  const [supportingInfo, setSupportingInfo] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [submittedResult, setSubmittedResult] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    setSubmitting(true);
+
+    try {
+      const res = await fetch(`/api/orders/${encodeURIComponent(orderToken)}/refund-request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reason: reason.trim(),
+          supportingInfo: supportingInfo.trim() || undefined,
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        setErrorMsg(json?.error?.message || 'Failed to submit refund request.');
+      } else {
+        setSubmittedResult(json.message);
+      }
+    } catch {
+      setErrorMsg('Network error while submitting refund request. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div
+      className="card"
+      style={{
+        marginBottom: 'var(--space-xl)',
+        border: '1px solid var(--border-subtle)',
+        backgroundColor: 'var(--surface)',
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h3 style={{ fontSize: '1.05rem', color: 'var(--text-body)', margin: '0 0 0.25rem' }}>
+            Need a Refund Review? (7-Day Installation Policy)
+          </h3>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
+            Customers may request a manual refund review within 7 calendar days of installation for serious bugs.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => setIsOpen(!isOpen)}
+          style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem' }}
+        >
+          {isOpen ? 'Close' : 'Request Review'}
+        </button>
+      </div>
+
+      {isOpen && (
+        <div style={{ marginTop: '1.25rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
+          {submittedResult ? (
+            <div
+              style={{
+                backgroundColor: '#F0FDF4',
+                border: '1px solid #BBF7D0',
+                borderRadius: '6px',
+                padding: '1rem',
+                color: '#166534',
+                fontSize: '0.9rem',
+              }}
+            >
+              <strong>✓ Refund Review Request Submitted (PENDING_REVIEW)</strong>
+              <p style={{ margin: '0.5rem 0 0', lineHeight: '1.5' }}>{submittedResult}</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: '1.5' }}>
+                Per confirmed client policy (C-08 & C-18), refund requests are manually evaluated by our engineering
+                support team. Submitting this form does not automatically issue a payment refund or revoke your license.
+              </div>
+
+              {errorMsg && (
+                <div
+                  style={{
+                    backgroundColor: '#FEF2F2',
+                    border: '1px solid #FCA5A5',
+                    borderRadius: '6px',
+                    padding: '0.75rem',
+                    color: '#B91C1C',
+                    fontSize: '0.85rem',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  {errorMsg}
+                </div>
+              )}
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label
+                  htmlFor="refundReason"
+                  style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}
+                >
+                  Description of Serious Bug / Functional Issue *
+                </label>
+                <textarea
+                  id="refundReason"
+                  required
+                  rows={3}
+                  className="input-field"
+                  placeholder="Describe the material defect or unexpected behavior affecting software functionality..."
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  style={{ width: '100%', resize: 'vertical' }}
+                  disabled={submitting}
+                />
+              </div>
+
+              <div style={{ marginBottom: '1.25rem' }}>
+                <label
+                  htmlFor="supportingInfo"
+                  style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}
+                >
+                  Supporting Technical Details (Windows Version, Error Codes, Steps to Reproduce)
+                </label>
+                <textarea
+                  id="supportingInfo"
+                  rows={2}
+                  className="input-field"
+                  placeholder="e.g. Windows 11 Build 22631 x64, error code displayed, application where defect occurred..."
+                  value={supportingInfo}
+                  onChange={(e) => setSupportingInfo(e.target.value)}
+                  style={{ width: '100%', resize: 'vertical' }}
+                  disabled={submitting}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={submitting || reason.trim().length < 15}
+                style={{ fontSize: '0.9rem', padding: '0.6rem 1.25rem' }}
+              >
+                {submitting ? 'Submitting for Support Review...' : 'Submit Refund Request for Manual Review'}
+              </button>
+            </form>
+          )}
+        </div>
+      )}
     </div>
   );
 }

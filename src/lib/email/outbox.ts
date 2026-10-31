@@ -203,3 +203,23 @@ export async function processEmailOutbox(
 
   return result;
 }
+
+export interface QueueEmailInput {
+  kind: string;
+  toEmail: string;
+  payloadRef?: string | null;
+}
+
+/**
+ * Enqueues an outgoing email to the EmailOutbox for reliable asynchronous delivery.
+ */
+export async function queueOutboxEmail(input: QueueEmailInput) {
+  return await prisma.emailOutbox.create({
+    data: {
+      kind: input.kind,
+      toEmail: input.toEmail.toLowerCase().trim(),
+      payloadRef: input.payloadRef || null,
+      status: EmailOutboxStatus.PENDING,
+    },
+  });
+}

@@ -34,26 +34,26 @@ doc.txt
 .idea/
 *.tsbuildinfo
 
-# Local environment and credentials
+# Environment and credentials
 .env*
-!.env.example
-!.env.*.example
 .npmrc
 .vercel/
 
-# Build artifacts and dependencies
+# Build artifacts
 node_modules/
 .next/
 coverage/
 dist/
 build/
 
-# Confidential client software and binaries
+# Confidential client packages
 /Requirements/Software/
 /Requirements/software/
 /requirements/Software/
 /requirements/software/
 doc.txt
+
+# Private keys and binary installers
 *.pfx
 *.p12
 *.pem
@@ -63,6 +63,4 @@ doc.txt
 *.sys
 *.cab
 *.dll
-*.ttf
-*.otf
 *.zip

@@ -83,6 +83,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+
     // Critical constraint: Never trust client price; reject products without confirmed database price
     if (product.priceMinor === null || product.priceMinor === undefined || product.priceMinor <= 0) {
       logger.warn('Checkout attempted for product with unconfirmed price', {

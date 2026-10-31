@@ -4,6 +4,9 @@ import Image from 'next/image';
 import { productCategories } from '../../content/categories';
 import { prisma } from '../../lib/prisma';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata = {
   title: 'Products — All 13 Language Categories & 14 Driver Packages',
   description:

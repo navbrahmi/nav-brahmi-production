@@ -1,7 +1,7 @@
 /**
  * Contact Information Content
  * Agreement Reference: §02 p4 (PG-08), §02 p5 (FT-20)
- * References: docs/production/01 §1, docs/production/14 (C-17, C-34)
+ * References: docs/production/01 §1, docs/production/14 (C-10, C-17, C-34)
  */
 
 export interface ContactContent {
@@ -12,8 +12,7 @@ export interface ContactContent {
     organization: string;
     location: string;
     officialEmail: string;
-    phonePendingNotice: string;
-    hours: string;
+    phone: string;
   };
   form: {
     title: string;
@@ -39,10 +38,8 @@ export const contactContent: ContactContent = {
     proprietor: 'Naveen Jayachandra (Proprietor)',
     organization: 'NAV BRAHMI',
     location: 'Bengaluru, Karnataka, India',
-    officialEmail: 'navbrahmi@gmail.com',
-    phonePendingNotice:
-      'PLACEHOLDER: Official public phone number pending client confirmation between visiting card and agreement (C-17)',
-    hours: 'Monday to Friday, 9:30 AM – 6:00 PM IST',
+    officialEmail: 'support@brahmicomputing.in',
+    phone: '9632819063',
   },
   form: {
     title: 'Send a Message',
@@ -59,5 +56,5 @@ export const contactContent: ContactContent = {
     errorMessage: 'Unable to send your message. Please check the required fields or email us directly.',
   },
   openDecisionNotice:
-    'PLACEHOLDER: Final email delivery provider integration pending client mailbox configuration (C-11, C-12)',
+    'Official support mailbox: support@brahmicomputing.in. Phone: 9632819063. Operational relay is active via Resend transport.',
 };

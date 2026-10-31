@@ -650,3 +650,58 @@ a:hover {
     gap: 0.75rem;
   }
 }
+
+/* =========================================================================
+   Skeleton Loaders (Phase 6 New Requirement)
+   Professional shimmer loading states respecting prefers-reduced-motion.
+   ========================================================================= */
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    rgba(35, 31, 32, 0.05) 0%,
+    rgba(35, 31, 32, 0.11) 50%,
+    rgba(35, 31, 32, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 3px;
+}
+
+.skeleton-title {
+  height: 1.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 4px;
+}
+
+.skeleton-rect {
+  border-radius: var(--radius-md);
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none !important;
+    background: rgba(35, 31, 32, 0.08) !important;
+  }
+}
+

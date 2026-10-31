@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Agentation } from 'agentation';
 import { siteConfig } from '../content/site';
 import './globals.css';
 
@@ -33,9 +34,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <meta charSet="utf-8" />
+
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
@@ -128,13 +130,16 @@ export default function RootLayout({
               <div className="footer-col">
                 <h4>System Architecture</h4>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-                  Platform: Microsoft Windows 10 & 11 (x64 / x86)
+                  Platform: Windows 11 (64-bit x64, Intel/AMD)
                 </p>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
                   Integration: Native Language Bar
                 </p>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
                   Shortcut: Windows Key + Spacebar
+                </p>
+                <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>
+                  Support: {siteConfig.contact.email} | {siteConfig.contact.phone}
                 </p>
               </div>
             </div>
@@ -155,6 +160,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        <Agentation />
       </body>
     </html>
   );

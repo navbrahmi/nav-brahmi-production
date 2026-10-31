@@ -34,7 +34,7 @@ export const faqContent: {
         {
           question: 'Which operating systems are supported?',
           answer:
-            'Nav Brahmi keyboard drivers are built for Microsoft Windows 10 and Windows 11 (64-bit and 32-bit editions). ARM64 and non-Windows operating systems are not currently supported.',
+            'The supported target is Windows 11, 64-bit (x64) systems using Intel or AMD processors on Windows versions within Microsoft’s supported servicing lifecycle. Compatible device categories include Windows 11 desktops, laptops, workstations, and x64 tablets. Windows 10 is unsupported as standard Microsoft support has ended. Windows on ARM (ARM64, including Snapdragon devices), 32-bit Windows, Windows 11 S mode, macOS, Linux, ChromeOS, iOS, and Android are unsupported. (Note: Runtime package installation is implemented and pending manual Windows verification).',
         },
         {
           question: 'Do I need special typing software or third-party background tools to type?',
@@ -54,7 +54,12 @@ export const faqContent: {
         {
           question: 'How many computers can I use my license on?',
           answer:
-            'PLACEHOLDER: Awaiting client policy on maximum machine activations per license and machine replacement rules (C-07)',
+            'Each license allows one active machine binding. If your hardware fails or you replace your computer, machine replacement is handled securely via customer support (support@brahmicomputing.in). Support verifies purchase ownership before authorizing a reset. A 90-day cooldown applies between transfers, and previous machine activations are invalidated upon reset. Public self-service deactivation is not permitted.',
+        },
+        {
+          question: 'What is the licensing scope and protection boundary?',
+          answer:
+            'Licensing protection applies to purchase authorization, license generation, one-machine activation, authorized package downloads, and installer execution. Installed MSKLC keyboard layouts integrate natively with Windows and are not modified with runtime DRM or background monitoring tools.',
         },
         {
           question: 'How do I recover my license if I lose my purchase email?',
@@ -69,7 +74,7 @@ export const faqContent: {
         {
           question: 'What is the price of each keyboard layout package?',
           answer:
-            'PLACEHOLDER: Official retail price per package pending client confirmation (Manuals state ₹480 tax-inclusive vs invoice template calculation ₹472) (C-02)',
+            'The confirmed retail price is ₹472 per individual language package (inclusive; no additional taxes are added at checkout). Kannada and Tulu are distinct standalone products.',
         },
         {
           question: 'How are digital goods and documentation delivered?',
@@ -79,7 +84,7 @@ export const faqContent: {
         {
           question: 'What is the refund and cancellation policy?',
           answer:
-            'PLACEHOLDER: Awaiting client confirmation of formal refund and dispute policy for digital software licenses (C-08, C-18)',
+            'Customers may apply for a refund within 7 calendar days of successful software installation if they experience a serious software bug or significant functional issue affecting core typing functionality. Refund requests are submitted through your order reference page and manually reviewed by support. Submitting a request does not automatically issue a refund or revoke your license; approved refunds are processed manually via Razorpay.',
         },
       ],
     },

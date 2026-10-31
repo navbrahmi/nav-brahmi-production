@@ -59,8 +59,8 @@ export const siteConfig: SiteConfig = {
     proprietor: 'Naveen Jayachandra',
     city: 'Bengaluru',
     stateCountry: 'Karnataka, India',
-    email: 'navbrahmi@gmail.com',
-    phone: 'PLACEHOLDER: Pending client confirmation of public phone number (C-17)',
+    email: 'support@brahmicomputing.in',
+    phone: '9632819063',
     gstinStatus: 'PLACEHOLDER: Registered GSTIN details pending confirmation (C-13)',
   },
   openDecisions: {

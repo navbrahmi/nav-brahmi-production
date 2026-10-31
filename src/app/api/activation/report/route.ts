@@ -73,6 +73,15 @@ export async function POST(req: NextRequest) {
 
     const licenseId = payload.lic || payload.license_id;
 
+    if (status === 'SUCCESS' && licenseId) {
+      await prisma.license.update({
+        where: { id: licenseId },
+        data: {
+          installedAt: new Date(),
+        },
+      }).catch(() => {});
+    }
+
     await prisma.auditEvent.create({
       data: {
         type: 'INSTALLATION_REPORTED',

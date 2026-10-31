@@ -123,4 +123,44 @@ Installer-only protection can be bypassed by sharing downloaded packages or MSIs
 - **Microsoft Windows Installer (MSI) Error Codes**: [https://learn.microsoft.com/en-us/windows/win32/msi/error-codes](https://learn.microsoft.com/en-us/windows/win32/msi/error-codes)
 - **Prisma Transactions & Row Locking**: [https://www.prisma.io/docs/orm/prisma-client/queries/transactions](https://www.prisma.io/docs/orm/prisma-client/queries/transactions)
 - **Node.js Crypto AES-256-GCM**: [https://nodejs.org/api/crypto.html#ccm-mode-and-gcm-mode](https://nodejs.org/api/crypto.html#ccm-mode-and-gcm-mode)
+- **Microsoft Updates Lifecycle — Windows 10 Support Ended**: [https://support.microsoft.com/en-us/windows/deployment/updates-lifecycle/windows-10-support-has-ended-on-october-14-2025](https://support.microsoft.com/en-us/windows/deployment/updates-lifecycle/windows-10-support-has-ended-on-october-14-2025)
+- **Microsoft Windows on ARM FAQ**: [https://learn.microsoft.com/en-us/windows/arm/faq](https://learn.microsoft.com/en-us/windows/arm/faq)
+- **Microsoft Windows 10 & 11 in S Mode FAQ**: [https://support.microsoft.com/en-us/windows/experience/platform-variants/windows-10-and-windows-11-in-s-mode-faq](https://support.microsoft.com/en-us/windows/experience/platform-variants/windows-10-and-windows-11-in-s-mode-faq)
+- **Microsoft Code Signing Options**: [https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/code-signing-options](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/code-signing-options)
+- **Microsoft Store FAQ for Existing Applications**: [https://learn.microsoft.com/en-us/windows/apps/publish/faq/get-started-with-the-microsoft-store](https://learn.microsoft.com/en-us/windows/apps/publish/faq/get-started-with-the-microsoft-store)
+
+## 16. Phase 6 Activation, Architecture & Font Mapping Implementation (VERIFIED IN REPOSITORY & BY TEST)
+
+- **Supported Windows Platform Policy (C-06):**
+  - **Recommended Supported Target:** Windows 11, 64-bit x64 systems on Intel or AMD processors, on Windows versions remaining within Microsoft's supported servicing lifecycle.
+  - **Supported Device Categories:** Compatible Windows 11 desktops, laptops, workstations, and tablets using x64 Intel/AMD processors. Device form factor alone does not determine compatibility.
+  - **Unsupported Configurations:** Windows ARM64 devices (including Snapdragon-based PCs) until native packages are produced and verified; 32-bit Windows; Windows 10 (standard support ended October 14, 2025); Windows 11 S mode (requires leaving S mode); macOS, Linux, ChromeOS, iOS, Android.
+  - **Technical Distinction:** Emulation on ARM cannot be assumed to support low-level MSKLC keyboard-layout DLLs. Bootstrapper detects native architecture via `GetNativeSystemInfo` and halts on unsupported environments.
+  - Live Windows tests remain marked **PENDING MANUAL WINDOWS VERIFICATION**.
+- **One-Machine Rule & Support-Assisted Machine Reset (C-07):**
+  - Exactly one active machine binding permitted per license (`maxActivations: 1`).
+  - Customer self-service deactivation endpoint is disabled (returns HTTP 400).
+  - Support-assisted administrative reset implemented in `src/lib/admin-reset.ts` and `scripts/admin-machine-reset.ts`:
+    - Requires verified support ticket reference, reason, and license/order identifier.
+    - Enforces 90-day cooldown period per license (resets permitted once every 90 days).
+    - Exceptional cases inside cooldown require explicit administrator override flag (`--allow-inside-cooldown`) with a recorded business reason.
+    - Atomically revokes previous machine activations (`ActivationStatus.REVOKED`) and invalidates old activation tokens (preventing package download authorization via `POST /api/package/authorize`).
+    - Writes structured security audit log events without leaking license keys or machine IDs.
+    - Verified by tests in `tests/integration/admin-reset.test.ts`.
+- **Licensing Scope & Protection Boundaries (C-09):**
+  - Protection strictly governs: purchase authorization, CSPRNG license issuance, one-machine activation, tokenized package download authorization, installer authorization, and installation reporting.
+  - Installed MSKLC keyboard layouts install native `.dll` files into `C:\Windows\System32` and do not execute background runtime DRM checks.
+  - Proprietary client binaries are NOT modified. No impossible claims of continuous runtime DRM or unbreakable copy protection are made.
+- **Product-Specific Font Mapping & Win32 Registration (C-29):**
+  - Font ownership and redistribution rights confirmed by Brahmi Computing Technologies.
+  - Product-specific font manifest implemented in `src/lib/font-manifest.ts` and `ProductApprovedFonts` in `Requirements/windows-driver/bootstrapper/Program.cs`.
+  - Rejects cross-language font mixing (e.g. Kannada fonts never installed with Tulu; Tamil never mixed with other packages).
+  - Strict allowlist filtering: wildcard font installation and indiscriminate `.ttf`/`.otf` extraction are rejected.
+  - Persistent Win32 font registration: installs to `%WINDIR%\Fonts` (admin) or `%LOCALAPPDATA%\Microsoft\Windows\Fonts` (user), writes registry keys, calls `AddFontResourceW` strictly without `FR_PRIVATE` (0x10), and broadcasts `WM_FONTCHANGE`. Full rollback on failure.
+  - Verified by tests in `tests/unit/font-manifest.test.ts`.
+- **Windows Code Signing Recommendation (C-19):**
+  - Use an Organization Validation (OV) Authenticode code-signing certificate for the direct-download C# `Setup.exe` bootstrapper.
+  - Avoid automatic conversion to MSIX: Microsoft Store does not sign external EXE/MSI installers and requires offline package self-containment incompatible with dynamic authorized B2 downloads.
+  - Certificate procurement is a client dependency.
+
 

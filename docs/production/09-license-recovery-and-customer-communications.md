@@ -77,3 +77,21 @@ Whether manuals/stickers are public downloads or purchase-only: C-35. Claims ins
 
 ## 8. Dependencies
 Email provider account; DNS access; WhatsApp Business account (if automated); invoice template/branding; client-supplied manual and sticker files.
+
+## 9. Phase 6 Customer Support and Notifications (VERIFIED IN REPOSITORY & VERIFIED BY TEST)
+
+- **Official Customer Support Contact (C-10, C-17):**
+  - Email: `support@brahmicomputing.in`
+  - Phone: `9632819063`
+  - Displayed consistently across website header, footer, contact page, installation instructions, order recovery pages, and automated customer emails.
+  - Zero invented information: No unconfirmed office hours, physical street addresses, or WhatsApp support availability are advertised.
+- **Refund Request Intake & Support Alerts (C-08 & C-18):**
+  - Customer refund requests submitted via `POST /api/orders/[token]/refund-request` are recorded in `RefundRequest` with status `PENDING_REVIEW`.
+  - Transactionally queues an alert email to support (`EmailType.REFUND_REQUEST_RECEIVED`) in `EmailOutbox` addressed to `support@brahmicomputing.in`.
+  - Dispatched via Resend email transport. Support staff receives order reference, customer email, installation timestamp, and customer's problem description.
+- **Support-Assisted Machine Reset Operational Procedure (C-07):**
+  - Customers requiring a machine transfer (e.g. PC replacement or hardware failure) must contact `support@brahmicomputing.in` from their original purchase email, providing the order reference.
+  - Support verifies purchase ownership and verifies whether the 90-day cooldown period has elapsed.
+  - If approved, an authorized administrator executes the server-side reset script (`scripts/admin-machine-reset.ts`) recording the support ticket reference and reason.
+  - The previous machine binding and old activation tokens are revoked, allowing the customer to activate on their new Windows 11 machine.
+

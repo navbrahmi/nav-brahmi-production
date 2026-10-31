@@ -6,6 +6,9 @@ import { productCategories } from '../../../content/categories';
 import { prisma } from '../../../lib/prisma';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
