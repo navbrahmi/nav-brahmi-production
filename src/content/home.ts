@@ -51,11 +51,11 @@ export const homeContent: HomePageContent = {
   about: {
     heading: 'About Nav Brahmi',
     body: [
-      "Nav Brahmi presents India's user-friendly bilingual keyboard designed to make typing in Indian languages simple, fast, and intuitive. The patented BRAHMI Keyboard allows users to type seamlessly in Indic languages of their choice using a single keyboard layout.",
-      'The BRAHMI Keyboard is fully Unicode-compliant and works across all Windows applications that support text input, enabling users to type effortlessly in documents, presentations, web browsers, and other software. Designed with simplicity and ease of use in mind.',
+      "Nav Brahmi presents India's user-friendly bilingual keyboard designed to make typing in Indian languages simple, fast, and intuitive. The Nav Brahmi layout allows users to type seamlessly in Indic languages of their choice using a structured keyboard layout.",
+      'The Nav Brahmi layout is fully Unicode-compliant and works across all Windows applications that support text input, enabling users to type effortlessly in documents, presentations, web browsers, and other software. Designed with simplicity and ease of use in mind.',
     ],
     approvalNotice:
-      'PLACEHOLDER: Client formal confirmation of patent citation and manual claims for public marketing copy (C-37)',
+      'C-37 confirmed: Public copy uses simple, truthful descriptions with no unsupported patent or unmeasured performance claims.',
   },
   vision: {
     heading: 'Our Vision',
@@ -77,7 +77,7 @@ export const homeContent: HomePageContent = {
     statSummary: {
       categoriesCount: 13,
       productsDelivered: 14,
-      operatingSystem: 'Microsoft Windows 10 & 11',
+      operatingSystem: 'Microsoft Windows 11 (64-bit x64)',
       standard: 'Full Unicode Compliance',
     },
   },

@@ -215,13 +215,42 @@ namespace NavBrahmi.Setup
 
         // =========================================================================
         // Task 1 Explicit Font Allowlist (C-29)
-        // Only install these two exact files when present in the authorized package.
+        // Only install explicitly approved font files belonging to the selected product.
         // Never install other fonts by wildcard (*.ttf/*.otf), extension enumeration, or fallback.
         // =========================================================================
         public static readonly string[] ApprovedFontAllowlist = new string[]
         {
             "navbrahmi-regular.ttf",
             "navbrahmi-bold.ttf"
+        };
+
+        // Product-Specific Font Allowlist per confirmed client decision C-29
+        public static readonly Dictionary<string, string[]> ProductApprovedFonts = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "kannada", new string[] { "NotoSansKannada-RegularNJ.ttf" } },
+            { "KANNADA", new string[] { "NotoSansKannada-RegularNJ.ttf" } },
+            { "tulu", new string[] { "Brahmi_Tulu_Tigalari_Refined_Regular-refined.ttf" } },
+            { "TULU", new string[] { "Brahmi_Tulu_Tigalari_Refined_Regular-refined.ttf" } },
+            { "ashokan-brahmi", new string[] { "NotoSansBrahmi-Regular.ttf" } },
+            { "ASHOKAN_BRAHMI", new string[] { "NotoSansBrahmi-Regular.ttf" } },
+            { "devanagari-hindi", new string[] { "Gargi.ttf", "Lohit-Devanagari.ttf", "Chandas.ttf", "NotoSansDevanagari-Regular.ttf", "NotoSansDevanagari-Bold.ttf" } },
+            { "DEVANAGARI_HINDI", new string[] { "Gargi.ttf", "Lohit-Devanagari.ttf", "Chandas.ttf", "NotoSansDevanagari-Regular.ttf", "NotoSansDevanagari-Bold.ttf" } },
+            { "gujarati", new string[] { "NotoSansGujarati-Regular.ttf", "NotoSansGujarati-Bold.ttf" } },
+            { "GUJARATI", new string[] { "NotoSansGujarati-Regular.ttf", "NotoSansGujarati-Bold.ttf" } },
+            { "malayalam", new string[] { "RaghuMalayalamSans-Regular.ttf", "Rachana-Regular.ttf", "Keraleeyam-Regular.ttf", "Rachana-Bold.ttf", "Suruma.ttf", "Meera-Regular.ttf" } },
+            { "MALAYALAM", new string[] { "RaghuMalayalamSans-Regular.ttf", "Rachana-Regular.ttf", "Keraleeyam-Regular.ttf", "Rachana-Bold.ttf", "Suruma.ttf", "Meera-Regular.ttf" } },
+            { "modi-marathi", new string[] { "NotoSansModi-Regular.ttf" } },
+            { "MODI_MARATHI", new string[] { "NotoSansModi-Regular.ttf" } },
+            { "oriya-odia", new string[] { "NotoSansOriya-Regular.ttf", "NotoSansOriya-Bold.ttf" } },
+            { "ORIYA_ODIA", new string[] { "NotoSansOriya-Regular.ttf", "NotoSansOriya-Bold.ttf" } },
+            { "punjabi-gurmukhi", new string[] { "NotoSansGurmukhi-Regular.ttf", "NotoSansGurmukhi-Bold.ttf" } },
+            { "PUNJABI_GURMUKHI", new string[] { "NotoSansGurmukhi-Regular.ttf", "NotoSansGurmukhi-Bold.ttf" } },
+            { "tamil-and-grantha", new string[] { "NotoSansTamil-Regular.ttf", "NotoSansTamil-Bold.ttf", "NotoSansGrantha-Regular.ttf" } },
+            { "TAMIL_AND_GRANTHA", new string[] { "NotoSansTamil-Regular.ttf", "NotoSansTamil-Bold.ttf", "NotoSansGrantha-Regular.ttf" } },
+            { "telugu", new string[] { "NotoSansTelugu-Regular.ttf", "NotoSansTelugu-Bold.ttf" } },
+            { "TELUGU", new string[] { "NotoSansTelugu-Regular.ttf", "NotoSansTelugu-Bold.ttf" } },
+            { "sharada", new string[] { "NotoSansSharada-Regular.ttf" } },
+            { "SHARADA", new string[] { "NotoSansSharada-Regular.ttf" } }
         };
 
         // =========================================================================
@@ -1000,10 +1029,27 @@ namespace NavBrahmi.Setup
                 // Install Fonts (Only explicitly client-approved fonts under Task 1 & C-29)
                 Progress(80, "Checking client-approved Unicode fonts (C-29 allowlist)...");
                 // C-29: Font redistribution requires explicit client confirmation of font licenses.
-                // Only the two explicit allowlist font files are handled: navbrahmi-regular.ttf and navbrahmi-bold.ttf.
+                // Product-specific font manifest enforces that fonts are installed only for the matching product.
                 // Do not install other fonts by wildcard (*.ttf/*.otf), extension enumeration, or automatic fallback.
                 List<string> approvedFontsFound = new List<string>();
-                foreach (string approvedName in ApprovedFontAllowlist)
+                HashSet<string> allowedNamesForProduct = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                // Add legacy allowlist for backwards compatibility
+                foreach (string name in ApprovedFontAllowlist)
+                {
+                    allowedNamesForProduct.Add(name);
+                }
+
+                // Add product-specific approved fonts if product is identified from token claims
+                if (claims != null && !string.IsNullOrEmpty(claims.ProductId) && ProductApprovedFonts.ContainsKey(claims.ProductId))
+                {
+                    foreach (string pFont in ProductApprovedFonts[claims.ProductId])
+                    {
+                        allowedNamesForProduct.Add(pFont);
+                    }
+                }
+
+                foreach (string approvedName in allowedNamesForProduct)
                 {
                     // Strict search for this exact approved filename only — NO wildcard (*.ttf/*.otf) enumeration
                     string[] matches = Directory.GetFiles(extractDir, approvedName, SearchOption.AllDirectories);
@@ -1016,7 +1062,7 @@ namespace NavBrahmi.Setup
                 int installedFontsCount = 0;
                 if (approvedFontsFound.Count == 0)
                 {
-                    Log("[INFO] No allowlisted fonts (navbrahmi-regular.ttf / navbrahmi-bold.ttf) present in package. Skipping font installation.");
+                    Log("[INFO] No allowlisted fonts present in package for this product. Skipping font installation.");
                 }
                 else
                 {

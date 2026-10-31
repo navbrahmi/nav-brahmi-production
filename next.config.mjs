@@ -1,4 +1,38 @@
 /** @type {import('next').NextConfig} */
+
+/**
+ * Builds Content-Security-Policy header.
+ * React in development mode requires eval() for debug callstack reconstruction and HMR.
+ * Production, Vercel Preview, and non-development deployments strictly NEVER include 'unsafe-eval'.
+ */
+function buildCspHeader(env = process.env) {
+  const isDev = env.NODE_ENV === 'development';
+  const isVercelPreview = env.VERCEL_ENV === 'preview';
+  const isVercelProduction = env.VERCEL_ENV === 'production';
+
+  // React development mode requires eval() for debug callstack reconstruction and HMR.
+  // Production and Vercel Preview deployments must strictly NEVER include 'unsafe-eval'.
+  const allowUnsafeEval = isDev && !isVercelPreview && !isVercelProduction;
+
+  const scriptSrcDirectives = [
+    "'self'",
+    "'unsafe-inline'",
+    allowUnsafeEval ? "'unsafe-eval'" : null,
+    "https://checkout.razorpay.com",
+  ].filter(Boolean).join(' ');
+
+  return [
+    "default-src 'self'",
+    `script-src ${scriptSrcDirectives}`,
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https:",
+    "font-src 'self' data:",
+    "connect-src 'self' https://lumberjack.razorpay.com https://api.razorpay.com",
+    "frame-src 'self' https://api.razorpay.com",
+    "frame-ancestors 'none'",
+  ].join('; ') + ';';
+}
+
 const nextConfig = {
   reactStrictMode: true,
   async headers() {
@@ -32,7 +66,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://checkout.razorpay.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://lumberjack.razorpay.com https://api.razorpay.com; frame-src 'self' https://api.razorpay.com; frame-ancestors 'none';",
+            value: buildCspHeader(),
           },
         ],
       },
@@ -40,4 +74,6 @@ const nextConfig = {
   },
 };
 
+export { buildCspHeader };
 export default nextConfig;
+

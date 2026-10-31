@@ -96,4 +96,38 @@ Executed via `npm test` on 2026-10-24 against local PostgreSQL scratch database:
 - Detailed 12-scenario checklist established in `docs/production/test-evidence/windows-test-checklist.md`.
 - All Windows runtime checks are marked **PENDING MANUAL WINDOWS VERIFICATION**. No Windows build or runtime outcomes are fabricated in Ubuntu.
 
+## 10. Phase 6 Automated Test Execution Results (VERIFIED BY TEST)
+
+Executed via `npm test` on 2026-10-31 against local PostgreSQL scratch database:
+- **Suites:** 34 total suites (6 new Phase 6 suites + 28 regression suites)
+- **Tests:** 146 passed, 0 failed, 0 skipped (100% pass rate)
+- **Duration:** ~10.8 seconds
+- **Phase 6 Suites Executed:**
+  1. `tests/unit/csp-header.test.ts` (6/6 tests passed: verifies Content-Security-Policy header rules across environments; strictly omits `'unsafe-eval'` in production, Vercel Preview, and Vercel Production; conditionally permits `'unsafe-eval'` strictly in local development for React callstack reconstruction; preserves all required Razorpay payment gateway integration sources and clickjacking defenses).
+  2. `tests/unit/skeleton-loader.test.ts` (7/7 tests passed: verifies skeleton loader components, shimmer CSS classes, accessibility attributes `role="status"` and `aria-busy="true"`, `@media (prefers-reduced-motion: reduce)` tokens, domain skeletons for product lists, product details, order status, and checkout, and distinct error/empty/loading states).
+  3. `tests/unit/pricing-and-catalog.test.ts` (4/4 tests passed: verifies confirmed retail price ₹472.00 represented consistently as 47200 paise, absence of automated 18% GST surcharge, distinct products for Kannada and Tulu, and withholding of unconfirmed Tamil/Grantha bundling with checkout disabled and `priceMinor: null`).
+  4. `tests/unit/font-manifest.test.ts` (6/6 tests passed: verifies product-specific font mapping, rejection of cross-language font mixing, strict rejection of wildcards and unapproved fonts, persistent Win32 registry and `AddFontResourceW` registration without `FR_PRIVATE`, and uninstall cleanup).
+  5. `tests/integration/admin-reset.test.ts` (6/6 tests passed: verifies one-machine binding rule, same-machine idempotent activation, different-machine rejection, support-assisted reset with verified ticket and reason, 90-day cooldown enforcement, exceptional administrator override, invalidation of previous bindings to `REVOKED`, invalidation of old activation tokens for package downloads, and audit event creation).
+  6. `tests/integration/refund-request.test.ts` (6/6 tests passed: verifies 7-calendar-day refund request calculation from server-recorded `installedAt`, fallback to manual review when `installedAt` is missing, duplicate request blocking with `DUPLICATE_REQUEST_PENDING`, fixed-window rate limiting, `PENDING_REVIEW` database status, Resend email outbox notification queueing, and zero automatic refund or license revocation).
+- **Static Analysis & Linting:**
+  - `npm run typecheck`: 0 TypeScript errors across the entire codebase.
+  - `npm run lint`: 0 ESLint errors and 0 warnings.
+- **Supabase Migration Status:**
+  - `npx prisma migrate status`: Database schema is up to date (6/6 migrations applied, 0 pending).
+  - Clean scratch database migration replay verified with 0 schema difference across all 6 migrations.
+- **Supabase Product Data Reconciliation Verification:**
+  - 14 products in Supabase:
+    - 12 active confirmed individual products verified at ₹472.00 (47200 paise), currency `INR`.
+    - Kannada (`KANNADA`) and Tulu (`TULU`) verified as independent standalone records.
+    - Legacy combined product (`KANNADA_TULU_LEGACY`) verified with `isActive = false`, `priceMinor = null`, 0 packages, blocked from purchase.
+    - Tamil & Tamil Grantha (`TAMIL_AND_GRANTHA`) verified with `price = 0`, `priceMinor = null`, checkout withheld.
+  - 24 registered packages in `ProductPackage` and Backblaze B2 across all 12 purchasable products (x64 and x86), verified with 100% byte size and SHA-256 match.
+- **Supabase RLS & Least-Privilege Verification:**
+  - Row Level Security verified active on all 15 public tables (`rowsecurity = true`).
+  - `role_table_grants` verified: exactly 0 grants to `anon` and `authenticated` roles.
+  - Server-side Prisma operations verified passing with 100% functionality.
+
+
+
+
 

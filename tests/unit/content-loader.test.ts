@@ -78,6 +78,7 @@ describe('Phase 3 Content Loader & Category Verification', () => {
 
     // Contact
     assert.strictEqual(contactContent.contactDetails.proprietor, 'Naveen Jayachandra (Proprietor)');
-    assert.strictEqual(contactContent.contactDetails.officialEmail, 'navbrahmi@gmail.com');
+    assert.strictEqual(contactContent.contactDetails.officialEmail, 'support@brahmicomputing.in');
+    assert.strictEqual(contactContent.contactDetails.phone, '9632819063');
   });
 });

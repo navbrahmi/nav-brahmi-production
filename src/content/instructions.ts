@@ -37,9 +37,9 @@ export const instructionsContent: InstructionsContent = {
   subtitle:
     'Step-by-step guidance for installing and enabling your Nav Brahmi keyboard layout driver on Microsoft Windows.',
   systemRequirements: {
-    os: 'Microsoft Windows 10 or Windows 11',
+    os: 'Microsoft Windows 11 (within Microsoft supported servicing lifecycle)',
     privileges: 'Administrator permissions required to install MSKLC keyboard layout drivers',
-    architecture: 'x64 (AMD64) or x86 (32-bit). ia64 delivered; ARM64 not supported in current packages (C-06)',
+    architecture: '64-bit x64 (Intel or AMD processors). Windows ARM64 (Snapdragon), 32-bit Windows, Windows 10, and non-Windows OS are unsupported.',
     framework: 'Native Windows Input Method subsystem (no external typing utilities required)',
   },
   steps: [

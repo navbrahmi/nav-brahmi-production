@@ -26,7 +26,7 @@ export const resourcesContent: ResourcesContent = {
   subtitle:
     'Guidance on Unicode typography, font licensing, and keyboard resources for Nav Brahmi supported scripts.',
   complianceNotice:
-    'In strict accordance with intellectual property governance, font packages delivered by Nav Brahmi are subject to licence verification (C-29). Open-source fonts (such as Google Noto families under SIL Open Font License) are recommended for general use.',
+    'Brahmi Computing Technologies confirms ownership or redistribution rights for the bundled fonts delivered inside each respective language folder (C-29). The installer installs only the authorized fonts mapped specifically to the purchased language product.',
   resources: [
     {
       name: 'Google Noto Sans Fonts',
@@ -42,9 +42,9 @@ export const resourcesContent: ResourcesContent = {
       category: 'Custom Epigraphic Fonts',
       description:
         'Specialized fonts delivered with specific keyboard packages, including custom Tulu Tigalari and Tamil Grantha font suites.',
-      licenseStatus: 'Licence verification pending client confirmation (C-29)',
+      licenseStatus: 'Confirmed: Brahmi Computing Technologies owns/holds redistribution rights (C-29)',
       downloadAvailable: false,
-      notes: 'Redistribution and public downloads restricted until client confirms redistribution rights.',
+      notes: 'Installed selectively and persistently by the setup bootstrapper for the purchased language product only.',
     },
     {
       name: 'Keyboard Layout Documentation & Stickers',

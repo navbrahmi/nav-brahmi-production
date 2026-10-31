@@ -73,3 +73,21 @@ Open items: who owns the Razorpay account and completes business verification fo
 - **Timing-Safe Signatures:** Checkout and raw-body webhook signature verification implemented with timing-safe comparison in `src/lib/razorpay.ts` (`tests/unit/razorpay-signatures.test.ts`).
 - **Gateway Mode:** Strictly enforced in TEST MODE. Live payments prohibited until client credentials and approved legal policies are supplied.
 
+## 13. Phase 6 Pricing & Refund Implementation (VERIFIED IN REPOSITORY & VERIFIED BY TEST)
+
+- **Confirmed Retail Price (C-02):** Retail price confirmed as **₹472.00 per language package** (represented as `47200` paise in database and gateway APIs).
+  - Stored price: `priceMinor: 47200`, `price: 472.0`, `currency: 'INR'`.
+  - Zero automated surcharge: Customers are charged exactly ₹472.00 at checkout without adding an automatic 18% GST surcharge.
+  - Gateway mode: Razorpay remains strictly in TEST mode. Live transactions remain disabled.
+  - GSTIN and official tax invoices remain pending client confirmation (C-13, C-34).
+- **Product Catalog Separation (C-03):**
+  - Kannada (`KANNADA`) and Tulu (`TULU`) separated into distinct authoritative products with independent packages.
+  - Tamil and Tamil Grantha bundling remains unconfirmed: withheld from checkout (`priceMinor: null`, `isCheckoutAllowed: false`).
+- **Manual Refund Review Workflow (C-08 & C-18):**
+  - Customer may request a refund within 7 calendar days of server-recorded installation event (`installedAt`) for serious defects affecting core documented functionality.
+  - Intake form on order status page (`POST /api/orders/[token]/refund-request`) stores requests in `RefundRequest` with status `PENDING_REVIEW`.
+  - Missing installation timestamp falls back gracefully to manual review instead of automatic rejection.
+  - Submission NEVER automatically refunds money or revokes licenses.
+  - Refunds are reviewed manually by support staff and processed through authorized Razorpay dashboard. State transitions (`REFUNDED`, `REVOKED`) occur only upon verified manual confirmation.
+
+

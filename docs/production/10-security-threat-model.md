@@ -43,12 +43,16 @@ Casual pirate (shares installer/key); technical cracker (patches/reverses instal
 | R26 | Windows-on-ARM/ia64 mis-selection (F-13) | Explicit architecture matrix |
 | R27 | Signature breakage/untrusted signer (F-17) | Real certificate; sign after final assembly or deliver payload separately |
 | R28 | Client account credentials delivered in plain text (client zip) | Client changes passwords, enables 2FA; never copy into repo/docs |
+| R29 | Refund request spam or denial of service on intake | Database-backed fixed-window rate limiter (5 req / 15m) + order duplicate check blocking multiple PENDING_REVIEW records |
+| R30 | Continued package downloads using old activation token after machine reset | Transactional machine reset sets all previous activations to `REVOKED`; package authorization endpoint rejects non-ACTIVE records (`ACTIVATION_NOT_FOUND`), preventing download |
+| R31 | Unauthorized or frequent machine resets / license roaming | Public self-service deactivation endpoint disabled; administrative reset requires verified support ticket, reason, and enforces 90-day cooldown |
 
 ## 4. Secrets management
 Keep in Vercel/host env vars (server-only), never `NEXT_PUBLIC_*`. Inventory: DB URLs, R2 keys, Ed25519 private key, payment keys/webhook secret, email API key, HMAC key (if retained). Separate staging/production values. Private signing key backed up offline in a controlled place; public key + `kid` embedded in installer builds. Access limited to named people; MFA on all provider accounts.
 
 ## 5. Licensing abuse specifics
 Activation limit, revocation, anomaly alerts (many machines per key), audit of activations. Do not claim anti-piracy guarantees.
+- **Licensing Boundary (C-09):** The installed MSKLC keyboard layout operates as a native Windows DLL within the operating system. It does not perform runtime license checks. Security controls enforce purchase verification, Ed25519-signed activation tokens, atomic 1-machine binding, authorized Backblaze B2 package downloads, and installation integrity verification. Once installed, OS-level driver files cannot be prevented from being manually copied by a technical user; the system does not promise unbreakable DRM.
 
 ## 6. Payment manipulation
 Server-held prices; amount/currency verification; order-token not sequential; reconcile against provider daily.
@@ -58,3 +62,4 @@ Minimize collected data; no card data; hashed machine IDs; redact logs; admin an
 
 ## 8. Incident response and rotation
 Playbooks: (1) leaked R2 key → revoke, rotate, review access logs, redeploy; (2) leaked signing key → new `kid`, ship new installer, revoke old key, force re-activation if required; (3) leaked DB credential → rotate, review; (4) packages exposed → rotate object keys/rename, invalidate URLs, notify client per NDA; (5) payment webhook secret leaked → rotate at provider. Record who to contact and notification duties in the NDA/agreement (REQUIRES CLIENT CONFIRMATION).
+

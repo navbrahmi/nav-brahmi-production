@@ -4,6 +4,9 @@ import { prisma } from '@/lib/prisma';
 import { productCategories, ProductCategory } from '@/content/categories';
 import { CheckoutClient } from './checkout-client';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: 'Purchase License | Nav Brahmi',
   description:
