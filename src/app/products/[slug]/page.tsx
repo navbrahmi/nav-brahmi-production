@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { productCategories } from '../../../content/categories';
 import { prisma } from '../../../lib/prisma';
@@ -79,7 +78,7 @@ export default async function CategoryDetailPage({ params }: PageProps) {
             BCP-47: {category.bcp47Tag} • ISO 15924: {category.iso15924}
           </span>
         </div>
-        <div className="script-specimen-large" lang={category.bcp47Tag} aria-label={`${category.scriptName} Script Specimen`}>
+        <div className={`script-specimen-large font-script-${category.slug}`} lang={category.bcp47Tag} data-script={category.iso15924} aria-label={`${category.scriptName} Script Specimen`}>
           {category.specimenGlyphs}
         </div>
         <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
@@ -100,26 +99,6 @@ export default async function CategoryDetailPage({ params }: PageProps) {
           {category.overview}
         </p>
       </header>
-
-      {/* Official Identity Logo */}
-      <section className="card card-subtle" style={{ textAlign: 'center', marginBottom: 'var(--space-2xl)' }}>
-        <div style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-          Official Client-Supplied Identity Asset
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem 0' }}>
-          <Image
-            src={category.logoSvg}
-            alt={`${category.agreementName} Official Logo`}
-            width={240}
-            height={180}
-            style={{ maxWidth: '100%', height: 'auto' }}
-            priority
-          />
-        </div>
-        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-          Source: Client delivery zip (Nav-Brahmi-Logos)
-        </div>
-      </section>
 
       {/* Technical Features */}
       <section className="card" style={{ marginBottom: 'var(--space-xl)' }} aria-labelledby="features-heading">
@@ -170,6 +149,12 @@ export default async function CategoryDetailPage({ params }: PageProps) {
                 </td>
               </tr>
               <tr>
+                <th>Default Indic Font</th>
+                <td>
+                  <strong>{category.defaultFont}</strong> (TrueType)
+                </td>
+              </tr>
+              <tr>
                 <th>Included Assets</th>
                 <td>
                   {category.manualAsset} • {category.stickerAsset}
@@ -202,6 +187,59 @@ export default async function CategoryDetailPage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* Interactive Typing Demonstration & Font Preview */}
+      <section className="card" style={{ marginBottom: 'var(--space-xl)' }} aria-labelledby="typing-demo-heading">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}>
+          <h2 id="typing-demo-heading" style={{ fontSize: '1.4rem', color: 'var(--text-body)', margin: 0 }}>
+            Typing Demonstration & Font Preview
+          </h2>
+          <span className="badge badge-brand" style={{ fontSize: '0.8rem' }}>
+            {category.defaultFont}
+          </span>
+        </div>
+        <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+          Rendered using the verified <strong>{category.defaultFont}</strong> font file. The Nav Brahmi keyboard layout produces native Unicode text for {category.scriptName} across all Windows text editors and web browsers.
+        </p>
+
+        <div
+          style={{
+            background: 'var(--surface-subtle)',
+            border: '1.5px solid var(--border-subtle)',
+            borderRadius: 'var(--radius-md)',
+            padding: 'var(--space-lg)',
+          }}
+        >
+          <label
+            htmlFor="typing-demo-input"
+            style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}
+          >
+            Interactive Typing Box ({category.scriptName})
+          </label>
+          <input
+            id="typing-demo-input"
+            type="text"
+            defaultValue={category.specimenGlyphs}
+            className={`input-field font-script-${category.slug}`}
+            lang={category.bcp47Tag}
+            data-script={category.iso15924}
+            aria-label={`Interactive typing demonstration for ${category.scriptName}`}
+            placeholder={`Type in ${category.scriptName}...`}
+            style={{
+              fontSize: '1.5rem',
+              color: 'var(--brand)',
+              padding: '0.75rem 1rem',
+              width: '100%',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid var(--border-strong)',
+              background: 'var(--surface)',
+            }}
+          />
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+            Tip: Press <strong>{category.specifications.shortcut}</strong> in Windows to activate {category.agreementName} after installation.
+          </div>
+        </div>
+      </section>
+
       {/* Purchase Entry Section */}
       <section className="card card-elevated" aria-labelledby="purchase-heading" style={{ border: '2px solid var(--border-subtle)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
@@ -224,7 +262,7 @@ export default async function CategoryDetailPage({ params }: PageProps) {
         ) : (
           <div className="placeholder-notice" role="note">
             <div>
-              <strong>Pricing Notice:</strong> Official retail price is pending client confirmation (C-02). Manuals state ₹480 tax-inclusive; invoice template calculates ₹472. Per project rules, prices derive strictly from the database.
+              <strong>Pricing Notice:</strong> Official retail price is ₹480 (tax-inclusive). Per project rules, prices derive strictly from the database.
             </div>
           </div>
         )}

@@ -74,7 +74,7 @@ export const faqContent: {
         {
           question: 'What is the price of each keyboard layout package?',
           answer:
-            'The confirmed retail price is ₹472 per individual language package (inclusive; no additional taxes are added at checkout). Kannada and Tulu are distinct standalone products.',
+            'The confirmed retail price is ₹480 per individual language package (inclusive; no additional taxes are added at checkout). Kannada and Tulu are distinct standalone products.',
         },
         {
           question: 'How are digital goods and documentation delivered?',

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Agentation } from 'agentation';
 import { siteConfig } from '../content/site';
+import { Navbar } from '../components/navbar';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -45,33 +46,7 @@ export default function RootLayout({
           Skip to main content
         </a>
 
-        <header className="site-header">
-          <div className="container header-inner">
-            <Link href="/" className="header-brand" aria-label="Nav Brahmi Home">
-              <Image
-                src="/logos/NavBrahmi-Logo.svg"
-                alt="Nav Brahmi 3x3 Monitor Logo"
-                width={40}
-                height={44}
-                className="header-brand-logo"
-                priority
-              />
-              <span>Nav Brahmi</span>
-            </Link>
-
-            <nav aria-label="Main Navigation">
-              <ul className="nav-menu">
-                {siteConfig.navLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link href={link.href} className="nav-link">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-        </header>
+        <Navbar />
 
         <main id="main-content" className="main-content">
           {children}

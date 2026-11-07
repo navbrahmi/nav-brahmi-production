@@ -26,7 +26,13 @@ export default function StoryPage() {
 
       {/* Script Specimen Accent */}
       <div className="script-specimen-box" style={{ padding: 'var(--space-xl) var(--space-md)' }}>
-        <div className="script-specimen-large" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }} aria-hidden="true">
+        <div
+          className="script-specimen-large script-brahmi"
+          lang="pra-Brah"
+          data-script="Brah"
+          style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}
+          aria-hidden="true"
+        >
           𑀦𑀯 𑀩𑁆𑀭𑀸𑀳𑁆𑀫𑀻
         </div>
         <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>

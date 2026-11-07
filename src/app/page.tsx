@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { homeContent } from '../content/home';
 import { productCategories } from '../content/categories';
+import { Agentation } from "agentation";
 
 export const metadata = {
   title: 'Home — Indian Language Keyboard Drivers & Typography',
@@ -60,19 +60,10 @@ export default function HomePage() {
             >
               <div className="monitor-card-category-num">Category {cat.categoryNumber}</div>
               <div className="monitor-card-title">{cat.agreementName}</div>
-              <div className="monitor-card-script-sample" lang={cat.bcp47Tag}>
+              <div className={`monitor-card-script-sample font-script-${cat.slug}`} lang={cat.bcp47Tag} data-script={cat.iso15924}>
                 {cat.specimenGlyphs}
               </div>
-              <div className="monitor-card-logo-wrap">
-                <Image
-                  src={cat.logoSvg}
-                  alt={`${cat.scriptName} Official Logo`}
-                  width={140}
-                  height={120}
-                  loading="lazy"
-                />
-              </div>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0, lineHeight: '1.5' }}>
                 {cat.overview.slice(0, 110)}…
               </p>
               <span style={{ fontSize: '0.875rem', color: 'var(--link)', fontWeight: 600, marginTop: 'auto', paddingTop: '0.75rem' }}>
@@ -105,7 +96,7 @@ export default function HomePage() {
       </section>
 
       {/* Vision and Mission Grid */}
-      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 'var(--space-xl)', marginBottom: 'var(--space-2xl)' }}>
+      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: 'var(--space-xl)', marginBottom: 'var(--space-2xl)' }}>
         <div className="card">
           <h2 style={{ color: 'var(--brand)', fontSize: '1.5rem', marginBottom: '0.75rem' }}>
             {homeContent.vision.heading}
@@ -173,6 +164,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <Agentation />
     </div>
   );
 }

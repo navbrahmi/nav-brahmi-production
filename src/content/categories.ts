@@ -13,6 +13,7 @@ export interface ProductCategory {
   scriptName: string;
   bcp47Tag: string;
   iso15924: string;
+  defaultFont: string;
   specimenGlyphs: string;
   specimenSource: 'CLIENT_MANUAL' | 'UNSUPPLIED';
   logoSvg: string;
@@ -43,11 +44,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Ashokan Brahmi',
     bcp47Tag: 'pra-Brah',
     iso15924: 'Brah',
+    defaultFont: 'Noto Sans Brahmi',
     specimenGlyphs: '𑀦𑀯 𑀩𑁆𑀭𑀸𑀳𑁆𑀫𑀻',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-AshokanBrahmi-IndicLanguageTypingMadeEasy-object.svg',
     overview:
-      'Ashokan Brahmi is an ancient Indian abugida writing system dating from the 3rd century BCE, foundational to the development of most Indic writing systems. The Nav Brahmi layout follows the phonetic and structural order of Sanskrit.',
+      'Brāhmī (𑀩𑁆𑀭𑀸𑀳𑁆𑀫𑀻), an ancient Indian abugida, appears as a fully developed writing system by the 3rd century BCE, with its best-known examples found in the rock-cut edicts of Ashoka. Over the centuries, Brāhmī underwent gradual development before diversifying into regional forms from around the 6th century CE, giving rise to the Brāhmīc family of scripts used across South and Southeast Asia today. The Ashokan Brāhmī driver uses Sanskrit as the basis for its keyboard design, following the traditional structural order of vowels and consonants.',
     features: [
       'Row 1 (Number Row): Vowel set mapping (𑀅 𑀆 𑀇 𑀈 𑀉 𑀊 𑀋 𑀌 𑀏 𑀐 𑀑 𑀒 𑀁)',
       'Row 2 (QWERTY Row): Initial consonant series (𑀓 𑀔 𑀕 𑀖 𑀗 | 𑀘 𑀙 𑀚 𑀛 𑀜)',
@@ -63,7 +65,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Does customer also receive Devanagari as a bundle or separate download?',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
     videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
@@ -80,11 +82,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Bengali',
     bcp47Tag: 'bn-Beng',
     iso15924: 'Beng',
+    defaultFont: 'Noto Sans Bengali',
     specimenGlyphs: 'নব ব্রাহ্মী',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Bengali-IndicLanguageTypingMadeEasy-Object.svg',
     overview:
-      'Native Bengali keyboard layout driver for Microsoft Windows, designed for rapid, intuitive typing of Bengali script with standard Windows language bar integration.',
+      'The Bengali script, or Bangla alphabet, is the standard writing system used for the Bengali language and is historically associated with Sanskrit in Bengal. Descended from the ancient Brahmi script, Bengali is written from left to right and functions as an abugida, recognised by its distinctive horizontal headline, or matra, which connects the characters. Its rich writing system incorporates vowels, consonants, conjunct consonants, numerals, and punctuation, reflecting centuries of linguistic and cultural development.',
     features: [
       'Phonetically organized Bengali conjunct and vowel input',
       'Seamless switching between English and Bengali using standard shortcut',
@@ -100,7 +103,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
     videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
@@ -117,11 +120,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Devanagari / Hindi',
     bcp47Tag: 'hi-Deva',
     iso15924: 'Deva',
+    defaultFont: 'Noto Sans Devanagari',
     specimenGlyphs: 'नव ब्राह्मी',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-नव् ब्राह्मी-Devanagari-IndicLanguageTypingMadeEasy-Objects.svg',
     overview:
-      'Standard bilingual Devanagari keyboard driver for Hindi and Sanskrit typing. Built for logical, fast input following the traditional varnamala order.',
+      'Devanāgarī is a left-to-right abugida of the Brahmic family, descended from ancient Brāhmī and developed from the Nāgarī tradition, reaching its modern form around the 11th century. One of the principal scripts of India and Nepal, it is widely used for Sanskrit, Hindi, Marathi, Nepali, Pāḷi, Konkani, and numerous other languages. Recognisable by its distinctive horizontal śirorekhā or headline, Devanāgarī follows a largely phonetic and systematic arrangement of vowels and consonants expressing the structure of speech.',
     features: [
       'Varnamala-ordered consonant and vowel keystrokes',
       'Accurate halant (virama), matra, and conjunct formation',
@@ -136,7 +140,7 @@ export const productCategories: ProductCategory[] = [
       shortcut: 'Windows Key + Spacebar',
     },
     openQuestions: [
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
     videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
@@ -153,11 +157,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Gujarati',
     bcp47Tag: 'gu-Gujr',
     iso15924: 'Gujr',
+    defaultFont: 'Noto Sans Gujarati',
     specimenGlyphs: 'નવ બ્રાહ્મી',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Gujarati-IndicLanguageTypingMadeEasy-object.svg',
     overview:
-      'Gujarati bilingual keyboard layout driver designed to simplify Gujarati typography across desktop publishing and everyday office computing.',
+      'The Gujarati script (Gujarātī lipi) is an Indic abugida used primarily for writing Gujarati and Kutchi, and is one of the official scripts of India. Evolving from the Nagari tradition through three broad stages between the 10th and 19th centuries, it evolved into a practical form distinguished from Devanagari by the absence of the horizontal headline (śirorekhā) and modifications to several characters. Historically known as Śarāphī, Vāṇiāśāī, or Mahājanī, it retains the fundamental Indic abugida structure.',
     features: [
       'Intuitive Gujarati vowel signs, matras, and conjunct formation',
       'Works in all Windows text fields and applications',
@@ -173,7 +178,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
     videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
@@ -190,11 +195,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Kannada',
     bcp47Tag: 'kn-Knda',
     iso15924: 'Knda',
+    defaultFont: 'Noto Sans Kannada',
     specimenGlyphs: 'ನವ್ ಬ್ರಾಹ್ಮಿ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-ನವ್ ಬ್ರಾಹ್ಮಿ-Kannada-IndicLanguageTypingMadeEasy-Objects.svg',
     overview:
-      'Kannada keyboard layout driver enabling effortless Kannada typing on Microsoft Windows. Configured with classical and modern Kannada orthography support.',
+      'The Kannaḍa script/lipi is a member of the Brahmic family of writing systems and serves as the primary script for Kannada, a major Dravidian language spoken in Karnataka, India, while also being used for Sanskrit, Tulu, Konkani, Kodava, Beary, and Sanketi. Comprising 49 letters, the script is a phonemic abugida tracing its origins to ancient Brahmi through the early Kadamba tradition and Chalukya period, preserving distinct character forms and orthographic conventions.',
     features: [
       'Native Kannada ottakshara (conjunct) and matra input logic',
       'System-wide integration with Windows language bar',
@@ -210,7 +216,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Resolved — Kannada is confirmed as an independent standalone product distinct from Tulu.',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
       'C-36: Kannada and Malayalam share an installer build in client delivery; verify canonical files',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
@@ -228,11 +234,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Malayalam',
     bcp47Tag: 'ml-Mlym',
     iso15924: 'Mlym',
+    defaultFont: 'Noto Sans Malayalam',
     specimenGlyphs: 'നവ് ബ്രാഹ്മി',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-നവ് ബ്രാഹ്മി-MalayalamLanguageTypingMadeEasy-Objects.svg',
     overview:
-      'Malayalam keyboard layout driver engineered for seamless typing of Malayalam characters, chillu letters, and complex conjuncts on Windows.',
+      'The Malayalam script (Malayāḷa lipi) is a Brahmic abugida used to write Malayalam, a major Dravidian language spoken primarily in Kerala. Evolving from the ancient Vatteluttu and Grantha scripts, its development reflects the rich linguistic and cultural heritage of southern India. Closely related to the Tigalari script, Malayalam features independent vowels, consonants, dependent vowel signs, and diacritics, supporting both traditional (Pazhaya Lipi) and reformed (Puthiya Lipi) orthography.',
     features: [
       'Effortless typing of traditional and reformed Malayalam orthography',
       'Dedicated handling for chillaksharam and chandrakkala (virama)',
@@ -248,7 +255,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
       'C-36: Malayalam fonts folder contains a copy of Kannada installer; verify canonical package contents',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
@@ -266,11 +273,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Modi / Marathi',
     bcp47Tag: 'mr-Modi',
     iso15924: 'Modi',
+    defaultFont: 'Noto Sans Modi',
     specimenGlyphs: '𑘡𑘪 𑘤𑘿𑘨𑘰𑘮𑘿𑘦𑘲',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Modi-Marathi-IndicLanguageTypingMadeEasy-Object.svg',
     overview:
-      'Historical Modi script keyboard layout driver for archival, research, and scholarly typing of Marathi in its historical Modi script, compliant with Unicode standards.',
+      'Mōḍī is an old handwritten cursive Brahmic script used primarily to write Marathi in Maharashtra, alongside Devanāgarī, especially for administration, commerce, accounts, and correspondence during the Maratha and Peshwa periods. Descending from the Nāgarī family, it developed as a fluid continuous-writing form with distinctive letterforms, ligatures, and a continuous headstroke across words, spanning historical styles from the Yādava era through the Shivaji, Peshwa, and Anglakalin periods.',
     features: [
       'Authentic Unicode Modi script mapping (U+11600–U+1165F)',
       'Enables digital transcription of historical Maratha-era documents',
@@ -286,7 +294,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
     videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
@@ -303,11 +311,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Odia',
     bcp47Tag: 'or-Orya',
     iso15924: 'Orya',
+    defaultFont: 'Noto Sans Oriya',
     specimenGlyphs: 'ନବ ବ୍ରାହ୍ମୀ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Oriya-IndicLanguageTypingMadeEasy-objects.svg',
     overview:
-      'Odia bilingual keyboard layout driver providing fluent typing of Odia characters, matras, and conjuncts with standard Windows keyboard integration.',
+      'The Odia script (Oṛiā Akṣara) is a Brahmic writing system primarily used to write the Odia language, the official language of Odisha, and is also used for Sanskrit and regional languages. Evolving over more than a thousand years from a variant of the Siddham script, its distinctive rounded letterforms and characteristic umbrella-shaped curves emerge largely from the historical practice of writing on palm leaves, which are easily damaged by straight strokes.',
     features: [
       'Logical placement of Odia vowels and consonants',
       'Direct input into desktop word processors and online portals',
@@ -323,7 +332,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
       'C-36: Oriya sticker delivered as SVG instead of PDF; client confirmation pending',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
@@ -341,11 +350,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Gurmukhi',
     bcp47Tag: 'pa-Guru',
     iso15924: 'Guru',
+    defaultFont: 'Noto Sans Gurmukhi',
     specimenGlyphs: 'ਨਵ ਬ੍ਰਾਹਮੀ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Punjabi-IndicLanguageTypingMadeEasy-object.svg',
     overview:
-      'Gurmukhi keyboard layout driver engineered for fast, accurate typing of Punjabi on Windows platforms with comprehensive Unicode support.',
+      'The Gurmukhi script is a Brahmic writing system primarily used to write Punjabi and serves as the official script of Punjabi in the Indian state of Punjab. Derived from the Sharada script tradition, Gurmukhi plays a vital role in preserving Sikh religious literature, particularly the Guru Granth Sahib. Its alphabet traditionally comprises 35 original letters, known as Paintī, alongside additional consonants, vowel signs, nasalisation marks, and subscript characters.',
     features: [
       'Systematic mapping for Gurmukhi vowels, consonants, and diacritics (tippi, bindi, addak)',
       'Seamless layout toggling using standard keyboard shortcut',
@@ -361,7 +371,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
     videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
@@ -378,11 +388,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Tamil & Tamil Grantha',
     bcp47Tag: 'ta-Taml',
     iso15924: 'Taml',
+    defaultFont: 'Noto Sans Tamil & Noto Sans Grantha',
     specimenGlyphs: 'நவ் பிராமி',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-நவ் பிராமி-TamilLanguageTypingMadeEasy-Object.svg',
     overview:
-      'Comprehensive dual-layout suite covering both modern standard Tamil and classical Tamil Grantha script used in epigraphy and traditional Sanskrit texts in Tamil Nadu.',
+      'The Tamiḻ script is a Brahmic writing system comprising 12 vowels (uyireḻuttu), 18 consonants (meyyeḻuttu), and the special character ஃ (āytha eḻuttu), evolving from ancient Tamil-Brahmi through Pallava and Grantha influences. The Grantha script is a classical South Indian Brahmic script that develops from the Pallava script and is traditionally associated with writing Sanskrit in South India from the 4th century CE onward, reflecting the twin literary and epigraphic traditions of Tamil Nadu.',
     features: [
       'Modern Tamil layout with standard pulli (virama) and uyirmey letters',
       'Grantha script layout for historical and Vedic Sanskrit texts',
@@ -397,7 +408,7 @@ export const productCategories: ProductCategory[] = [
       shortcut: 'Windows Key + Spacebar',
     },
     openQuestions: [
-      'C-03: OPEN — Tamil and Tamil Grantha catalog grouping remains unconfirmed by client; checkout is withheld until grouping is resolved.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
       'C-39: Grantha package includes 2 .otf fonts not registered by default installer; client confirmation pending',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
@@ -415,11 +426,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Telugu',
     bcp47Tag: 'te-Telu',
     iso15924: 'Telu',
+    defaultFont: 'Noto Sans Telugu',
     specimenGlyphs: 'నవ్ బ్రాహ్మి',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-నవ్ బ్రాహ్మి-TeluguLanguageTypingMadeEasy-Objects.svg',
     overview:
-      'Telugu keyboard layout driver providing intuitive, fluid typing for Telugu script on Windows systems with native conjunct and vowel-mark support.',
+      'The Telugu script is a Brahmic writing system used primarily to write Telugu, a Dravidian language spoken in Andhra Pradesh, Telangana, and neighbouring regions, as well as Sanskrit texts. Evolving from ancient Brahmi through Bhattiprolu and Kadamba scripts, Telugu developed alongside Kannada before emerging as a distinct script around the 13th century. The writing system features sixteen vowels with independent and diacritic forms used with consonants to represent syllables.',
     features: [
       'Natural gunintamu (vowel sign) and vattulu (consonant conjunct) typing',
       'Works in all Windows text-enabled programs and web applications',
@@ -435,7 +447,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
     videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
@@ -452,11 +464,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Tulu (Tigalari)',
     bcp47Tag: 'tcy-Tglr',
     iso15924: 'Tglr',
+    defaultFont: 'Brahmi Tulu-Tigalari 2026 by Nav Brahmi',
     specimenGlyphs: '𑎡𑎰 𑎪𑎳𑎵𑎱𑎬',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Tulu-LanguageTypingMadeEasy-Object.svg',
     overview:
-      'Tulu Tigalari keyboard driver supporting the indigenous historical Tigalari script of the Tulu Nadu region, recently encoded in the Unicode standard.',
+      'Tulu is a Dravidian language traditionally spoken across Tulu Nadu, encompassing Dakshina Kannada and Udupi in Karnataka and northern Kasaragod in Kerala. Its history extends back many centuries, with early inscriptions and literary works associated with the Tigalari script, a Brahmic script historically used for Tulu and Sanskrit and closely related to the Malayalam script. Tigalari character sets were approved by the Central Institute of Indian Languages in 2021.',
     features: [
       'First-of-its-kind digital typing interface for Tulu Tigalari script',
       'Preserves classical Tulu epigraphic and manuscript traditions',
@@ -472,7 +485,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Resolved — Tulu is confirmed as an independent standalone product distinct from Kannada.',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
       'C-29: Resolved — Brahmi Computing Technologies confirmed font ownership/redistribution rights for delivered Tulu fonts.',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
@@ -490,11 +503,12 @@ export const productCategories: ProductCategory[] = [
     scriptName: 'Sharada',
     bcp47Tag: 'ks-Shrd',
     iso15924: 'Shrd',
+    defaultFont: 'Noto Sans Sharada',
     specimenGlyphs: '𑆤𑆮 𑆧𑇀𑆫𑆳𑆲𑇀𑆩𑆵',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Sharada-IndicLanguageTypingMadeEasy-Objects.svg',
     overview:
-      'Sharada script keyboard layout driver for the historical Kashmiri script used across northwest South Asia from the 8th century onward.',
+      'The Śāradā (also Sarada or Sharada) script is a Brahmic abugida that developed in northwestern South Asia and flourished particularly in Kashmir and neighbouring regions from around the 8th to 12th centuries. Named after Śāradā, the Hindu goddess of learning, it is used primarily for writing Sanskrit and Kashmiri, appearing in historical inscriptions and manuscripts across Kashmir, Punjab, Himachal Pradesh, and ancient Gandhara, including the Bakhshali manuscript.',
     features: [
       'Full Unicode Sharada character and conjunct support (U+11180–U+111DF)',
       'Essential for researchers, universities, and manuscript digital archives',
@@ -510,7 +524,7 @@ export const productCategories: ProductCategory[] = [
     },
     openQuestions: [
       'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹472 per language package.',
+      'C-02: Retail price confirmed at ₹480 per language package.',
     ],
     screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
     videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',

@@ -90,4 +90,43 @@ describe('Product-Specific Font Manifest & Allowlist (C-29)', () => {
     const WM_FONTCHANGE = 0x001d;
     assert.strictEqual(WM_FONTCHANGE, 29);
   });
+
+  it('should verify all 14 languages have appropriate client-mandated Noto Sans or Tulu font', () => {
+    const expectations: Record<string, string> = {
+      'ashokan-brahmi': 'NotoSansBrahmi-Regular.ttf',
+      'bengali': 'NotoSansBengali-Regular.ttf',
+      'devanagari-hindi': 'NotoSansDevanagari-Regular.ttf',
+      'gujarati': 'NotoSansGujarati-Regular.ttf',
+      'kannada': 'NotoSansKannada-RegularNJ.ttf',
+      'malayalam': 'NotoSansMalayalam-Regular.ttf',
+      'modi-marathi': 'NotoSansModi-Regular.ttf',
+      'oriya-odia': 'NotoSansOriya-Regular.ttf',
+      'punjabi-gurmukhi': 'NotoSansGurmukhi-Regular.ttf',
+      'tamil': 'NotoSansTamil-Regular.ttf',
+      'tamil-grantha': 'NotoSansGrantha-Regular.ttf',
+      'telugu': 'NotoSansTelugu-Regular.ttf',
+      'tulu': 'Brahmi_Tulu_Tigalari_Refined_Regular-refined.ttf',
+      'sharada': 'NotoSansSharada-Regular.ttf',
+    };
+
+    for (const [slug, expectedFont] of Object.entries(expectations)) {
+      const approved = getApprovedFontsForProduct(slug);
+      assert.ok(
+        approved.includes(expectedFont),
+        `Product ${slug} must approve ${expectedFont}. Actual approved: ${approved.join(', ')}`
+      );
+      assert.strictEqual(
+        isFontApprovedForProduct(slug, expectedFont),
+        true,
+        `${expectedFont} must be approved for ${slug}`
+      );
+    }
+
+    // Explicit check: Bengali must NOT use Newa
+    assert.strictEqual(
+      isFontApprovedForProduct('bengali', 'NotoSansNewa-Regular.ttf'),
+      false,
+      'Bengali must not use Noto Sans Newa'
+    );
+  });
 });

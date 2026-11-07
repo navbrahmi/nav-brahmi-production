@@ -251,12 +251,12 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
           className="card"
           style={{
             marginBottom: 'var(--space-xl)',
-            borderLeft: '4px solid #DC2626',
-            backgroundColor: '#FEF2F2',
+            borderLeft: '4px solid var(--state-error-text)',
+            backgroundColor: 'var(--state-error-bg)',
           }}
           role="alert"
         >
-          <div style={{ color: '#DC2626', fontWeight: 600, fontSize: '0.95rem' }}>{errorMessage}</div>
+          <div style={{ color: 'var(--state-error-text)', fontWeight: 600, fontSize: '0.95rem' }}>{errorMessage}</div>
         </div>
       )}
 
@@ -264,10 +264,10 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
       {status === 'cancelled' && (
         <div
           className="card card-subtle"
-          style={{ marginBottom: 'var(--space-xl)', borderLeft: '4px solid #D97706' }}
+          style={{ marginBottom: 'var(--space-xl)', borderLeft: '4px solid var(--state-pending-border)' }}
           role="status"
         >
-          <p style={{ margin: 0, color: '#92400E', fontSize: '0.9rem' }}>
+          <p style={{ margin: 0, color: 'var(--state-pending-text)', fontSize: '0.9rem' }}>
             Checkout was dismissed before completion. You can retry at any time using the button below.
           </p>
         </div>

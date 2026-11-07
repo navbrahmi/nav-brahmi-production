@@ -21,6 +21,122 @@
  *   - Clean enterprise-grade UI, mobile-first, fully responsive and accessible.
  */
 
+/**
+ * Indic Script Webfonts (Client Confirmed Noto Sans & Brahmi Tulu-Tigalari)
+ * Loaded locally from /fonts/ for zero-network dependency & cross-platform consistency
+ */
+@font-face {
+  font-family: 'Noto Sans Brahmi';
+  src: url('/fonts/NotoSansBrahmi-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Bengali';
+  src: url('/fonts/NotoSansBengali-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Devanagari';
+  src: url('/fonts/NotoSansDevanagari-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Gujarati';
+  src: url('/fonts/NotoSansGujarati-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Kannada';
+  src: url('/fonts/NotoSansKannada-RegularNJ.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Malayalam';
+  src: url('/fonts/NotoSansMalayalam-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Modi';
+  src: url('/fonts/NotoSansModi-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Oriya';
+  src: url('/fonts/NotoSansOriya-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Gurmukhi';
+  src: url('/fonts/NotoSansGurmukhi-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Tamil';
+  src: url('/fonts/NotoSansTamil-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Grantha';
+  src: url('/fonts/NotoSansGrantha-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Telugu';
+  src: url('/fonts/NotoSansTelugu-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Brahmi Tulu-Tigalari';
+  src: url('/fonts/Brahmi_Tulu_Tigalari_Refined_Regular-refined.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Sharada';
+  src: url('/fonts/NotoSansSharada-Regular.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Brand Tokens (Client Final) */
   --brand: #E51055;
@@ -46,10 +162,13 @@
   --state-pending-bg: #FFFBEB;
   --state-pending-text: #92400E;
   --state-pending-border: #FDE68A;
+  --state-error-bg: #FEF2F2;
+  --state-error-text: #991B1B;
+  --state-error-border: #FECACA;
 
-  /* Typography Stacks (No unverified self-hosted webfonts per C-29) */
+  /* Typography Stacks (Indic Noto Sans + Brahmi Tulu-Tigalari with system fallbacks) */
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-script: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-script: "Brahmi Tulu-Tigalari", "Noto Sans Brahmi", "Noto Sans Sharada", "Noto Sans Modi", "Noto Sans Grantha", "Noto Sans Bengali", "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Oriya", "Noto Sans Gurmukhi", "Noto Sans Tamil", "Noto Sans Telugu", "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
   /* Spacing Scale */
@@ -90,7 +209,10 @@ html {
   color: var(--text-body);
   line-height: 1.6;
   text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -99,6 +221,19 @@ body {
   flex-direction: column;
   background-color: var(--surface);
   color: var(--text-body);
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+}
+
+p, h1, h2, h3, h4, h5, h6, li, td, th {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 /* Typography Hierarchy */
@@ -218,6 +353,39 @@ a:hover {
   list-style: none;
 }
 
+.desktop-nav {
+  display: block;
+}
+
+.mobile-nav-toggle {
+  display: none;
+  background: transparent;
+  color: var(--text-inverse);
+  border: none;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.mobile-nav-toggle:hover,
+.mobile-nav-toggle:focus-visible {
+  background-color: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+
+.mobile-nav-backdrop {
+  display: none;
+}
+
+.mobile-nav-menu {
+  display: none;
+}
+
 .nav-link {
   color: var(--text-inverse) !important;
   text-decoration: none !important;
@@ -269,13 +437,14 @@ a:hover {
 
 .script-specimen-large {
   font-family: var(--font-script);
-  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-size: clamp(2rem, 7vw, 4.5rem);
   font-weight: 700;
   color: var(--brand);
   line-height: 1.2;
   margin-bottom: var(--space-sm);
   letter-spacing: 0.05em;
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .script-specimen-tag {
@@ -293,7 +462,7 @@ a:hover {
 /* 3x3 Monitor Motif Grid */
 .monitor-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: var(--space-lg);
   margin: var(--space-xl) 0;
 }
@@ -353,6 +522,66 @@ a:hover {
   font-size: 1.4rem;
   color: var(--brand);
   margin-bottom: var(--space-xs);
+}
+
+/* =========================================================================
+ * Script-Specific Font Bindings & Utility Classes
+ * Applies dedicated Noto Sans or Brahmi Tulu font strictly to matching script
+ * ========================================================================= */
+:lang(pra-Brah), [data-script="Brah"], .font-script-ashokan-brahmi, .script-brahmi {
+  font-family: 'Noto Sans Brahmi', var(--font-script);
+}
+
+:lang(bn), :lang(bn-Beng), [data-script="Beng"], .font-script-bengali, .script-bengali {
+  font-family: 'Noto Sans Bengali', var(--font-script);
+}
+
+:lang(hi), :lang(hi-Deva), :lang(mr-Deva), [data-script="Deva"], .font-script-devanagari-hindi, .script-devanagari {
+  font-family: 'Noto Sans Devanagari', var(--font-script);
+}
+
+:lang(gu), :lang(gu-Gujr), [data-script="Gujr"], .font-script-gujarati, .script-gujarati {
+  font-family: 'Noto Sans Gujarati', var(--font-script);
+}
+
+:lang(kn), :lang(kn-Knda), [data-script="Knda"], .font-script-kannada, .script-kannada {
+  font-family: 'Noto Sans Kannada', var(--font-script);
+}
+
+:lang(ml), :lang(ml-Mlym), [data-script="Mlym"], .font-script-malayalam, .script-malayalam {
+  font-family: 'Noto Sans Malayalam', var(--font-script);
+}
+
+:lang(mr-Modi), [data-script="Modi"], .font-script-modi-marathi, .script-modi {
+  font-family: 'Noto Sans Modi', var(--font-script);
+}
+
+:lang(or), :lang(or-Orya), [data-script="Orya"], .font-script-oriya-odia, .script-oriya {
+  font-family: 'Noto Sans Oriya', var(--font-script);
+}
+
+:lang(pa), :lang(pa-Guru), [data-script="Guru"], .font-script-punjabi-gurmukhi, .script-gurmukhi {
+  font-family: 'Noto Sans Gurmukhi', var(--font-script);
+}
+
+:lang(ta), :lang(ta-Taml), [data-script="Taml"], .font-script-tamil, .script-tamil {
+  font-family: 'Noto Sans Tamil', 'Noto Sans Grantha', var(--font-script);
+}
+
+:lang(ta-Gran), [data-script="Gran"], .font-script-tamil-grantha, .script-grantha {
+  font-family: 'Noto Sans Grantha', var(--font-script);
+}
+
+:lang(te), :lang(te-Telu), [data-script="Telu"], .font-script-telugu, .script-telugu {
+  font-family: 'Noto Sans Telugu', var(--font-script);
+}
+
+:lang(tcy), :lang(tcy-Tglr), :lang(tcy-Tutg), [data-script="Tglr"], [data-script="Tutg"], .font-script-tulu, .script-tulu {
+  font-family: 'Brahmi Tulu-Tigalari', var(--font-script);
+}
+
+:lang(ks-Shrd), :lang(sa-Shrd), [data-script="Shrd"], .font-script-sharada, .script-sharada {
+  font-family: 'Noto Sans Sharada', var(--font-script);
 }
 
 .monitor-card-category-num {
@@ -448,6 +677,18 @@ a:hover {
   border: 1px solid var(--state-pending-border);
 }
 
+.badge-success {
+  background: var(--state-success-bg);
+  color: var(--state-success-text);
+  border: 1px solid var(--state-success-border);
+}
+
+.badge-error {
+  background: var(--state-error-bg);
+  color: var(--state-error-text);
+  border: 1px solid var(--state-error-border);
+}
+
 .placeholder-notice {
   background: var(--state-pending-bg);
   border: 1px dashed var(--state-pending-border);
@@ -476,10 +717,11 @@ a:hover {
 
 .form-input, .form-textarea, .form-select {
   width: 100%;
+  max-width: 100%;
   padding: 0.75rem 0.9rem;
   border: 1.5px solid var(--border-strong);
   border-radius: var(--radius-md);
-  font-size: 1rem;
+  font-size: 16px; /* 16px prevents iOS Safari auto-zoom */
   font-family: inherit;
   color: var(--text-body);
   background: var(--surface);
@@ -501,6 +743,7 @@ a:hover {
 .table-wrap {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin: var(--space-lg) 0;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
@@ -508,6 +751,7 @@ a:hover {
 
 .data-table {
   width: 100%;
+  min-width: 520px;
   border-collapse: collapse;
   text-align: left;
   font-size: 0.925rem;
@@ -624,7 +868,7 @@ a:hover {
   border: 1.5px solid var(--border-strong);
   border-radius: var(--radius-md);
   color: var(--text-body);
-  font-size: 1rem;
+  font-size: 16px; /* 16px prevents iOS Safari auto-zoom */
   font-family: inherit;
   transition: all 0.15s ease;
 }
@@ -635,19 +879,164 @@ a:hover {
   box-shadow: 0 0 0 3px rgba(229, 16, 85, 0.2);
 }
 
-/* Mobile Responsive */
+/* Mobile & Tablet Responsive Enhancements (Android, iOS, Desktops) */
 @media (max-width: 768px) {
-  .header-inner {
-    flex-direction: column;
-    height: auto;
-    padding-top: var(--space-sm);
-    padding-bottom: var(--space-sm);
+  .desktop-nav {
+    display: none !important;
   }
 
-  .nav-menu {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.75rem;
+  .mobile-nav-toggle {
+    display: inline-flex !important;
+  }
+
+  .header-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    min-height: 64px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .header-brand {
+    font-size: 1.15rem;
+  }
+
+  .header-brand-logo {
+    height: 38px;
+    width: auto;
+  }
+
+  .mobile-nav-backdrop {
+    display: block;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 98;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .mobile-nav-menu {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--brand);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    z-index: 99;
+    padding: var(--space-xs) 0 var(--space-md) 0;
+    animation: mobile-nav-slide-down 0.2s ease-out;
+  }
+
+  @keyframes mobile-nav-slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    color: var(--text-inverse) !important;
+    text-decoration: none !important;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    min-height: 44px;
+    transition: background-color 0.15s ease;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link:focus-visible {
+    background-color: rgba(255, 255, 255, 0.18);
+    outline: none;
+  }
+
+  .mobile-nav-link.active {
+    background-color: rgba(255, 255, 255, 0.25);
+    font-weight: 700;
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+
+  .mobile-nav-arrow {
+    font-size: 1.1rem;
+    opacity: 0.7;
+  }
+
+  .main-content {
+    padding: var(--space-lg) 0 var(--space-2xl) 0;
+  }
+
+  .hero {
+    padding: var(--space-lg) 0;
+    margin-bottom: var(--space-xl);
+  }
+
+  .script-specimen-box {
+    padding: var(--space-lg) var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .card {
+    padding: var(--space-lg);
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: var(--space-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: var(--space-sm);
+    padding-right: var(--space-sm);
+  }
+
+  .card {
+    padding: var(--space-md);
+  }
+
+  .monitor-card {
+    padding: var(--space-md);
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 }
 

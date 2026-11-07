@@ -8,27 +8,27 @@ import {
 } from '../../src/lib/products';
 
 describe('Product Catalog & Pricing Verification (C-02 & C-03)', () => {
-  it('should verify ₹472 is consistently represented as 47200 paise with no additional tax added', () => {
-    assert.strictEqual(CONFIRMED_RETAIL_PRICE_MINOR, 47200, 'paise must be 47200');
-    assert.strictEqual(CONFIRMED_RETAIL_PRICE_INR, 472.0, 'rupees must be 472.00');
+  it('should verify ₹480 is consistently represented as 48000 paise with no additional tax added', () => {
+    assert.strictEqual(CONFIRMED_RETAIL_PRICE_MINOR, 48000, 'paise must be 48000');
+    assert.strictEqual(CONFIRMED_RETAIL_PRICE_INR, 480.0, 'rupees must be 480.00');
 
     for (const prod of AUTHORITATIVE_PRODUCTS) {
       if (prod.priceMinor !== null) {
-        // Price minor must be exactly 47200 paise
+        // Price minor must be exactly 48000 paise
         assert.strictEqual(
           prod.priceMinor,
-          47200,
-          `Product ${prod.slug} priceMinor must be 47200 paise (₹472.00)`
+          48000,
+          `Product ${prod.slug} priceMinor must be 48000 paise (₹480.00)`
         );
 
-        // Computed rupees must equal 472.00
+        // Computed rupees must equal 480.00
         const inRupees = prod.priceMinor / 100;
-        assert.strictEqual(inRupees, 472.0);
+        assert.strictEqual(inRupees, 480.0);
 
-        // Verification that no automatic +18% tax is added (472 * 1.18 = 556.96)
+        // Verification that no automatic +18% tax is added (480 * 1.18 = 566.40)
         assert.notStrictEqual(
           prod.priceMinor,
-          55696,
+          56640,
           'Product price must NOT have an automatic 18% GST added on top'
         );
       }
@@ -63,15 +63,15 @@ describe('Product Catalog & Pricing Verification (C-02 & C-03)', () => {
     assert.deepStrictEqual(catTulu.deliveredFolders, ['Tulu']);
   });
 
-  it('should verify Tamil and Tamil Grantha price is confirmed to ₹472.00 (47200 paise)', () => {
+  it('should verify Tamil and Tamil Grantha price is confirmed to ₹480.00 (48000 paise)', () => {
     const tamilProd = AUTHORITATIVE_PRODUCTS.find((p) => p.slug === 'tamil-and-grantha');
     assert.ok(tamilProd, 'Tamil and Grantha entry exists in catalog');
     assert.strictEqual(
       tamilProd.priceMinor,
-      47200,
-      'Tamil and Grantha must have priceMinor: 47200 paise (₹472.00)'
+      48000,
+      'Tamil and Grantha must have priceMinor: 48000 paise (₹480.00)'
     );
-    assert.strictEqual(tamilProd.price, 472.0, 'Tamil and Grantha price in rupees must be 472.00');
+    assert.strictEqual(tamilProd.price, 480.0, 'Tamil and Grantha price in rupees must be 480.00');
     assert.strictEqual(tamilProd.isCheckoutAllowed, true, 'Checkout must be allowed');
   });
 

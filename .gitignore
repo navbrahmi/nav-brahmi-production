@@ -64,3 +64,11 @@ doc.txt
 *.cab
 *.dll
 *.zip
+
+# Client-provided manuals - do not publish
+/docs/manuals/
+/docs/production/Manuals/
+
+# Allow only the safe environment template
+!/.env.example
+/docs/manuals
