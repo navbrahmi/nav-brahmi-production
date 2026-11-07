@@ -5,6 +5,7 @@ import { execSync } from 'child_process';
 import { HeadObjectCommand, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getStorageClient } from '../src/lib/storage';
 import { prisma } from '../src/lib/prisma';
+import { getProductApprovedFonts } from '../src/lib/font-manifest';
 
 interface ProductMapping {
   slug: string;
@@ -138,9 +139,10 @@ async function main() {
         }
       }
 
-      // Check for allowlisted fonts in packageDir or parent folder
+      // Check for allowlisted fonts for this specific product in packageDir or parent folder
       const parentDir = path.dirname(packageDir);
-      for (const fontName of ['navbrahmi-regular.ttf', 'navbrahmi-bold.ttf']) {
+      const approvedFontsForProduct = getProductApprovedFonts(product.slug || '');
+      for (const fontName of approvedFontsForProduct) {
         if (fs.existsSync(path.join(packageDir, fontName))) {
           filesToZip.push(fontName);
         } else if (fs.existsSync(path.join(parentDir, fontName))) {

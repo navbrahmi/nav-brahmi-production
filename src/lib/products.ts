@@ -2,10 +2,10 @@
  * Authoritative Product Catalog & Pricing Definition
  *
  * Implements confirmed client decisions:
- * - C-02: Retail price is ₹472.00 per individual language package (47200 paise).
- *   Do not charge ₹472 plus 18% automatically.
+ * - C-02: Retail price is ₹480.00 per individual language package (48000 paise).
+ *   Do not charge ₹480 plus 18% automatically.
  * - C-03: Kannada is a separate product. Tulu is a separate product.
- *   Tamil and Tamil Grantha bundling remains unconfirmed; withheld from checkout.
+ *   Tamil and Tamil Grantha confirmed price at ₹480.00.
  */
 
 export interface AuthoritativeProduct {
@@ -22,8 +22,8 @@ export interface AuthoritativeProduct {
   statusNote: string;
 }
 
-export const CONFIRMED_RETAIL_PRICE_MINOR = 47200; // ₹472.00 in paise
-export const CONFIRMED_RETAIL_PRICE_INR = 472.0;
+export const CONFIRMED_RETAIL_PRICE_MINOR = 48000; // ₹480.00 in paise
+export const CONFIRMED_RETAIL_PRICE_INR = 480.0;
 
 export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {

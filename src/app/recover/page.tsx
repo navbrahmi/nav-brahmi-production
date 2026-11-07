@@ -109,9 +109,9 @@ export default function LicenseRecoveryPage() {
               <div
                 role="alert"
                 style={{
-                  background: '#FEF2F2',
-                  color: '#991B1B',
-                  border: '1px solid #FECACA',
+                  background: 'var(--state-error-bg)',
+                  color: 'var(--state-error-text)',
+                  border: '1px solid var(--state-error-border)',
                   padding: '0.85rem 1rem',
                   borderRadius: 'var(--radius-md)',
                   marginBottom: '1.25rem',

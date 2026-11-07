@@ -25,7 +25,7 @@ export default function ContactPage() {
       </header>
 
       {/* Grid: Contact Information & Working Contact Form */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-xl)', marginBottom: 'var(--space-2xl)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 'var(--space-xl)', marginBottom: 'var(--space-2xl)' }}>
         {/* Contact Details Card */}
         <section className="card card-subtle" aria-labelledby="details-heading">
           <h2 id="details-heading" style={{ fontSize: '1.35rem', marginBottom: '1rem', color: 'var(--text-body)' }}>

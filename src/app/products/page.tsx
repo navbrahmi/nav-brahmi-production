@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { productCategories } from '../../content/categories';
 import { prisma } from '../../lib/prisma';
 
@@ -125,35 +124,37 @@ export default async function ProductsPage() {
         </h2>
 
         <div className="monitor-grid">
-          {productCategories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/products/${cat.slug}`}
-              className="monitor-card"
-              aria-label={`View ${cat.agreementName} page`}
-            >
-              <div className="monitor-card-category-num">Category {cat.categoryNumber}</div>
-              <div className="monitor-card-title">{cat.agreementName}</div>
-              <div className="monitor-card-script-sample" lang={cat.bcp47Tag}>
-                {cat.specimenGlyphs}
-              </div>
-              <div className="monitor-card-logo-wrap">
-                <Image
-                  src={cat.logoSvg}
-                  alt={`${cat.scriptName} Logo`}
-                  width={140}
-                  height={120}
-                  loading="lazy"
-                />
-              </div>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
-                {cat.overview.slice(0, 120)}…
-              </p>
-              <span style={{ fontSize: '0.875rem', color: 'var(--link)', fontWeight: 600, marginTop: 'auto', paddingTop: '0.75rem' }}>
-                Open category page →
-              </span>
-            </Link>
-          ))}
+          {productCategories.map((cat) => {
+            const dbProd = dbProductMap.get(cat.slug);
+            let cardPrice = '₹480.00';
+            if (dbProd?.priceMinor) {
+              cardPrice = `₹${(dbProd.priceMinor / 100).toFixed(2)}`;
+            }
+
+            return (
+              <Link
+                key={cat.id}
+                href={`/products/${cat.slug}`}
+                className="monitor-card"
+                aria-label={`View ${cat.agreementName} page`}
+              >
+                <div className="monitor-card-category-num">Category {cat.categoryNumber}</div>
+                <div className="monitor-card-title">{cat.agreementName}</div>
+                <div className={`monitor-card-script-sample font-script-${cat.slug}`} lang={cat.bcp47Tag} data-script={cat.iso15924}>
+                  {cat.specimenGlyphs}
+                </div>
+                <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-body)', margin: '0.25rem 0' }}>
+                  {cardPrice}
+                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0, lineHeight: '1.5' }}>
+                  {cat.overview.slice(0, 120)}…
+                </p>
+                <span style={{ fontSize: '0.875rem', color: 'var(--link)', fontWeight: 600, marginTop: 'auto', paddingTop: '0.75rem' }}>
+                  Open category page →
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </section>
     </div>

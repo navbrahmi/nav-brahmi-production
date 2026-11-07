@@ -67,6 +67,8 @@ export const PRODUCT_FONT_MANIFEST: Record<string, ProductFontDefinition> = {
     productCode: 'MALAYALAM',
     languageName: 'Malayalam',
     approvedFonts: [
+      'NotoSansMalayalam-Regular.ttf',
+      'NotoSansMalayalam-Bold.ttf',
       'RaghuMalayalamSans-Regular.ttf',
       'Rachana-Regular.ttf',
       'Keraleeyam-Regular.ttf',
@@ -132,6 +134,8 @@ export const PRODUCT_FONT_MANIFEST: Record<string, ProductFontDefinition> = {
     productCode: 'BENGALI',
     languageName: 'Bengali',
     approvedFonts: [
+      'NotoSansBengali-Regular.ttf',
+      'NotoSansBengali-Bold.ttf',
       'muktinarrow.ttf',
       'MitraMono.ttf',
       'Ani.ttf',
@@ -150,12 +154,12 @@ export const PRODUCT_FONT_MANIFEST: Record<string, ProductFontDefinition> = {
     productCode: 'TAMIL',
     languageName: 'Tamil',
     approvedFonts: [
+      'NotoSansTamil-Regular.ttf',
+      'NotoSansTamil-Bold.ttf',
       'Lohit-Tamil.ttf',
       'Samyak-Tamil.ttf',
       'LaboratIN-Tamil.ttf',
       'Maduram.ttf',
-      'NotoSansTamil-Regular.ttf',
-      'NotoSansTamil-Bold.ttf',
     ],
   },
   'tamil-grantha': {
@@ -163,6 +167,7 @@ export const PRODUCT_FONT_MANIFEST: Record<string, ProductFontDefinition> = {
     productCode: 'TAMIL_GRANTHA',
     languageName: 'Tamil Grantha',
     approvedFonts: [
+      'NotoSansGrantha-Regular.ttf',
       'NotoSerifGrantha-Regular.ttf',
       'Grantham Roman.ttf',
       'Grantham Bold.ttf',
@@ -178,9 +183,10 @@ export const PRODUCT_FONT_MANIFEST: Record<string, ProductFontDefinition> = {
     productCode: 'TAMIL_AND_GRANTHA',
     languageName: 'Tamil & Tamil Grantha (Unresolved Bundle)',
     approvedFonts: [
-      'Lohit-Tamil.ttf',
       'NotoSansTamil-Regular.ttf',
+      'NotoSansGrantha-Regular.ttf',
       'NotoSerifGrantha-Regular.ttf',
+      'Lohit-Tamil.ttf',
       'Grantham Roman.ttf',
     ],
   },

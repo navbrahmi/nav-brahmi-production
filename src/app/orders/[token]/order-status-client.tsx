@@ -72,10 +72,10 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
         return <span className="badge badge-pending">Order Created</span>;
       case 'FAILED':
       case 'EXPIRED':
-        return <span className="badge" style={{ backgroundColor: '#FEE2E2', color: '#B91C1C' }}>Payment Not Completed</span>;
+        return <span className="badge badge-error">Payment Not Completed</span>;
       case 'PAYMENT_MISMATCH':
       case 'NEEDS_ATTENTION':
-        return <span className="badge" style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}>Under Verification</span>;
+        return <span className="badge badge-pending">Under Verification</span>;
       default:
         return <span className="badge badge-subtle">{status}</span>;
     }

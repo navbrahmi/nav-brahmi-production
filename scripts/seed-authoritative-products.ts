@@ -7,9 +7,9 @@ export async function seedAuthoritativeProducts() {
   const created: any[] = [];
   for (const cat of productCategories) {
     const code = cat.slug.toUpperCase().replace(/-/g, '_');
-    // Confirmed price per C-02/C-03: ₹472 retail (47200 paise) for all language packages.
-    const priceMinor = 47200;
-    const price = 472.0;
+    // Confirmed price per C-02/C-03: ₹480 retail (48000 paise) for all language packages.
+    const priceMinor = 48000;
+    const price = 480.0;
 
     const existing = await prisma.product.findFirst({
       where: {
