@@ -85,8 +85,10 @@ export async function processEmailOutbox(
         // Decrypt license key in memory; never log decrypted key
         const decryptedKey = decryptLicenseKey(license);
         const resolvedKey = decryptedKey || '[Legacy Unrecoverable Key - Contact Support]';
-        const downloadToken = createPurchaseAuthToken(license.id, license.id, license.email);
-        const downloadUrl = `${appBaseUrl}/api/download-installer?token=${encodeURIComponent(downloadToken)}`;
+        // Point downloadUrl to the secure order portal to avoid exposing sensitive tokens in query parameters
+        const downloadUrl = license.order?.publicToken
+          ? `${appBaseUrl}/orders/${encodeURIComponent(license.order.publicToken)}`
+          : `${appBaseUrl}/instructions`;
 
         let emailContent: { subject: string; text: string; html: string };
         if (item.kind === 'LICENSE_RECOVERY') {
@@ -164,6 +166,113 @@ export async function processEmailOutbox(
           });
 
           logger.warn('Email dispatch failed, scheduled for retry', {
+            outboxId: item.id,
+            attempt: nextAttempt,
+            isTerminal,
+            error: sendResult.error,
+          });
+
+          result.failed++;
+          result.errors.push({
+            outboxId: item.id,
+            error: sendResult.error || 'Unknown send failure',
+          });
+        }
+      } else if (item.kind === 'SUPPORT_NOTIFICATION') {
+        let subject = '[Nav Brahmi Support] New Support Notification';
+        let text = 'A new support event requires attention.';
+        let html = '<p>A new support event requires attention.</p>';
+
+        if (item.payloadRef) {
+          const refundRequest = await prisma.refundRequest.findUnique({
+            where: { id: item.payloadRef },
+            include: {
+              order: {
+                include: {
+                  product: true,
+                },
+              },
+            },
+          });
+
+          if (refundRequest) {
+            subject = `[Nav Brahmi Support] Refund Review Request: Order ${refundRequest.order.publicToken}`;
+            text =
+              `Hello Support Team,\n\nA customer has submitted a refund or technical review request:\n\n` +
+              `Request ID: ${refundRequest.id}\n` +
+              `Order Reference: ${refundRequest.order.publicToken}\n` +
+              `Product: ${refundRequest.order.product?.name || 'N/A'} (${refundRequest.order.product?.code || 'N/A'})\n` +
+              `Customer Email: ${refundRequest.customerEmail}\n` +
+              `Reason: ${refundRequest.reason}\n` +
+              `Details: ${refundRequest.supportingInfo || 'None provided'}\n` +
+              `Installation Timestamp: ${refundRequest.installationAt ? refundRequest.installationAt.toISOString() : 'None recorded'}\n` +
+              `Status: ${refundRequest.status}\n` +
+              `Submitted: ${refundRequest.requestedAt.toISOString()}\n\n` +
+              `Nav Brahmi Automated Support System\n${appBaseUrl}`;
+
+            html =
+              `<!DOCTYPE html><html><body style="font-family: sans-serif; line-height: 1.5; color: #231F20;">` +
+              `<h2 style="color: #E51055;">Customer Support Review Request</h2>` +
+              `<ul>` +
+              `<li><strong>Request ID:</strong> ${refundRequest.id}</li>` +
+              `<li><strong>Order Token:</strong> <code>${refundRequest.order.publicToken}</code></li>` +
+              `<li><strong>Product:</strong> ${refundRequest.order.product?.name || 'N/A'}</li>` +
+              `<li><strong>Customer Email:</strong> ${refundRequest.customerEmail}</li>` +
+              `<li><strong>Reason:</strong> ${refundRequest.reason}</li>` +
+              `<li><strong>Details:</strong> ${refundRequest.supportingInfo || 'None provided'}</li>` +
+              `<li><strong>Installation Timestamp:</strong> ${refundRequest.installationAt ? refundRequest.installationAt.toISOString() : 'None recorded'}</li>` +
+              `<li><strong>Status:</strong> ${refundRequest.status}</li>` +
+              `<li><strong>Submitted:</strong> ${refundRequest.requestedAt.toISOString()}</li>` +
+              `</ul></body></html>`;
+          }
+        }
+
+        const sendResult = await transport.sendMail({
+          to: item.toEmail,
+          subject,
+          text,
+          html,
+        });
+
+        if (sendResult.success) {
+          await prisma.emailOutbox.update({
+            where: { id: item.id },
+            data: {
+              status: EmailOutboxStatus.SENT,
+              sentAt: new Date(),
+            },
+          });
+
+          await recordAuditEvent({
+            type: 'SUPPORT_NOTIFICATION_SENT',
+            actorType: 'SYSTEM',
+            refType: 'ORDER',
+            refId: item.payloadRef || item.id,
+            metadata: {
+              outboxId: item.id,
+              kind: item.kind,
+              to: item.toEmail,
+              messageId: sendResult.messageId,
+            },
+          });
+
+          result.sent++;
+        } else {
+          const nextAttempt = item.attempts + 1;
+          const isTerminal = nextAttempt >= 5;
+          const backoffMinutes = Math.pow(2, nextAttempt);
+          const nextAttemptAt = new Date(Date.now() + backoffMinutes * 60 * 1000);
+
+          await prisma.emailOutbox.update({
+            where: { id: item.id },
+            data: {
+              attempts: nextAttempt,
+              status: isTerminal ? EmailOutboxStatus.FAILED : EmailOutboxStatus.PENDING,
+              nextAttemptAt: isTerminal ? item.nextAttemptAt : nextAttemptAt,
+            },
+          });
+
+          logger.warn('Support notification dispatch failed, scheduled for retry', {
             outboxId: item.id,
             attempt: nextAttempt,
             isTerminal,

@@ -36,10 +36,16 @@ const serverEnvSchema = z.object({
   EMAIL_PROVIDER: z.enum(['resend', 'mock', 'dev']).default('mock'),
   RESEND_API_KEY: z.string().optional(),
   FROM_EMAIL: z.string().email().optional(),
+  EMAIL_TEST_RECIPIENT: z.string().optional(),
+  RESEND_TEST_EMAIL: z.string().optional(),
+
+  // Local Testing Bypass
+  DEMO_PAYMENT_BYPASS: z.string().optional(),
 });
 
 const clientEnvSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+  NEXT_PUBLIC_DEMO_PAYMENT_BYPASS: z.string().optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;

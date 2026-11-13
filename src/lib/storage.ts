@@ -69,27 +69,62 @@ export function getStorageClient(): StorageConfig {
       accessKeyId: keyId,
       secretAccessKey: applicationKey,
     },
+    forcePathStyle: true,
   });
 
   cachedStorage = { provider: 'b2', bucketName, s3Client };
   return cachedStorage;
 }
 
+let cachedClockOffsetMs: number | null = null;
+let lastClockSyncTime = 0;
+
+async function getStorageServerDate(endpoint: string): Promise<Date> {
+  const now = Date.now();
+  if (cachedClockOffsetMs !== null && now - lastClockSyncTime < 300000) {
+    return new Date(now + cachedClockOffsetMs);
+  }
+
+  try {
+    const res = await fetch(endpoint, { method: 'HEAD' });
+    const dateHeader = res.headers.get('date');
+    if (dateHeader) {
+      const serverTime = new Date(dateHeader).getTime();
+      cachedClockOffsetMs = serverTime - now;
+      lastClockSyncTime = now;
+      return new Date(serverTime);
+    }
+  } catch {}
+
+  return new Date();
+}
+
 /**
  * Generates a presigned GET URL for an object.
  * Enforces maximum TTL of 900 seconds (15 minutes).
+ * Synchronizes with storage provider clock to prevent clock-skew expiration (401/403).
  * Never logs URLs.
  */
 export async function getPresignedGetUrl(objectKey: string, ttlSeconds: number = 900): Promise<string> {
   const effectiveTtl = Math.min(Math.max(1, ttlSeconds), 900); // 1s to 15m maximum
-  const { s3Client, bucketName } = getStorageClient();
+  const { s3Client, bucketName, provider } = getStorageClient();
+
+  let signingDate: Date | undefined;
+  if (provider === 'b2') {
+    const rawEndpoint = process.env.B2_ENDPOINT || 's3.us-east-005.backblazeb2.com';
+    const endpoint = rawEndpoint.startsWith('http') ? rawEndpoint : `https://${rawEndpoint}`;
+    signingDate = await getStorageServerDate(endpoint);
+  }
 
   const command = new GetObjectCommand({
     Bucket: bucketName,
     Key: objectKey,
   });
 
-  return getSignedUrl(s3Client, command, { expiresIn: effectiveTtl });
+  return getSignedUrl(s3Client, command, {
+    expiresIn: effectiveTtl,
+    ...(signingDate ? { signingDate } : {}),
+  });
 }
 
 /**

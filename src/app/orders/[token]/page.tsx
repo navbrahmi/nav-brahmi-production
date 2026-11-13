@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
+import { decryptLicenseKey } from '@/lib/license-crypto';
+import { createPurchaseAuthToken } from '@/lib/license';
 import { OrderStatusClient } from './order-status-client';
 
 export const metadata: Metadata = {
@@ -40,6 +42,18 @@ export default async function OrderDetailPage({
     notFound();
   }
 
+  let licenseKey: string | undefined;
+  let downloadUrl: string | undefined;
+
+  if (order.licenses.length > 0) {
+    const activeLicense = order.licenses[0];
+    const decrypted = decryptLicenseKey(activeLicense) || activeLicense.licenseKey;
+    if (decrypted) {
+      licenseKey = decrypted;
+      downloadUrl = '/api/download-installer';
+    }
+  }
+
   return (
     <div className="container section">
       <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
@@ -59,6 +73,8 @@ export default async function OrderDetailPage({
           customerEmail: maskEmail(order.customerEmail),
           createdAt: order.createdAt.toISOString(),
           hasLicense: order.licenses.length > 0,
+          licenseKey,
+          downloadUrl,
         }}
       />
     </div>

@@ -16,6 +16,10 @@ const REDACTION_PATTERNS = [
   { regex: /https:\/\/[^\s"'<>]+\?[^\s"'<>]*X-Amz-Signature=[^\s"'<>]+/gi, replacement: '[REDACTED_PRESIGNED_URL]' },
   // Generic Private Keys
   { regex: /-----BEGIN[ A-Z0-9_-]+PRIVATE KEY-----[\s\S]+?-----END[ A-Z0-9_-]+PRIVATE KEY-----/gi, replacement: '[REDACTED_PRIVATE_KEY]' },
+  // Download tokens, order tokens, JWTs, auth in query strings (?token=..., &orderToken=..., etc.)
+  { regex: /([?&](?:token|download_token|auth|orderToken|order_token|order_ref|licenseKey|license_key)=)[^&\s"'<>]+/gi, replacement: '$1[REDACTED_TOKEN]' },
+  // JWT / Ed25519 tokens in strings (header.payload.sig or payload.sig)
+  { regex: /eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}(?:\.[A-Za-z0-9_-]{10,})?/g, replacement: '[REDACTED_TOKEN]' },
 ];
 
 function maskEmail(email: string): string {

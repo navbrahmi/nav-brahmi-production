@@ -2,14 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { prisma } from '@/lib/prisma';
-import { verifyPurchaseAuthToken } from '@/lib/license';
+import { verifyPurchaseAuthToken, createPurchaseAuthToken } from '@/lib/license';
 import { verifyActivationToken } from '@/lib/keys';
+import { decryptLicenseKey } from '@/lib/license-crypto';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(req: NextRequest) {
+async function serveInstaller(
+  req: NextRequest,
+  options: {
+    orderTokenParam?: string | null;
+    tokenParam?: string | null;
+    fileParam?: string | null;
+    hasLicenseKeyInParams?: boolean;
+  }
+) {
   try {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || '127.0.0.1';
 
@@ -28,9 +37,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const searchParams = req.nextUrl ? req.nextUrl.searchParams : new URL(req.url, 'http://localhost').searchParams;
-    const tokenParam = searchParams.get('token')?.trim();
-    const fileParam = searchParams.get('file')?.toLowerCase();
+    const { orderTokenParam, tokenParam, fileParam, hasLicenseKeyInParams } = options;
 
     // Security Rule (Task 5 & F-09):
     // Do NOT serve setup.ps1 or setup.bat by default. Unserved unless explicitly approved.
@@ -44,60 +51,93 @@ export async function GET(req: NextRequest) {
     }
 
     // Security Rule (F-09): Reject raw licenseKey in query strings to prevent browser history leakage.
-    if (searchParams.has('licenseKey') || searchParams.has('license_key')) {
+    if (hasLicenseKeyInParams) {
       return NextResponse.json(
         {
-          error: 'Passing raw license keys in query parameters is prohibited. Use a signed authorization token.',
+          error: 'Passing raw license keys in request parameters is prohibited. Use an order token or signed authorization.',
         },
         { status: 400 }
       );
     }
 
-    // Require token
-    if (!tokenParam) {
+    // Require either orderToken or signed authorization token
+    if (!orderTokenParam && !tokenParam) {
       return NextResponse.json(
-        { error: 'Signed authorization token is required to download installer.' },
+        { error: 'Valid authorization token or order token is required to download installer.' },
         { status: 401 }
       );
     }
 
-    // Verify token (supports either purchase auth token or activation token)
     let licenseId: string | null = null;
     let licenseKey: string | null = null;
+    let resolvedToken = tokenParam;
+    let licenseRecord: any = null;
 
-    const purchaseAuth = verifyPurchaseAuthToken(tokenParam);
-    if (purchaseAuth.valid && purchaseAuth.payload) {
-      licenseId = purchaseAuth.payload.license_id;
-      licenseKey = purchaseAuth.payload.license_key;
-    } else {
-      const actAuth = verifyActivationToken(tokenParam);
-      if (actAuth.valid && actAuth.payload) {
-        licenseId = actAuth.payload.lic || actAuth.payload.license_id || null;
+    if (orderTokenParam) {
+      // Resolve license via public orderToken (Zero sensitive keys/JWT in URL)
+      const order = await prisma.order.findUnique({
+        where: { publicToken: orderTokenParam },
+        include: {
+          licenses: {
+            where: { status: 'ACTIVE' },
+            orderBy: { createdAt: 'desc' },
+            take: 1,
+          },
+        },
+      });
+
+      if (!order || order.licenses.length === 0) {
+        return NextResponse.json(
+          { error: 'Order not found or no active license exists for this purchase.' },
+          { status: 404 }
+        );
+      }
+
+      licenseRecord = order.licenses[0];
+      licenseId = licenseRecord.id;
+      licenseKey = decryptLicenseKey(licenseRecord) || licenseRecord.licenseKey || '';
+      resolvedToken = createPurchaseAuthToken(licenseKey || '', licenseRecord.id, licenseRecord.email);
+    } else if (tokenParam) {
+      // Verify token (supports either purchase auth token or activation token)
+      const purchaseAuth = verifyPurchaseAuthToken(tokenParam);
+      if (purchaseAuth.valid && purchaseAuth.payload) {
+        licenseId = purchaseAuth.payload.license_id;
+        licenseKey = purchaseAuth.payload.license_key;
+      } else {
+        const actAuth = verifyActivationToken(tokenParam);
+        if (actAuth.valid && actAuth.payload) {
+          licenseId = actAuth.payload.lic || actAuth.payload.license_id || null;
+        }
+      }
+
+      if (!licenseId) {
+        return NextResponse.json(
+          { error: 'Authorization token is invalid, expired, or tampered.' },
+          { status: 401 }
+        );
+      }
+
+      licenseRecord = await prisma.license.findUnique({
+        where: { id: licenseId },
+      });
+
+      if (!licenseRecord || licenseRecord.status !== 'ACTIVE') {
+        return NextResponse.json(
+          { error: 'Associated license is no longer active.' },
+          { status: 403 }
+        );
+      }
+
+      if (!licenseKey) {
+        licenseKey = decryptLicenseKey(licenseRecord) || licenseRecord.licenseKey;
       }
     }
 
-    if (!licenseId) {
-      return NextResponse.json(
-        { error: 'Authorization token is invalid, expired, or tampered.' },
-        { status: 401 }
-      );
-    }
-
-    // Verify license in database is active
-    const license = await prisma.license.findUnique({
-      where: { id: licenseId },
+    logger.info('Serving installer download', {
+      ip,
+      authMethod: orderTokenParam ? 'order_token' : 'auth_token',
+      licenseIdRedacted: licenseId ? `${licenseId.substring(0, 8)}...` : undefined,
     });
-
-    if (!license || license.status !== 'ACTIVE') {
-      return NextResponse.json(
-        { error: 'Associated license is no longer active.' },
-        { status: 403 }
-      );
-    }
-
-    if (!licenseKey) {
-      licenseKey = license.licenseKey;
-    }
 
     const filename = 'Setup.exe';
     const filePath = path.resolve(process.cwd(), 'Requirements', 'windows-driver', filename);
@@ -113,7 +153,7 @@ export async function GET(req: NextRequest) {
 
     // Attach signed authorization payload block to Setup.exe
     const payloadObj = {
-      token: tokenParam,
+      token: resolvedToken || tokenParam,
       licenseKey: licenseKey,
       generatedAt: Date.now(),
     };
@@ -130,6 +170,9 @@ export async function GET(req: NextRequest) {
         'Content-Type': 'application/vnd.microsoft.portable-executable',
         'Content-Disposition': `attachment; filename="${filename}"`,
         'Content-Length': fileBuffer.length.toString(),
+        'Cache-Control': 'no-store, no-cache, must-revalidate, private',
+        'Referrer-Policy': 'no-referrer',
+        'Pragma': 'no-cache',
       },
     });
   } catch (error: any) {
@@ -139,4 +182,40 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl ? req.nextUrl.searchParams : new URL(req.url, 'http://localhost').searchParams;
+  const orderTokenParam = searchParams.get('orderToken')?.trim() || searchParams.get('order_token')?.trim() || req.headers.get('x-order-token')?.trim();
+  const tokenParam =
+    searchParams.get('token')?.trim() ||
+    req.headers.get('x-download-token')?.trim() ||
+    (req.headers.get('authorization')?.startsWith('Bearer ')
+      ? req.headers.get('authorization')?.substring(7).trim()
+      : null);
+  const fileParam = searchParams.get('file')?.toLowerCase();
+  const hasLicenseKeyInParams = searchParams.has('licenseKey') || searchParams.has('license_key');
+
+  return serveInstaller(req, { orderTokenParam, tokenParam, fileParam, hasLicenseKeyInParams });
+}
+
+export async function POST(req: NextRequest) {
+  let body: any = {};
+  try {
+    body = await req.json();
+  } catch {
+    body = {};
+  }
+
+  const orderTokenParam = (body.orderToken || body.order_token)?.trim() || req.headers.get('x-order-token')?.trim();
+  const tokenParam =
+    (body.token || body.download_token)?.trim() ||
+    req.headers.get('x-download-token')?.trim() ||
+    (req.headers.get('authorization')?.startsWith('Bearer ')
+      ? req.headers.get('authorization')?.substring(7).trim()
+      : null);
+  const fileParam = body.file?.toLowerCase();
+  const hasLicenseKeyInParams = Boolean(body.licenseKey || body.license_key);
+
+  return serveInstaller(req, { orderTokenParam, tokenParam, fileParam, hasLicenseKeyInParams });
 }
