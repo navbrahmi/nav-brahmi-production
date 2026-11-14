@@ -12,10 +12,6 @@ export default function ContactPage() {
   return (
     <div className="container container-reading">
       <header style={{ marginBottom: 'var(--space-2xl)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
-          <span className="badge badge-brand">Get in Touch</span>
-          <span className="badge badge-pending">Direct Communication</span>
-        </div>
         <h1 style={{ color: 'var(--brand)', marginBottom: '0.75rem' }}>
           {contactContent.title}
         </h1>
@@ -35,15 +31,14 @@ export default function ContactPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.95rem' }}>
             <div>
               <strong style={{ display: 'block', color: 'var(--text-muted)', fontSize: '0.8rem', textTransform: 'uppercase' }}>
-                Organization & Proprietor
+                Organization
               </strong>
               <div>{contactContent.contactDetails.organization}</div>
-              <div style={{ color: 'var(--text-muted)' }}>{contactContent.contactDetails.proprietor}</div>
             </div>
 
             <div>
               <strong style={{ display: 'block', color: 'var(--text-muted)', fontSize: '0.8rem', textTransform: 'uppercase' }}>
-                Operational Location
+                Address
               </strong>
               <div>{contactContent.contactDetails.location}</div>
             </div>
@@ -79,13 +74,6 @@ export default function ContactPage() {
 
           <ContactForm />
         </section>
-      </div>
-
-      {/* Backend Integration Notice */}
-      <div className="placeholder-notice" role="note">
-        <div>
-          <strong>Mailbox Relay Notice:</strong> {contactContent.openDecisionNotice}
-        </div>
       </div>
     </div>
   );

@@ -8,7 +8,6 @@ export interface ContactContent {
   title: string;
   subtitle: string;
   contactDetails: {
-    proprietor: string;
     organization: string;
     location: string;
     officialEmail: string;
@@ -27,7 +26,6 @@ export interface ContactContent {
     successMessage: string;
     errorMessage: string;
   };
-  openDecisionNotice: string;
 }
 
 export const contactContent: ContactContent = {
@@ -35,11 +33,10 @@ export const contactContent: ContactContent = {
   subtitle:
     'Get in touch with the Nav Brahmi team for inquiries regarding Indian language keyboard drivers, academic licensing, or technical assistance.',
   contactDetails: {
-    proprietor: 'Naveen Jayachandra (Proprietor)',
     organization: 'NAV BRAHMI',
-    location: 'Bengaluru, Karnataka, India',
+    location: '#75, 7th Cross, K.P. West, Bengaluru',
     officialEmail: 'support@brahmicomputing.in',
-    phone: '9632819063',
+    phone: '+91 98459 80534',
   },
   form: {
     title: 'Send a Message',
@@ -55,6 +52,4 @@ export const contactContent: ContactContent = {
     successMessage: 'Thank you. Your message has been received and our team will get back to you shortly.',
     errorMessage: 'Unable to send your message. Please check the required fields or email us directly.',
   },
-  openDecisionNotice:
-    'Official support mailbox: support@brahmicomputing.in. Phone: 9632819063. Operational relay is active via Resend transport.',
 };

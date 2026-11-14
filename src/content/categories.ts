@@ -4,6 +4,13 @@
  * Reference: docs/production/13-product-catalog-and-package-matrix.md
  */
 
+export interface ProductManual {
+  title: string;
+  filename: string;
+  url: string;
+  size: string;
+}
+
 export interface ProductCategory {
   id: string;
   categoryNumber: number;
@@ -26,10 +33,12 @@ export interface ProductCategory {
     encoding: string;
     shortcut: string;
   };
-  openQuestions: string[];
-  screenshots: string;
-  videos: string;
-  fontLinks: string;
+  images: string[];
+  manuals: ProductManual[];
+  openQuestions?: string[];
+  screenshots?: string;
+  videos?: string;
+  fontLinks?: string;
   manualAsset: string;
   stickerAsset: string;
 }
@@ -38,7 +47,7 @@ export const productCategories: ProductCategory[] = [
   {
     id: 'cat-1',
     categoryNumber: 1,
-    agreementName: 'Ashokan Brahmi and Devanagari',
+    agreementName: 'Ashokan Brahmi',
     slug: 'ashokan-brahmi',
     deliveredFolders: ['Ashokan Brahmi'],
     scriptName: 'Ashokan Brahmi',
@@ -63,20 +72,22 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode 7.0+ (Brahmi Block U+11000–U+1107F)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Does customer also receive Devanagari as a bundle or separate download?',
-      'C-02: Retail price confirmed at ₹480 per language package.',
+    images: ['/images/languages/ashokan-brahmi.png'],
+    manuals: [
+      {
+        title: 'Ashokan Brahmi User Manual',
+        filename: 'AshokanBrahmi-Manual.pdf',
+        url: '/manuals/AshokanBrahmi-Manual.pdf',
+        size: '522 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'AshokanBrahmi-Manual.pdf',
     stickerAsset: 'Ashokan-Brahmi-Sticker.pdf',
   },
   {
     id: 'cat-2',
     categoryNumber: 2,
-    agreementName: 'Bengali and Devanagari',
+    agreementName: 'Bengali',
     slug: 'bengali',
     deliveredFolders: ['Bengali'],
     scriptName: 'Bengali',
@@ -101,13 +112,15 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Bengali Block (U+0980–U+09FF)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹480 per language package.',
+    images: ['/images/languages/bengali.png'],
+    manuals: [
+      {
+        title: 'Bengali User Manual',
+        filename: 'Bengali-Manual.pdf',
+        url: '/manuals/Bengali-Manual.pdf',
+        size: '945 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Bengali-Manual.pdf',
     stickerAsset: 'Bengali-Sticker.pdf',
   },
@@ -139,19 +152,22 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Devanagari Block (U+0900–U+097F)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-02: Retail price confirmed at ₹480 per language package.',
+    images: ['/images/languages/devanagari.png'],
+    manuals: [
+      {
+        title: 'Devanagari / Hindi User Manual',
+        filename: 'Devanagari-Manual.pdf',
+        url: '/manuals/Devanagari-Manual.pdf',
+        size: '956 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Devanagari-Manual.pdf',
     stickerAsset: 'Devanagari-Sticker.pdf',
   },
   {
     id: 'cat-4',
     categoryNumber: 4,
-    agreementName: 'Gujarati and Devanagari',
+    agreementName: 'Gujarati',
     slug: 'gujarati',
     deliveredFolders: ['Gujarati'],
     scriptName: 'Gujarati',
@@ -176,13 +192,15 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Gujarati Block (U+0A80–U+0AFF)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹480 per language package.',
+    images: ['/images/languages/gujarati.png'],
+    manuals: [
+      {
+        title: 'Gujarati User Manual',
+        filename: 'Gujarathi-Manual.pdf',
+        url: '/manuals/Gujarathi-Manual.pdf',
+        size: '923 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Gujarati-Manual.pdf',
     stickerAsset: 'Gujarati-Sticker.pdf',
   },
@@ -214,21 +232,22 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Kannada Block (U+0C80–U+0CFF)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Resolved — Kannada is confirmed as an independent standalone product distinct from Tulu.',
-      'C-02: Retail price confirmed at ₹480 per language package.',
-      'C-36: Kannada and Malayalam share an installer build in client delivery; verify canonical files',
+    images: ['/images/languages/kannada.png'],
+    manuals: [
+      {
+        title: 'Kannada User Manual',
+        filename: 'Kannada-Manual2026-11-05.pdf',
+        url: '/manuals/Kannada-Manual2026-11-05.pdf',
+        size: '1.0 MB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Kannada-Manual.pdf',
     stickerAsset: 'Kannada-Sticker.pdf',
   },
   {
     id: 'cat-6',
     categoryNumber: 6,
-    agreementName: 'Malayalam and Devanagari',
+    agreementName: 'Malayalam',
     slug: 'malayalam',
     deliveredFolders: ['Malayalam'],
     scriptName: 'Malayalam',
@@ -253,21 +272,22 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Malayalam Block (U+0D00–U+0D7F)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹480 per language package.',
-      'C-36: Malayalam fonts folder contains a copy of Kannada installer; verify canonical package contents',
+    images: ['/images/languages/malayalam.png'],
+    manuals: [
+      {
+        title: 'Malayalam User Manual',
+        filename: 'Malayalam-Manual.pdf',
+        url: '/manuals/Malayalam-Manual.pdf',
+        size: '961 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Malayalam-Manual.pdf',
     stickerAsset: 'Malayalam-Sticker.pdf',
   },
   {
     id: 'cat-7',
     categoryNumber: 7,
-    agreementName: 'Modi/Marathi and Devanagari',
+    agreementName: 'Modi/Marathi',
     slug: 'modi-marathi',
     deliveredFolders: ['Modi-Marathi'],
     scriptName: 'Modi / Marathi',
@@ -292,20 +312,22 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Modi Block (U+11600–U+1165F)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹480 per language package.',
+    images: ['/images/languages/modi-marathi.png'],
+    manuals: [
+      {
+        title: 'Modi / Marathi User Manual',
+        filename: 'Modi-Marathi--Manual.pdf',
+        url: '/manuals/Modi-Marathi--Manual.pdf',
+        size: '487 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Modi-Marathi-Manual.pdf',
     stickerAsset: 'Modi-Marathi-Sticker.pdf',
   },
   {
     id: 'cat-8',
     categoryNumber: 8,
-    agreementName: 'Oriya/Odia and Devanagari',
+    agreementName: 'Oriya/Odia',
     slug: 'oriya-odia',
     deliveredFolders: ['Oriya-Odia'],
     scriptName: 'Odia',
@@ -330,21 +352,22 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Odia Block (U+0B00–U+0B7F)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹480 per language package.',
-      'C-36: Oriya sticker delivered as SVG instead of PDF; client confirmation pending',
+    images: ['/images/languages/oriya.png'],
+    manuals: [
+      {
+        title: 'Odia / Oriya User Manual',
+        filename: 'Oriya-Manual.pdf',
+        url: '/manuals/Oriya-Manual.pdf',
+        size: '1.0 MB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Oriya-Manual.pdf',
     stickerAsset: 'Oriya-Sticker.svg',
   },
   {
     id: 'cat-9',
     categoryNumber: 9,
-    agreementName: 'Punjabi/Gurmukhi and Devanagari',
+    agreementName: 'Punjabi/Gurmukhi',
     slug: 'punjabi-gurmukhi',
     deliveredFolders: ['Punjabi-Gurumuki'],
     scriptName: 'Gurmukhi',
@@ -369,13 +392,15 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Gurmukhi Block (U+0A00–U+0A7F)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹480 per language package.',
+    images: ['/images/languages/punjabi-gurumukhi.png'],
+    manuals: [
+      {
+        title: 'Punjabi / Gurmukhi User Manual',
+        filename: 'Punjabi-Gurumukhi-Manual.pdf',
+        url: '/manuals/Punjabi-Gurumukhi-Manual.pdf',
+        size: '895 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Punjabi-Manual.pdf',
     stickerAsset: 'Punjabi-Sticker.pdf',
   },
@@ -407,20 +432,28 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Tamil (U+0B80–U+0BFF) & Grantha (U+11300–U+1137F)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-02: Retail price confirmed at ₹480 per language package.',
-      'C-39: Grantha package includes 2 .otf fonts not registered by default installer; client confirmation pending',
+    images: ['/images/languages/tamil.png', '/images/languages/tamil-grantha.png'],
+    manuals: [
+      {
+        title: 'Tamil User Manual',
+        filename: 'Tamil-Manual.pdf',
+        url: '/manuals/Tamil-Manual.pdf',
+        size: '911 KB',
+      },
+      {
+        title: 'Tamil Grantha User Manual',
+        filename: 'Tamil-Grantha-Manual.pdf',
+        url: '/manuals/Tamil-Grantha-Manual.pdf',
+        size: '726 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Tamil-Manual.pdf / TamilGrantha-Manual.pdf',
     stickerAsset: 'Tamil-Sticker.pdf / TamilGrantha-Sticker.pdf',
   },
   {
     id: 'cat-11',
     categoryNumber: 11,
-    agreementName: 'Telugu and Devanagari',
+    agreementName: 'Telugu',
     slug: 'telugu',
     deliveredFolders: ['Telugu'],
     scriptName: 'Telugu',
@@ -445,13 +478,15 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Telugu Block (U+0C00–U+0C7F)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹480 per language package.',
+    images: ['/images/languages/telugu.png'],
+    manuals: [
+      {
+        title: 'Telugu User Manual',
+        filename: 'Telugu-Manual.pdf',
+        url: '/manuals/Telugu-Manual.pdf',
+        size: '928 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Telugu-Manual.pdf',
     stickerAsset: 'Telugu-Sticker.pdf',
   },
@@ -483,21 +518,22 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Tigalari Block (U+11380–U+113DF)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Resolved — Tulu is confirmed as an independent standalone product distinct from Kannada.',
-      'C-02: Retail price confirmed at ₹480 per language package.',
-      'C-29: Resolved — Brahmi Computing Technologies confirmed font ownership/redistribution rights for delivered Tulu fonts.',
+    images: ['/images/languages/tulu.png'],
+    manuals: [
+      {
+        title: 'Tulu (Tigalari) User Manual',
+        filename: 'Tulu-Tigalari-Manual.pdf',
+        url: '/manuals/Tulu-Tigalari-Manual.pdf',
+        size: '642 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Tulu-Manual.pdf',
     stickerAsset: 'Tulu-Sticker.pdf',
   },
   {
     id: 'cat-13',
     categoryNumber: 13,
-    agreementName: 'Sharada (Kashmiri) and Devanagari',
+    agreementName: 'Sharada (Kashmiri)',
     slug: 'sharada',
     deliveredFolders: ['Sharada'],
     scriptName: 'Sharada',
@@ -522,13 +558,15 @@ export const productCategories: ProductCategory[] = [
       encoding: 'Unicode Sharada Block (U+11180–U+111DF)',
       shortcut: 'Windows Key + Spacebar',
     },
-    openQuestions: [
-      'C-03: Does customer also receive Devanagari as a bundle?',
-      'C-02: Retail price confirmed at ₹480 per language package.',
+    images: ['/images/languages/sharada.png'],
+    manuals: [
+      {
+        title: 'Sharada (Kashmiri) User Manual',
+        filename: 'Sharada-Manual.pdf',
+        url: '/manuals/Sharada-Manual.pdf',
+        size: '665 KB',
+      },
     ],
-    screenshots: 'PLACEHOLDER: Client screenshots pending delivery (C-17)',
-    videos: 'PLACEHOLDER: Client product demonstration video pending delivery (C-17)',
-    fontLinks: 'PLACEHOLDER: Font download links pending license verification (C-29)',
     manualAsset: 'Sharada-Manual.pdf',
     stickerAsset: 'Sharada-Sticker.pdf',
   },

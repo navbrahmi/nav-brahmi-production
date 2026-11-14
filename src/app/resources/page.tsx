@@ -12,10 +12,6 @@ export default function ResourcesPage() {
   return (
     <div className="container container-reading">
       <header style={{ marginBottom: 'var(--space-2xl)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
-          <span className="badge badge-brand">Typography & Assets</span>
-          <span className="badge badge-pending">License Verification</span>
-        </div>
         <h1 style={{ color: 'var(--brand)', marginBottom: '0.75rem' }}>
           {resourcesContent.title}
         </h1>

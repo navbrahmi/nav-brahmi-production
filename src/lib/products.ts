@@ -29,7 +29,7 @@ export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {
     code: 'ASHOKAN_BRAHMI',
     slug: 'ashokan-brahmi',
-    name: 'Ashokan Brahmi and Devanagari',
+    name: 'Ashokan Brahmi',
     folderName: 'Ashokan Brahmi',
     msklcFolder: 'Ashokan Brahmi',
     categoryNumber: 1,
@@ -42,7 +42,7 @@ export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {
     code: 'BENGALI',
     slug: 'bengali',
-    name: 'Bengali and Devanagari',
+    name: 'Bengali',
     folderName: 'Bengali',
     msklcFolder: 'Bengali',
     categoryNumber: 2,
@@ -68,7 +68,7 @@ export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {
     code: 'GUJARATI',
     slug: 'gujarati',
-    name: 'Gujarati and Devanagari',
+    name: 'Gujarati',
     folderName: 'Gujarati',
     msklcFolder: 'Gujarati',
     categoryNumber: 4,
@@ -94,7 +94,7 @@ export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {
     code: 'MALAYALAM',
     slug: 'malayalam',
-    name: 'Malayalam and Devanagari',
+    name: 'Malayalam',
     folderName: 'Malayalam',
     msklcFolder: 'Malayalam',
     categoryNumber: 6,
@@ -107,7 +107,7 @@ export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {
     code: 'MODI_MARATHI',
     slug: 'modi-marathi',
-    name: 'Modi/Marathi and Devanagari',
+    name: 'Modi/Marathi',
     folderName: 'Modi-Marathi',
     msklcFolder: 'Modi-Marathi',
     categoryNumber: 7,
@@ -120,7 +120,7 @@ export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {
     code: 'ORIYA_ODIA',
     slug: 'oriya-odia',
-    name: 'Oriya/Odia and Devanagari',
+    name: 'Oriya/Odia',
     folderName: 'Oriya-Odia',
     msklcFolder: 'Odia',
     categoryNumber: 8,
@@ -133,7 +133,7 @@ export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {
     code: 'PUNJABI_GURMUKHI',
     slug: 'punjabi-gurmukhi',
-    name: 'Punjabi/Gurmukhi and Devanagari',
+    name: 'Punjabi/Gurmukhi',
     folderName: 'Punjabi-Gurumuki',
     msklcFolder: 'Punjabi-Gurumuki',
     categoryNumber: 9,
@@ -159,7 +159,7 @@ export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {
     code: 'TELUGU',
     slug: 'telugu',
-    name: 'Telugu and Devanagari',
+    name: 'Telugu',
     folderName: 'Telugu',
     msklcFolder: 'Telugu',
     categoryNumber: 11,
@@ -185,7 +185,7 @@ export const AUTHORITATIVE_PRODUCTS: AuthoritativeProduct[] = [
   {
     code: 'SHARADA',
     slug: 'sharada',
-    name: 'Sharada (Kashmiri) and Devanagari',
+    name: 'Sharada (Kashmiri)',
     folderName: 'Sharada',
     msklcFolder: 'Sharada',
     categoryNumber: 13,

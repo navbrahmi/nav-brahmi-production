@@ -20,7 +20,6 @@ export interface SiteConfig {
   navLinks: NavLink[];
   footerLinks: NavLink[];
   contact: {
-    proprietor: string;
     city: string;
     stateCountry: string;
     email: string;
@@ -56,11 +55,10 @@ export const siteConfig: SiteConfig = {
     { label: 'Contact', href: '/contact' },
   ],
   contact: {
-    proprietor: 'Naveen Jayachandra',
     city: 'Bengaluru',
     stateCountry: 'Karnataka, India',
     email: 'support@brahmicomputing.in',
-    phone: '9632819063',
+    phone: '+91 98459 80534',
     gstinStatus: 'PLACEHOLDER: Registered GSTIN details pending confirmation (C-13)',
   },
   openDecisions: {

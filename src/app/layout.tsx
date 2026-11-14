@@ -68,9 +68,6 @@ export default function RootLayout({
                 <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Native Microsoft Windows keyboard layout drivers and Unicode typography for Indian languages.
                 </p>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  Proprietor: {siteConfig.contact.proprietor}, {siteConfig.contact.city}.
-                </p>
               </div>
 
               <div className="footer-col">
