@@ -7,11 +7,11 @@ import crypto from 'crypto';
 export function getVerificationPublicKey(): string {
   const envKey = process.env.LICENSE_SIGNING_PUBLIC_KEY;
   if (envKey && envKey.trim().length > 0) {
-    return envKey.trim();
+    return envKey.trim().replace(/\\n/g, '\n');
   }
   // In development / non-production, allow a defined development key
   if (process.env.NODE_ENV !== 'production' && process.env.DEV_PUBLIC_KEY_PEM) {
-    return process.env.DEV_PUBLIC_KEY_PEM.trim();
+    return process.env.DEV_PUBLIC_KEY_PEM.trim().replace(/\\n/g, '\n');
   }
   throw new Error('FATAL: LICENSE_SIGNING_PUBLIC_KEY environment variable is missing.');
 }
@@ -25,7 +25,7 @@ export function getSigningPrivateKey(): string {
   if (!privateKey || privateKey.trim().length === 0) {
     throw new Error('FATAL: LICENSE_SIGNING_PRIVATE_KEY environment variable is missing.');
   }
-  return privateKey.trim();
+  return privateKey.trim().replace(/\\n/g, '\n');
 }
 
 export interface ActivationTokenPayload {

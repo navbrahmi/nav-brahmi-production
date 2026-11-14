@@ -90,6 +90,21 @@ export class ResendEmailTransport implements EmailTransport {
     }
 
     try {
+      let targetRecipient = options.to;
+      const isExampleDomain = /@example\.(com|org|net)$/i.test(targetRecipient);
+
+      // In non-production testing, Resend enforces using an approved test email instead of example.com
+      if (process.env.NODE_ENV !== 'production' && isExampleDomain) {
+        targetRecipient =
+          process.env.EMAIL_TEST_RECIPIENT ||
+          process.env.RESEND_TEST_EMAIL ||
+          'delivered@resend.dev';
+        logger.info('Routed development synthetic test recipient to approved testing address', {
+          originalTo: options.to,
+          targetRecipient,
+        });
+      }
+
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -98,7 +113,7 @@ export class ResendEmailTransport implements EmailTransport {
         },
         body: JSON.stringify({
           from: this.fromEmail,
-          to: [options.to],
+          to: [targetRecipient],
           subject: options.subject,
           text: options.text,
           html: options.html,

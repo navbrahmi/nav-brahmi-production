@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { checkRateLimit } from '@/lib/rate-limiter';
+import { decryptLicenseKey } from '@/lib/license-crypto';
+import { createPurchaseAuthToken } from '@/lib/license';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,7 +44,15 @@ export async function GET(req: NextRequest) {
       product: true,
       licenses: {
         where: { status: 'ACTIVE' },
-        select: { id: true, createdAt: true, status: true },
+        select: {
+          id: true,
+          createdAt: true,
+          status: true,
+          encryptedKey: true,
+          keyIv: true,
+          keyTag: true,
+          licenseKey: true,
+        },
       },
     },
   });
@@ -52,6 +62,18 @@ export async function GET(req: NextRequest) {
       { error: { code: 'ORDER_NOT_FOUND', message: 'Order not found for the specified token.' } },
       { status: 404 }
     );
+  }
+
+  let licenseKey: string | undefined;
+  let downloadUrl: string | undefined;
+
+  if (order.licenses.length > 0) {
+    const activeLicense = order.licenses[0];
+    const decrypted = decryptLicenseKey(activeLicense) || activeLicense.licenseKey;
+    if (decrypted) {
+      licenseKey = decrypted;
+      downloadUrl = '/api/download-installer';
+    }
   }
 
   return NextResponse.json({
@@ -67,6 +89,8 @@ export async function GET(req: NextRequest) {
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
       hasLicense: order.licenses.length > 0,
+      licenseKey,
+      downloadUrl,
     },
   });
 }

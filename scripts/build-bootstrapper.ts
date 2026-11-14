@@ -27,6 +27,7 @@ async function main() {
   const refs = [
     'System.dll',
     'System.Core.dll',
+    'System.Numerics.dll',
     'System.Drawing.dll',
     'System.Windows.Forms.dll',
     'System.Management.dll',

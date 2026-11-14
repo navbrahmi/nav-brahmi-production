@@ -12,15 +12,52 @@ export interface OrderStatusProps {
   customerEmail: string;
   createdAt: string;
   hasLicense: boolean;
+  licenseKey?: string;
+  downloadUrl?: string;
 }
 
 export function OrderStatusClient({ initialData }: { initialData: OrderStatusProps }) {
   const [data, setData] = useState<OrderStatusProps>(initialData);
+  const [copied, setCopied] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [isPolling, setIsPolling] = useState(
     initialData.initialStatus === 'CREATED' ||
       initialData.initialStatus === 'PAYMENT_PENDING' ||
       initialData.initialStatus === 'PAID'
   );
+
+  const handleDownload = async () => {
+    try {
+      setDownloading(true);
+      const res = await fetch('/api/download-installer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderToken: data.publicToken }),
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => null);
+        throw new Error(errJson?.error || `Download failed (HTTP ${res.status})`);
+      }
+
+      const blob = await res.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'Setup.exe';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err: any) {
+      console.error('Download error:', err);
+      alert(err.message || 'Failed to download installer. Please try again.');
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   useEffect(() => {
     if (!isPolling) return;
@@ -35,6 +72,8 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
               ...prev,
               initialStatus: body.order.status,
               hasLicense: body.order.hasLicense,
+              licenseKey: body.order.licenseKey || prev.licenseKey,
+              downloadUrl: body.order.downloadUrl || prev.downloadUrl,
             }));
 
             // Stop polling once terminal or delivered
@@ -118,14 +157,93 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
             }}
           >
             <h3 style={{ fontSize: '1.05rem', color: '#166534', margin: '0 0 0.5rem' }}>
-              Your License Has Been Issued!
+              ✓ Your License Has Been Issued!
             </h3>
             <p style={{ fontSize: '0.9rem', color: '#14532D', margin: '0 0 1rem', lineHeight: '1.5' }}>
-              An email containing your official license key and secure software download link has been
-              dispatched to <strong>{data.customerEmail}</strong>.
+              Your official software license key is ready. An email copy has also been queued for{' '}
+              <strong>{data.customerEmail}</strong>.
             </p>
+
+            {data.licenseKey && (
+              <div
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #86EFAC',
+                  borderRadius: '6px',
+                  padding: '1rem',
+                  marginBottom: '1rem',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '0.5rem',
+                  }}
+                >
+                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                    Official Product License Key
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (data.licenseKey && typeof navigator !== 'undefined') {
+                        navigator.clipboard.writeText(data.licenseKey);
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 2500);
+                      }
+                    }}
+                    className="btn btn-secondary"
+                    style={{ padding: '0.25rem 0.65rem', fontSize: '0.8rem' }}
+                  >
+                    {copied ? '✓ Copied' : 'Copy Key'}
+                  </button>
+                </div>
+                <code
+                  style={{
+                    fontSize: '1.25rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.05em',
+                    color: 'var(--brand)',
+                    display: 'block',
+                    wordBreak: 'break-all',
+                  }}
+                >
+                  {data.licenseKey}
+                </code>
+              </div>
+            )}
+
+            {data.downloadUrl && (
+              <div style={{ marginBottom: '1.25rem' }}>
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  disabled={downloading}
+                  className="btn btn-primary"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    fontSize: '1rem',
+                    padding: '0.75rem 1.5rem',
+                    fontWeight: 600,
+                    cursor: downloading ? 'not-allowed' : 'pointer',
+                    opacity: downloading ? 0.7 : 1,
+                    border: 'none',
+                  }}
+                >
+                  <span>{downloading ? '⏳ Preparing Setup.exe...' : '⬇ Download Setup.exe (Windows 11 / 10)'}</span>
+                </button>
+                <p style={{ fontSize: '0.8rem', color: '#14532D', marginTop: '0.4rem', margin: '0.4rem 0 0' }}>
+                  Pre-authorized bootstrapper automatically detects your license key and manages machine activation.
+                </p>
+              </div>
+            )}
+
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <Link href="/instructions" className="btn btn-primary" style={{ fontSize: '0.9rem' }}>
+              <Link href="/instructions" className="btn btn-secondary" style={{ fontSize: '0.9rem' }}>
                 View Installation Guide
               </Link>
               <Link href="/faq" className="btn btn-secondary" style={{ fontSize: '0.9rem' }}>

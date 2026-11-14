@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma';
 import { isValidEmail } from '@/lib/license';
 import { OrderStatus, PaymentStatus } from '@prisma/client';
 import { getRazorpayConfig, createRazorpayOrder } from '@/lib/razorpay';
+import { isPaymentBypassEnabled } from '@/lib/payment-bypass';
+import { markOrderPaid } from '@/lib/payment-completion';
 import { checkRateLimit } from '@/lib/rate-limiter';
 import { recordAuditEvent } from '@/lib/audit';
 import { logger } from '@/lib/logger';
@@ -131,6 +133,64 @@ export async function POST(req: NextRequest) {
         productId: product.id,
       },
     });
+
+    // 4b. Local Development / Test Payment Bypass (Controlled Simulation Mode)
+    if (isPaymentBypassEnabled()) {
+      logger.info('Executing local test payment bypass', {
+        orderId: order.id,
+        orderToken: order.publicToken,
+      });
+
+      const testOrderId = `order_sim_${crypto.randomBytes(8).toString('hex')}`;
+      const testPaymentId = `pay_sim_test_${crypto.randomBytes(12).toString('hex')}`;
+
+      // Transition order to PAYMENT_PENDING and create initial payment record
+      await prisma.$transaction([
+        prisma.order.update({
+          where: { id: order.id },
+          data: { status: OrderStatus.PAYMENT_PENDING },
+        }),
+        prisma.payment.create({
+          data: {
+            orderId: order.id,
+            provider: 'RAZORPAY',
+            providerOrderId: testOrderId,
+            providerPaymentId: testPaymentId,
+            amountMinor,
+            currency,
+            status: PaymentStatus.CREATED,
+            rawStatus: 'SIMULATED_TEST_PAYMENT_INITIATED',
+          },
+        }),
+      ]);
+
+      // Complete payment via existing markOrderPaid workflow
+      await markOrderPaid({
+        orderId: order.id,
+        orderToken: order.publicToken,
+        providerOrderId: testOrderId,
+        providerPaymentId: testPaymentId,
+        amountMinor,
+        currency,
+        rawStatus: 'SIMULATED_TEST_PAYMENT_CAPTURED',
+        actorType: 'CUSTOMER',
+      });
+
+      // Send license delivery email if email transport is available
+      try {
+        const { processEmailOutbox } = await import('@/lib/email/outbox');
+        await processEmailOutbox();
+      } catch (emailErr: any) {
+        logger.warn('Email dispatch notice for simulated purchase', { error: emailErr.message });
+      }
+
+      return NextResponse.json({
+        success: true,
+        isTestBypass: true,
+        orderToken: order.publicToken,
+        message: 'Simulated test payment successful. Order confirmed and license issued.',
+      });
+    }
 
     // 5. Razorpay Gateway Order Creation (TEST MODE)
     const razorpayConfig = getRazorpayConfig();

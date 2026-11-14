@@ -72,3 +72,9 @@ doc.txt
 # Allow only the safe environment template
 !/.env.example
 /docs/manuals
+
+# Confidential Kannada software packages
+/Requirements/Kannada/
+
+# Local backups, extracted packages and test artifacts
+/scratch/

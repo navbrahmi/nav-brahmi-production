@@ -79,6 +79,13 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
         return;
       }
 
+      // Handle test payment bypass redirect immediately
+      if (data.isTestBypass && data.orderToken) {
+        setStatus('verifying');
+        router.push(`/orders/${data.orderToken}`);
+        return;
+      }
+
       // Safe handling when gateway credentials are still being configured in test mode
       if (data.code === 'GATEWAY_CONFIG_PENDING' || !data.razorpayOrderId) {
         setStatus('idle');
@@ -275,6 +282,22 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
 
       {/* Customer Input & Pay Form */}
       <form onSubmit={handleCheckoutSubmit} className="card">
+        {process.env.NEXT_PUBLIC_DEMO_PAYMENT_BYPASS === 'true' && (
+          <div
+            style={{
+              backgroundColor: '#FEF3C7',
+              border: '1px solid #F59E0B',
+              borderRadius: '6px',
+              padding: '0.75rem 1rem',
+              marginBottom: '1.25rem',
+              fontSize: '0.85rem',
+              color: '#92400E',
+            }}
+          >
+            <strong>Simulation Test Mode Active:</strong> Razorpay payment is bypassed for local verification. Clicking Pay will simulate a successful test purchase, issue a real license key, and provide Setup.exe download.
+          </div>
+        )}
+
         <h3 style={{ fontSize: '1.15rem', marginBottom: '1rem', color: 'var(--text-body)' }}>
           Customer Information
         </h3>

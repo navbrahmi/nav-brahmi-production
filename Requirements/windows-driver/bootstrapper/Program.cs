@@ -43,11 +43,16 @@ namespace NavBrahmi.Setup
         private Action<string> _logCallback;
         private Action<int, string> _progressCallback;
 
+        public string InstalledLayoutText { get; private set; }
+        public string InstalledProductName { get; private set; }
+
         public InstallerEngine(SetupConfig config, Action<string> logCallback, Action<int, string> progressCallback)
         {
             _config = config;
             _logCallback = logCallback ?? ((s) => { });
             _progressCallback = progressCallback ?? ((p, s) => { });
+            InstalledLayoutText = "";
+            InstalledProductName = "";
         }
 
         private void Log(string message)
@@ -228,35 +233,27 @@ namespace NavBrahmi.Setup
         public static readonly Dictionary<string, string[]> ProductApprovedFonts = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
         {
             { "kannada", new string[] { "NotoSansKannada-RegularNJ.ttf" } },
-            { "KANNADA", new string[] { "NotoSansKannada-RegularNJ.ttf" } },
             { "tulu", new string[] { "Brahmi_Tulu_Tigalari_Refined_Regular-refined.ttf" } },
-            { "TULU", new string[] { "Brahmi_Tulu_Tigalari_Refined_Regular-refined.ttf" } },
             { "ashokan-brahmi", new string[] { "NotoSansBrahmi-Regular.ttf" } },
-            { "ASHOKAN_BRAHMI", new string[] { "NotoSansBrahmi-Regular.ttf" } },
+            { "ashokan_brahmi", new string[] { "NotoSansBrahmi-Regular.ttf" } },
             { "bengali", new string[] { "NotoSansBengali-Regular.ttf", "NotoSansBengali-Bold.ttf" } },
-            { "BENGALI", new string[] { "NotoSansBengali-Regular.ttf", "NotoSansBengali-Bold.ttf" } },
             { "devanagari-hindi", new string[] { "NotoSansDevanagari-Regular.ttf", "NotoSansDevanagari-Bold.ttf", "Gargi.ttf", "Lohit-Devanagari.ttf", "Chandas.ttf" } },
-            { "DEVANAGARI_HINDI", new string[] { "NotoSansDevanagari-Regular.ttf", "NotoSansDevanagari-Bold.ttf", "Gargi.ttf", "Lohit-Devanagari.ttf", "Chandas.ttf" } },
+            { "devanagari_hindi", new string[] { "NotoSansDevanagari-Regular.ttf", "NotoSansDevanagari-Bold.ttf", "Gargi.ttf", "Lohit-Devanagari.ttf", "Chandas.ttf" } },
             { "gujarati", new string[] { "NotoSansGujarati-Regular.ttf", "NotoSansGujarati-Bold.ttf" } },
-            { "GUJARATI", new string[] { "NotoSansGujarati-Regular.ttf", "NotoSansGujarati-Bold.ttf" } },
             { "malayalam", new string[] { "NotoSansMalayalam-Regular.ttf", "NotoSansMalayalam-Bold.ttf", "RaghuMalayalamSans-Regular.ttf", "Rachana-Regular.ttf", "Keraleeyam-Regular.ttf", "Meera-Regular.ttf" } },
-            { "MALAYALAM", new string[] { "NotoSansMalayalam-Regular.ttf", "NotoSansMalayalam-Bold.ttf", "RaghuMalayalamSans-Regular.ttf", "Rachana-Regular.ttf", "Keraleeyam-Regular.ttf", "Meera-Regular.ttf" } },
             { "modi-marathi", new string[] { "NotoSansModi-Regular.ttf" } },
-            { "MODI_MARATHI", new string[] { "NotoSansModi-Regular.ttf" } },
+            { "modi_marathi", new string[] { "NotoSansModi-Regular.ttf" } },
             { "oriya-odia", new string[] { "NotoSansOriya-Regular.ttf", "NotoSansOriya-Bold.ttf" } },
-            { "ORIYA_ODIA", new string[] { "NotoSansOriya-Regular.ttf", "NotoSansOriya-Bold.ttf" } },
+            { "oriya_odia", new string[] { "NotoSansOriya-Regular.ttf", "NotoSansOriya-Bold.ttf" } },
             { "punjabi-gurmukhi", new string[] { "NotoSansGurmukhi-Regular.ttf", "NotoSansGurmukhi-Bold.ttf" } },
-            { "PUNJABI_GURMUKHI", new string[] { "NotoSansGurmukhi-Regular.ttf", "NotoSansGurmukhi-Bold.ttf" } },
+            { "punjabi_gurmukhi", new string[] { "NotoSansGurmukhi-Regular.ttf", "NotoSansGurmukhi-Bold.ttf" } },
             { "tamil", new string[] { "NotoSansTamil-Regular.ttf", "NotoSansTamil-Bold.ttf" } },
-            { "TAMIL", new string[] { "NotoSansTamil-Regular.ttf", "NotoSansTamil-Bold.ttf" } },
             { "tamil-grantha", new string[] { "NotoSansGrantha-Regular.ttf", "NotoSerifGrantha-Regular.ttf" } },
-            { "TAMIL_GRANTHA", new string[] { "NotoSansGrantha-Regular.ttf", "NotoSerifGrantha-Regular.ttf" } },
+            { "tamil_grantha", new string[] { "NotoSansGrantha-Regular.ttf", "NotoSerifGrantha-Regular.ttf" } },
             { "tamil-and-grantha", new string[] { "NotoSansTamil-Regular.ttf", "NotoSansTamil-Bold.ttf", "NotoSansGrantha-Regular.ttf", "NotoSerifGrantha-Regular.ttf" } },
-            { "TAMIL_AND_GRANTHA", new string[] { "NotoSansTamil-Regular.ttf", "NotoSansTamil-Bold.ttf", "NotoSansGrantha-Regular.ttf", "NotoSerifGrantha-Regular.ttf" } },
+            { "tamil_and_grantha", new string[] { "NotoSansTamil-Regular.ttf", "NotoSansTamil-Bold.ttf", "NotoSansGrantha-Regular.ttf", "NotoSerifGrantha-Regular.ttf" } },
             { "telugu", new string[] { "NotoSansTelugu-Regular.ttf", "NotoSansTelugu-Bold.ttf" } },
-            { "TELUGU", new string[] { "NotoSansTelugu-Regular.ttf", "NotoSansTelugu-Bold.ttf" } },
-            { "sharada", new string[] { "NotoSansSharada-Regular.ttf" } },
-            { "SHARADA", new string[] { "NotoSansSharada-Regular.ttf" } }
+            { "sharada", new string[] { "NotoSansSharada-Regular.ttf" } }
         };
 
         // =========================================================================
@@ -268,7 +265,9 @@ namespace NavBrahmi.Setup
         public static readonly Dictionary<string, string> TrustedVerificationPublicKeys = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             // Production Key ID v1 (SPKI DER or 32 raw bytes Base64)
-            { "nav-brahmi-ed25519-v1", "MCowBQYDK2VwAyEAx5s2b/O159L3G2+r6W6q1+tD7P4L8N7F3m2e1B5c6kA=" }
+            { "nav-brahmi-ed25519-v1", "MCowBQYDK2VwAyEAx5s2b/O159L3G2+r6W6q1+tD7P4L8N7F3m2e1B5c6kA=" },
+            // Development / Demonstration Test Key ID
+            { "nav-brahmi-ed25519-dev", "MCowBQYDK2VwAyEAfO/pKDXjHpI7no5kwr3x6qpIER1uOVaigVsD+ZzFh4k=" }
         };
 
         public class ActivationTokenClaims
@@ -516,10 +515,10 @@ namespace NavBrahmi.Setup
         {
             private static readonly BigInteger P = BigInteger.Parse("57896044618658097711785492504343953926634992332820282019728792003956564819949");
             private static readonly BigInteger L = BigInteger.Parse("7237005577332262213973186563042994240857116359379907606001950938285454250989");
-            private static readonly BigInteger D = BigInteger.Parse("370957059344740094567083545501322941599805dec".Replace("dec", ""), System.Globalization.NumberStyles.HexNumber);
-            private static readonly BigInteger Bx = BigInteger.Parse("0216936d3cd6e53fec0a4e231fdd6dc5c692cc7609525a7b2c9562d608f25d51a", System.Globalization.NumberStyles.HexNumber);
-            private static readonly BigInteger By = BigInteger.Parse("0666666666666666666666666666666666666666666666666666666666666658", System.Globalization.NumberStyles.HexNumber);
-            private static readonly BigInteger I = BigInteger.Parse("02b8324804fc1df0b2b4d00993dfbd7a72f431806ad2fe478c4ee1b274a0ea0b0", System.Globalization.NumberStyles.HexNumber);
+            private static readonly BigInteger D = BigInteger.Parse("37095705934669439343138083508754565189542113879843219016388785533085940283555");
+            private static readonly BigInteger Bx = BigInteger.Parse("15112221349535400772501151409588531511454012693041857206046113283949847762202");
+            private static readonly BigInteger By = BigInteger.Parse("46316835694926478169428394003475163141307993866256225615783033603165251855960");
+            private static readonly BigInteger I = BigInteger.Parse("19681161376707505956807079304988542015446066515923890162744021073123829784752");
 
             private struct Point
             {
@@ -843,6 +842,7 @@ namespace NavBrahmi.Setup
                 }
 
                 Log("License verified for product: " + productName);
+                InstalledProductName = productName;
 
                 Progress(30, "Activating machine license...");
                 string actUrl = _config.BackendUrl.TrimEnd('/') + "/api/activation";
@@ -892,9 +892,20 @@ namespace NavBrahmi.Setup
                     return false;
                 }
 
+                // Compute machine identity SHA-256 hash for token validation
+                string machineIdHash;
+                using (SHA256 sha = SHA256.Create())
+                {
+                    byte[] hashBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(machineId));
+                    StringBuilder sb = new StringBuilder();
+                    foreach (byte b in hashBytes) sb.Append(b.ToString("x2"));
+                    machineIdHash = sb.ToString();
+                }
+
                 // Local verification of Ed25519 activation token claims and structure
                 string tokenVerificationError;
-                if (!VerifyActivationTokenLocally(token, machineIdHash, out tokenVerificationError))
+                ActivationTokenClaims claims;
+                if (!VerifyActivationTokenLocally(token, machineIdHash, productCode, out tokenVerificationError, out claims))
                 {
                     errorMessage = "Local token verification failed: " + tokenVerificationError;
                     Log("[ERROR] " + errorMessage);
@@ -1235,24 +1246,110 @@ namespace NavBrahmi.Setup
                 // Post-install verification check
                 Progress(95, "Performing post-installation verification check...");
                 bool layoutVerified = false;
+
+                // Identify target driver DLL name from extracted directory or targetMsi
+                string expectedDllName = null;
+                try
+                {
+                    string[] extractedDlls = Directory.GetFiles(extractDir, "*.dll", SearchOption.AllDirectories);
+                    if (extractedDlls != null && extractedDlls.Length > 0)
+                    {
+                        expectedDllName = Path.GetFileName(extractedDlls[0]);
+                    }
+                }
+                catch { }
+
+                if (string.IsNullOrEmpty(expectedDllName) && !string.IsNullOrEmpty(targetMsi))
+                {
+                    string msiBase = Path.GetFileNameWithoutExtension(targetMsi);
+                    string cleanBase = msiBase.Replace("_amd64", "").Replace("_i386", "").Replace("_ia64", "").Replace("_wow64", "").Replace("_x64", "").Replace("_x86", "");
+                    expectedDllName = cleanBase + ".dll";
+                }
+
                 try
                 {
                     using (RegistryKey klKey = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Keyboard Layouts"))
                     {
                         if (klKey != null)
                         {
-                            foreach (string subKeyName in klKey.GetSubKeyNames())
+                            // PASS 1: Exact match on driver DLL file name (e.g. Br-Kan.dll for Kannada, B-Tam-Gr.dll for Tamil Grantha)
+                            if (!string.IsNullOrEmpty(expectedDllName))
                             {
-                                using (RegistryKey subKey = klKey.OpenSubKey(subKeyName))
+                                foreach (string subKeyName in klKey.GetSubKeyNames())
                                 {
-                                    if (subKey != null)
+                                    using (RegistryKey subKey = klKey.OpenSubKey(subKeyName))
                                     {
-                                        object layoutText = subKey.GetValue("Layout Text");
-                                        if (layoutText != null && layoutText.ToString().ToLower().Contains("brahmi"))
+                                        if (subKey != null)
                                         {
-                                            layoutVerified = true;
-                                            Log("Verified registered layout in registry: " + layoutText);
-                                            break;
+                                            object regFile = subKey.GetValue("Layout File");
+                                            if (regFile != null && string.Equals(regFile.ToString().Trim(), expectedDllName.Trim(), StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                object layoutText = subKey.GetValue("Layout Text");
+                                                layoutVerified = true;
+                                                string verifiedName = layoutText != null ? layoutText.ToString() : expectedDllName;
+                                                InstalledLayoutText = verifiedName;
+                                                Log(string.Format("Verified registered layout in registry: {0} ({1}, File: {2})", verifiedName, subKeyName, regFile));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // PASS 2: Match layout text with product keywords if Pass 1 did not find it
+                            if (!layoutVerified && !string.IsNullOrEmpty(productName))
+                            {
+                                string cleanProd = productName.ToLower();
+                                foreach (string subKeyName in klKey.GetSubKeyNames())
+                                {
+                                    using (RegistryKey subKey = klKey.OpenSubKey(subKeyName))
+                                    {
+                                        if (subKey != null)
+                                        {
+                                            object layoutText = subKey.GetValue("Layout Text");
+                                            if (layoutText != null)
+                                            {
+                                                string lt = layoutText.ToString().ToLower();
+                                                if ((cleanProd.Contains("kannada") && lt.Contains("kannada")) ||
+                                                    (cleanProd.Contains("grantha") && lt.Contains("grantha")) ||
+                                                    (cleanProd.Contains("malayalam") && lt.Contains("malayalam")) ||
+                                                    (cleanProd.Contains("gujarati") && lt.Contains("gujarati")) ||
+                                                    (cleanProd.Contains("bengali") && lt.Contains("bengali")) ||
+                                                    (cleanProd.Contains("telugu") && lt.Contains("telugu")) ||
+                                                    (cleanProd.Contains("gurmukhi") && lt.Contains("gurmukhi")) ||
+                                                    (cleanProd.Contains("punjabi") && (lt.Contains("punjabi") || lt.Contains("gurmukhi"))) ||
+                                                    (cleanProd.Contains("ashokan") && (lt.Contains("ashokan") || lt.Contains("brahmi"))))
+                                                {
+                                                    layoutVerified = true;
+                                                    string verifiedName = layoutText.ToString();
+                                                    InstalledLayoutText = verifiedName;
+                                                    Log(string.Format("Verified registered layout in registry by product match: {0} ({1})", verifiedName, subKeyName));
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // PASS 3: Fallback check for any Brahmi layout if specific match not found
+                            if (!layoutVerified)
+                            {
+                                foreach (string subKeyName in klKey.GetSubKeyNames())
+                                {
+                                    using (RegistryKey subKey = klKey.OpenSubKey(subKeyName))
+                                    {
+                                        if (subKey != null)
+                                        {
+                                            object layoutText = subKey.GetValue("Layout Text");
+                                            if (layoutText != null && layoutText.ToString().ToLower().Contains("brahmi"))
+                                            {
+                                                layoutVerified = true;
+                                                string verifiedName = layoutText.ToString();
+                                                InstalledLayoutText = verifiedName;
+                                                Log("Verified registered layout in registry (fallback): " + verifiedName);
+                                                break;
+                                            }
                                         }
                                     }
                                 }
@@ -1514,7 +1611,10 @@ namespace NavBrahmi.Setup
                         }
                         else
                         {
-                            MessageBox.Show("Nav Brahmi drivers installed and configured successfully!\n\nYou can now select the Brahmi / Tamil Grantha keyboard layout from the Windows Language Bar.", "Installation Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            string layoutDisplay = !string.IsNullOrEmpty(engine.InstalledLayoutText)
+                                ? engine.InstalledLayoutText
+                                : (!string.IsNullOrEmpty(engine.InstalledProductName) ? engine.InstalledProductName : "Nav Brahmi");
+                            MessageBox.Show(string.Format("Nav Brahmi drivers installed and configured successfully!\n\nYou can now select the {0} keyboard layout from the Windows Language Bar.", layoutDisplay), "Installation Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         this.Close();
                     }
