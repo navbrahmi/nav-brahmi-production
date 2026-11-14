@@ -10,71 +10,24 @@ export function ProductListSkeleton() {
     <div className="container" aria-busy="true" aria-label="Loading product catalog...">
       <div style={{ marginBottom: 'var(--space-2xl)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-          <Skeleton variant="rect" width={110} height={24} />
-          <Skeleton variant="rect" width={170} height={24} />
+          <Skeleton variant="rect" width={120} height={24} />
         </div>
-        <Skeleton variant="title" width="60%" height={38} style={{ marginBottom: '0.75rem' }} />
-        <Skeleton variant="text" width="90%" height={20} />
-        <Skeleton variant="text" width="75%" height={20} style={{ marginBottom: '1.25rem' }} />
-
-        {/* Notice box skeleton */}
-        <div className="card card-subtle" style={{ padding: '1rem', marginBottom: '1.5rem' }}>
-          <Skeleton variant="text" width="100%" height={18} />
-          <Skeleton variant="text" width="80%" height={18} />
-        </div>
+        <Skeleton variant="title" width="50%" height={38} style={{ marginBottom: '0.75rem' }} />
+        <Skeleton variant="text" width="80%" height={20} style={{ marginBottom: '1rem' }} />
       </div>
 
-      {/* Table Skeleton */}
-      <section className="card card-elevated" style={{ marginBottom: 'var(--space-2xl)', padding: '1.5rem' }}>
-        <Skeleton variant="title" width={320} height={28} style={{ marginBottom: '0.5rem' }} />
-        <Skeleton variant="text" width={480} height={18} style={{ marginBottom: '1.25rem' }} />
-
-        <div className="table-wrap">
-          <table className="data-table" style={{ width: '100%' }}>
-            <thead>
-              <tr>
-                <th style={{ width: '5%' }}>#</th>
-                <th style={{ width: '30%' }}>Agreement Category</th>
-                <th style={{ width: '25%' }}>Delivered Package Folder(s)</th>
-                <th style={{ width: '15%' }}>Script Tag</th>
-                <th style={{ width: '15%' }}>Database Price</th>
-                <th style={{ width: '10%' }}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: 6 }).map((_, idx) => (
-                <tr key={idx}>
-                  <td><Skeleton width={16} height={16} /></td>
-                  <td>
-                    <Skeleton width="70%" height={18} style={{ marginBottom: '0.25rem' }} />
-                    <Skeleton width="40%" height={14} />
-                  </td>
-                  <td><Skeleton width="60%" height={22} variant="rect" /></td>
-                  <td><Skeleton width={60} height={20} variant="rect" /></td>
-                  <td><Skeleton width={70} height={18} /></td>
-                  <td><Skeleton width={90} height={18} /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Grid of Monitor Cards Skeleton */}
+      {/* Grid of Product Cards Skeleton */}
       <section>
-        <Skeleton variant="title" width={280} height={28} style={{ marginBottom: 'var(--space-lg)' }} />
         <div className="monitor-grid">
           {Array.from({ length: 6 }).map((_, idx) => (
             <div key={idx} className="monitor-card" style={{ display: 'flex', flexDirection: 'column' }}>
               <Skeleton width={90} height={16} style={{ marginBottom: '0.5rem' }} />
-              <Skeleton variant="title" width="80%" height={24} style={{ marginBottom: '0.75rem' }} />
+              <Skeleton variant="title" width="70%" height={24} style={{ marginBottom: '0.75rem' }} />
               <Skeleton variant="rect" width="100%" height={36} style={{ marginBottom: '0.75rem' }} />
-              <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem 0' }}>
-                <Skeleton variant="rect" width={140} height={100} />
-              </div>
+              <Skeleton width={80} height={22} style={{ margin: '0.25rem 0 0.5rem 0' }} />
               <Skeleton variant="text" width="100%" height={14} />
               <Skeleton variant="text" width="85%" height={14} style={{ marginBottom: 'auto' }} />
-              <Skeleton width={130} height={18} style={{ marginTop: '0.75rem' }} />
+              <Skeleton width={140} height={18} style={{ marginTop: '0.75rem' }} />
             </div>
           ))}
         </div>

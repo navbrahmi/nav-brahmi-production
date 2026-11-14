@@ -53,7 +53,6 @@ describe('Skeleton Loader Components & Accessibility', () => {
 
     // Check children sections
     const childrenStr = JSON.stringify(listEl);
-    assert.ok(childrenStr.includes('data-table'), 'Should include data table skeleton matching catalog table');
     assert.ok(childrenStr.includes('monitor-grid'), 'Should include monitor grid skeleton matching catalog grid');
   });
 

@@ -26,6 +26,11 @@ describe('Phase 3 Content Loader & Category Verification', () => {
       seenSlugs.add(cat.slug);
 
       assert.ok(cat.agreementName && cat.agreementName.length > 0);
+      assert.ok(cat.images && cat.images.length > 0, `Missing images for ${cat.slug}`);
+      assert.ok(cat.manuals && cat.manuals.length > 0, `Missing manuals for ${cat.slug}`);
+      for (const m of cat.manuals) {
+        assert.ok(m.title && m.filename && m.url && m.size, `Invalid manual structure in ${cat.slug}`);
+      }
       assert.ok(cat.deliveredFolders.length > 0, `Category ${cat.categoryNumber} must map to at least one delivered folder`);
       assert.ok(cat.logoSvg.startsWith('/logos/'), `Logo SVG must be located in /logos/: ${cat.logoSvg}`);
     }
@@ -77,8 +82,8 @@ describe('Phase 3 Content Loader & Category Verification', () => {
     assert.ok(resourcesContent.resources.length >= 3);
 
     // Contact
-    assert.strictEqual(contactContent.contactDetails.proprietor, 'Naveen Jayachandra (Proprietor)');
     assert.strictEqual(contactContent.contactDetails.officialEmail, 'support@brahmicomputing.in');
-    assert.strictEqual(contactContent.contactDetails.phone, '9632819063');
+    assert.strictEqual(contactContent.contactDetails.phone, '+91 98459 80534');
+    assert.strictEqual(contactContent.contactDetails.location, '#75, 7th Cross, K.P. West, Bengaluru');
   });
 });

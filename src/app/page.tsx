@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { homeContent } from '../content/home';
 import { productCategories } from '../content/categories';
 import { Agentation } from "agentation";
@@ -15,29 +16,66 @@ export default function HomePage() {
     <div className="container">
       {/* Hero Section */}
       <section className="hero" aria-labelledby="hero-title">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-          <span className="badge badge-brand">Official Software Suite</span>
-          <span className="badge badge-pending">Native Windows Drivers</span>
-        </div>
-        <h1 id="hero-title" style={{ color: 'var(--brand)', marginBottom: '0.75rem' }}>
-          {homeContent.hero.title}
-        </h1>
-        <p className="hero-lead">
-          {homeContent.hero.description}
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 min(100%, 520px)', maxWidth: '680px' }}>
+            <h1 id="hero-title" style={{ color: 'var(--brand)', marginBottom: '0.75rem' }}>
+              {homeContent.hero.title}
+            </h1>
+            <p className="hero-lead">
+              {homeContent.hero.description}
+            </p>
 
-        {/* C-33 Tagline Notice */}
-        <div className="placeholder-notice" role="note" style={{ maxWidth: '720px' }}>
-          <strong>Notice:</strong> {homeContent.hero.taglineNotice}
-        </div>
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
+              <Link href="/products" className="btn btn-primary">
+                Explore All 13 Categories →
+              </Link>
+              <Link href="/instructions" className="btn btn-secondary">
+                Installation Guide
+              </Link>
+            </div>
+          </div>
 
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
-          <Link href="/products" className="btn btn-primary">
-            Explore All 13 Categories →
-          </Link>
-          <Link href="/instructions" className="btn btn-secondary">
-            Installation Guide
-          </Link>
+          <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
+            <Image
+              src="/logos/nav-brahmi-hero-logo.png"
+              alt="Nav Brahmi 3x3 Monitor Identity"
+              width={220}
+              height={230}
+              priority
+              style={{ width: 'auto', maxWidth: '100%', maxHeight: '220px', objectFit: 'contain' }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Patented Keyboard Layout Showcase */}
+      <section aria-label="Nav Brahmi Patented Keyboard Showcase" style={{ marginBottom: 'var(--space-3xl)' }}>
+        <div
+          className="card card-elevated"
+          style={{
+            padding: 'var(--space-md)',
+            textAlign: 'center',
+            background: 'var(--surface)',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 'var(--radius-lg)',
+          }}
+        >
+          <Image
+            src="/images/NB-KB-for-FontPage.gif"
+            alt="Nav Brahmi Patented Bilingual Keyboard Layout for Indian Languages"
+            width={1086}
+            height={506}
+            priority
+            unoptimized
+            style={{
+              width: '100%',
+              maxWidth: '980px',
+              height: 'auto',
+              margin: '0 auto',
+              display: 'block',
+              borderRadius: 'var(--radius-md)',
+            }}
+          />
         </div>
       </section>
 
@@ -58,7 +96,6 @@ export default function HomePage() {
               className="monitor-card"
               aria-label={`View ${cat.agreementName} keyboard driver`}
             >
-              <div className="monitor-card-category-num">Category {cat.categoryNumber}</div>
               <div className="monitor-card-title">{cat.agreementName}</div>
               <div className={`monitor-card-script-sample font-script-${cat.slug}`} lang={cat.bcp47Tag} data-script={cat.iso15924}>
                 {cat.specimenGlyphs}
@@ -90,79 +127,18 @@ export default function HomePage() {
             {paragraph}
           </p>
         ))}
-        <div className="placeholder-notice" role="note">
-          <strong>Review Note:</strong> {homeContent.about.approvalNotice}
-        </div>
       </section>
 
-      {/* Vision and Mission Grid */}
-      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: 'var(--space-xl)', marginBottom: 'var(--space-2xl)' }}>
-        <div className="card">
-          <h2 style={{ color: 'var(--brand)', fontSize: '1.5rem', marginBottom: '0.75rem' }}>
-            {homeContent.vision.heading}
-          </h2>
-          {homeContent.vision.body.map((p, idx) => (
-            <p key={idx} style={{ color: 'var(--text-body)', lineHeight: '1.65' }}>
-              {p}
-            </p>
-          ))}
-        </div>
-
-        <div className="card">
-          <h2 style={{ color: 'var(--brand)', fontSize: '1.5rem', marginBottom: '0.75rem' }}>
-            {homeContent.mission.heading}
-          </h2>
-          {homeContent.mission.body.map((p, idx) => (
-            <p key={idx} style={{ color: 'var(--text-body)', lineHeight: '1.65' }}>
-              {p}
-            </p>
-          ))}
-        </div>
-      </section>
-
-      {/* Overview of Work and Products */}
-      <section className="card card-subtle" aria-labelledby="overview-heading">
-        <h2 id="overview-heading" style={{ marginBottom: '0.75rem' }}>
-          {homeContent.overview.heading}
+      {/* Our Vision */}
+      <section className="card" aria-labelledby="vision-heading" style={{ marginBottom: 'var(--space-2xl)' }}>
+        <h2 id="vision-heading" style={{ color: 'var(--brand)', marginBottom: '1rem' }}>
+          {homeContent.vision.heading}
         </h2>
-        <p style={{ fontSize: '1.05rem', color: 'var(--text-body)', marginBottom: '1.5rem' }}>
-          {homeContent.overview.body}
-        </p>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-          <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>
-              Agreement Categories
-            </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--brand)' }}>
-              {homeContent.overview.statSummary.categoriesCount}
-            </div>
-          </div>
-          <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>
-              Packages Delivered
-            </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--brand)' }}>
-              {homeContent.overview.statSummary.productsDelivered}
-            </div>
-          </div>
-          <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>
-              Target Environment
-            </div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-body)' }}>
-              {homeContent.overview.statSummary.operatingSystem}
-            </div>
-          </div>
-          <div style={{ background: 'var(--surface)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>
-              Standard
-            </div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-body)' }}>
-              {homeContent.overview.statSummary.standard}
-            </div>
-          </div>
-        </div>
+        {homeContent.vision.body.map((p, idx) => (
+          <p key={idx} style={{ color: 'var(--text-body)', lineHeight: '1.7', fontSize: '1.05rem', marginBottom: '1rem' }}>
+            {p}
+          </p>
+        ))}
       </section>
       <Agentation />
     </div>

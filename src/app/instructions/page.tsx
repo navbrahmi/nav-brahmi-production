@@ -12,10 +12,6 @@ export default function InstructionsPage() {
   return (
     <div className="container container-reading">
       <header style={{ marginBottom: 'var(--space-2xl)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
-          <span className="badge badge-brand">Setup Guide</span>
-          <span className="badge badge-pending">Windows 10 / 11</span>
-        </div>
         <h1 style={{ color: 'var(--brand)', marginBottom: '0.75rem' }}>
           {instructionsContent.title}
         </h1>
