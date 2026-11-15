@@ -21,6 +21,26 @@ export default function LicenseRecoveryPage() {
   const [licenses, setLicenses] = useState<RecoveredLicense[]>([]);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const err = params.get('error');
+    if (err) {
+      if (err === 'TOKEN_ALREADY_USED') {
+        setErrorMessage('This recovery link has already been used. Please enter your email below to request a fresh link.');
+      } else if (err === 'TOKEN_EXPIRED') {
+        setErrorMessage('This recovery link has expired (30-minute validity limit). Please enter your email below to request a new link.');
+      } else if (err === 'RATE_LIMIT_EXCEEDED') {
+        setErrorMessage('Too many attempts. Please wait a few minutes before trying again.');
+      } else {
+        setErrorMessage('The recovery link is invalid or expired. Please submit your purchase email below to receive a new link.');
+      }
+    }
+    if (params.get('recovered') === 'true') {
+      setSuccessMessage('Your recovery request has been verified. Your license details have been dispatched to your email.');
+    }
+  }, []);
+
   const handleRecover = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
