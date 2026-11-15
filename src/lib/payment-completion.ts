@@ -56,47 +56,43 @@ export async function markOrderPaid(
     actorId,
   } = params;
 
-  return await prisma.$transaction(async (tx) => {
-    // 1. Locate the Order
-    let order = null;
-    if (orderId) {
-      order = await tx.order.findUnique({
-        where: { id: orderId },
+  let createdLicenseId: string | undefined;
+  let targetCustomerEmail: string | undefined;
+
+  const result = await prisma.$transaction(
+    async (tx) => {
+      // 1. Locate Target Order ID
+      let targetOrderId = orderId;
+      if (!targetOrderId && orderToken) {
+        const found = await tx.order.findUnique({
+          where: { publicToken: orderToken },
+          select: { id: true },
+        });
+        targetOrderId = found?.id;
+      } else if (!targetOrderId && providerOrderId) {
+        const paymentWithOrder = await tx.payment.findFirst({
+          where: { providerOrderId },
+          select: { orderId: true },
+        });
+        targetOrderId = paymentWithOrder?.orderId;
+      }
+
+      if (!targetOrderId) {
+        throw new Error(
+          `Order not found for payment completion (orderId: ${orderId}, token: ${orderToken}, providerOrderId: ${providerOrderId})`
+        );
+      }
+
+      // Concurrency defense: acquire exclusive row lock on the Order
+      await tx.$executeRaw`SELECT id FROM "Order" WHERE id = ${targetOrderId} FOR UPDATE`;
+
+      // Read fresh order state and licenses under the exclusive lock
+      const lockedOrder = await tx.order.findUniqueOrThrow({
+        where: { id: targetOrderId },
         include: { licenses: true, payments: true, product: true },
       });
-    } else if (orderToken) {
-      order = await tx.order.findUnique({
-        where: { publicToken: orderToken },
-        include: { licenses: true, payments: true, product: true },
-      });
-    } else if (providerOrderId) {
-      const paymentWithOrder = await tx.payment.findFirst({
-        where: { providerOrderId },
-        include: {
-          order: {
-            include: { licenses: true, payments: true, product: true },
-          },
-        },
-      });
-      order = paymentWithOrder?.order || null;
-    }
 
-    if (!order) {
-      throw new Error(
-        `Order not found for payment completion (orderId: ${orderId}, token: ${orderToken}, providerOrderId: ${providerOrderId})`
-      );
-    }
-
-    // Concurrency defense: acquire exclusive row lock on the Order
-    await tx.$executeRaw`SELECT id FROM "Order" WHERE id = ${order.id} FOR UPDATE`;
-
-    // Re-read fresh order state and licenses under the exclusive lock
-    const lockedOrder = await tx.order.findUniqueOrThrow({
-      where: { id: order.id },
-      include: { licenses: true, payments: true, product: true },
-    });
-
-    // 2. Validate Amount and Currency
+      // 2. Validate Amount and Currency
     const expectedAmount = lockedOrder.amountMinor;
     const expectedCurrency = lockedOrder.currency.toUpperCase();
     const receivedAmount = amountMinor;
@@ -262,47 +258,28 @@ export async function markOrderPaid(
       },
     });
 
+    createdLicenseId = license.id;
+    targetCustomerEmail = lockedOrder.customerEmail.toLowerCase().trim();
+
     // 7. Advance Order to LICENSE_ISSUED
     await tx.order.update({
       where: { id: lockedOrder.id },
       data: { status: OrderStatus.LICENSE_ISSUED },
     });
 
-    // 8. Queue Email in EmailOutbox
-    await tx.emailOutbox.create({
-      data: {
-        kind: 'LICENSE_DELIVERY',
-        toEmail: lockedOrder.customerEmail.toLowerCase().trim(),
-        payloadRef: license.id,
-        status: EmailOutboxStatus.PENDING,
-      },
-    });
-
-    // 9. Record Immutable Audit Events
-    await recordAuditEvent({
-      type: 'PAYMENT_CAPTURED',
-      actorType,
-      actorId,
-      refType: 'PAYMENT',
-      refId: providerPaymentId,
-      metadata: {
-        orderId: lockedOrder.id,
-        amountMinor: receivedAmount,
-        currency: receivedCurrency,
-      },
-    });
-
-    await recordAuditEvent({
-      type: 'LICENSE_ISSUED',
-      actorType,
-      actorId,
-      refType: 'LICENSE',
-      refId: license.id,
-      metadata: {
-        orderId: lockedOrder.id,
-        productId: lockedOrder.productId,
-      },
-    });
+    // 8. Queue Email in EmailOutbox inside transaction
+    try {
+      await tx.emailOutbox.create({
+        data: {
+          kind: 'LICENSE_DELIVERY',
+          toEmail: targetCustomerEmail,
+          payloadRef: license.id,
+          status: EmailOutboxStatus.PENDING,
+        },
+      });
+    } catch (outboxErr: any) {
+      logger.warn('Email outbox insert within tx skipped or deferred', { error: outboxErr.message });
+    }
 
     return {
       success: true,
@@ -311,5 +288,56 @@ export async function markOrderPaid(
       isDuplicate: false,
       licenseId: license.id,
     };
+  },
+  {
+    maxWait: 15000,
+    timeout: 30000,
   });
+
+  // Post-commit: Ensure Email Outbox entry exists and log immutable audit events
+  if (result.success && createdLicenseId && targetCustomerEmail) {
+    try {
+      const existingOutbox = await prisma.emailOutbox.findFirst({
+        where: { payloadRef: createdLicenseId },
+      });
+      if (!existingOutbox) {
+        await prisma.emailOutbox.create({
+          data: {
+            kind: 'LICENSE_DELIVERY',
+            toEmail: targetCustomerEmail,
+            payloadRef: createdLicenseId,
+            status: EmailOutboxStatus.PENDING,
+          },
+        });
+      }
+    } catch (postOutboxErr: any) {
+      logger.warn('Post-commit email outbox check notice', { error: postOutboxErr.message });
+    }
+
+    await recordAuditEvent({
+      type: 'PAYMENT_CAPTURED',
+      actorType,
+      actorId,
+      refType: 'PAYMENT',
+      refId: providerPaymentId,
+      metadata: {
+        orderId: result.orderId,
+        amountMinor,
+        currency,
+      },
+    });
+
+    await recordAuditEvent({
+      type: 'LICENSE_ISSUED',
+      actorType,
+      actorId,
+      refType: 'LICENSE',
+      refId: createdLicenseId,
+      metadata: {
+        orderId: result.orderId,
+      },
+    });
+  }
+
+  return result;
 }
