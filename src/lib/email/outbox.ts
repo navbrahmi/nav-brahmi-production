@@ -47,10 +47,16 @@ export async function processEmailOutbox(
     errors: [],
   };
 
-  const appBaseUrl =
+  let appBaseUrl =
     process.env.APP_BASE_URL?.trim() ||
     process.env.NEXT_PUBLIC_APP_URL?.trim() ||
-    'https://brahmicomputing.in';
+    'https://dev.brahmicomputing.in';
+
+  if (appBaseUrl.includes('localhost')) {
+    appBaseUrl = process.env.NODE_ENV === 'production'
+      ? 'https://brahmicomputing.in'
+      : 'https://dev.brahmicomputing.in';
+  }
 
   for (const item of pendingItems) {
     try {

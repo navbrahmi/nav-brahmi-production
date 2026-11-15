@@ -41,7 +41,7 @@ export const contactContent: ContactContent = {
   form: {
     title: 'Send a Message',
     description:
-      'Please fill out the form below. Inquiries will be relayed directly to the official Nav Brahmi administrative mailbox.',
+      'Have a question, feedback, or need technical assistance? Fill out the form below and our team will get back to you shortly.',
     fields: {
       nameLabel: 'Full Name',
       emailLabel: 'Email Address',

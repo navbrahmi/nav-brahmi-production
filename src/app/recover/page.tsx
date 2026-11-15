@@ -17,12 +17,14 @@ export default function LicenseRecoveryPage() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [licenses, setLicenses] = useState<RecoveredLicense[]>([]);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const handleRecover = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
+    setSuccessMessage('');
     setLicenses([]);
 
     const trimmed = email.trim();
@@ -43,12 +45,18 @@ export default function LicenseRecoveryPage() {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        setErrorMessage(data.error || 'No active licenses were found for this email address.');
+        setErrorMessage(data?.error?.message || data?.error || 'Unable to process recovery request.');
         setIsLoading(false);
         return;
       }
 
-      setLicenses(data.licenses || []);
+      setSuccessMessage(
+        data.message ||
+          'If an authorized purchase exists for this email address, license recovery instructions have been dispatched. Please check your inbox.'
+      );
+      if (data.licenses) {
+        setLicenses(data.licenses);
+      }
     } catch (err) {
       console.error(err);
       setErrorMessage('A network connection error occurred while recovering your license.');
@@ -66,11 +74,6 @@ export default function LicenseRecoveryPage() {
   return (
     <div className="container container-reading">
       <div className="card card-elevated">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem' }}>
-          <span className="badge badge-brand">Customer Support</span>
-          <span className="badge badge-pending">Self-Service Recovery</span>
-        </div>
-
         <h1 style={{ color: 'var(--brand)', marginBottom: '0.5rem' }}>
           License & Installer Recovery
         </h1>
@@ -104,6 +107,25 @@ export default function LicenseRecoveryPage() {
                 required
               />
             </div>
+
+            {successMessage && (
+              <div
+                role="status"
+                style={{
+                  background: '#F0FDF4',
+                  color: '#166534',
+                  border: '1px solid #BBF7D0',
+                  padding: '0.85rem 1rem',
+                  borderRadius: 'var(--radius-md)',
+                  marginBottom: '1.25rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 600,
+                  lineHeight: '1.5',
+                }}
+              >
+                ✓ {successMessage}
+              </div>
+            )}
 
             {errorMessage && (
               <div
@@ -219,7 +241,7 @@ export default function LicenseRecoveryPage() {
                       color: 'var(--text-body)',
                     }}
                   >
-                    💡 <strong>Installation Note:</strong> Run the downloaded installer package with administrative rights on your Windows machine to complete setup.
+                    <strong>Installation Note:</strong> Run the downloaded installer package with administrative rights on your Windows machine to complete setup.
                   </div>
                 </div>
               ))}

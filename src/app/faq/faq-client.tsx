@@ -4,18 +4,11 @@ import React, { useState } from 'react';
 import { FAQCategory } from '../../content/faq';
 
 export function FaqAccordion({ categories }: { categories: FAQCategory[] }) {
-  // Store an open set of item keys e.g. "0-0", "1-0", etc. Initialize with first item of each category open
-  const [openItems, setOpenItems] = useState<Record<string, boolean>>({
-    '0-0': true,
-    '1-0': true,
-    '2-0': true,
-  });
+  // Track single active open item. Clicking any question closes the previously open one and opens the new one.
+  const [openItemKey, setOpenItemKey] = useState<string | null>('0-0');
 
   const toggleItem = (key: string) => {
-    setOpenItems((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+    setOpenItemKey((prev) => (prev === key ? null : key));
   };
 
   return (
@@ -66,7 +59,7 @@ export function FaqAccordion({ categories }: { categories: FAQCategory[] }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
             {category.items.map((item, itemIdx) => {
               const itemKey = `${catIdx}-${itemIdx}`;
-              const isOpen = !!openItems[itemKey];
+              const isOpen = openItemKey === itemKey;
               const isPlaceholder = item.answer.includes('PLACEHOLDER');
 
               return (

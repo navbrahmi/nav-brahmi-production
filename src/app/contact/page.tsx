@@ -45,22 +45,6 @@ export default function ContactPage() {
         >
           <div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <span
-                style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.06em',
-                  color: 'var(--brand)',
-                  backgroundColor: 'rgba(229, 16, 85, 0.08)',
-                  padding: '0.25rem 0.65rem',
-                  borderRadius: '999px',
-                  display: 'inline-block',
-                  marginBottom: '0.5rem',
-                }}
-              >
-                Official Directory
-              </span>
               <h2
                 id="details-heading"
                 style={{
@@ -265,23 +249,6 @@ export default function ContactPage() {
           }}
         >
           <div style={{ marginBottom: '1.5rem' }}>
-            <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                color: '#059669',
-                backgroundColor: '#ECFDF5',
-                border: '1px solid #A7F3D0',
-                padding: '0.25rem 0.65rem',
-                borderRadius: '999px',
-                display: 'inline-block',
-                marginBottom: '0.5rem',
-              }}
-            >
-              Direct Message
-            </span>
             <h2
               id="contact-form-title"
               style={{
