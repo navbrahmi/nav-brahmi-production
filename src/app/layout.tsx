@@ -132,7 +132,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
-        <Agentation />
+        {process.env.NODE_ENV === 'development' && <Agentation />}
       </body>
     </html>
   );

@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { homeContent } from '../content/home';
 import { productCategories } from '../content/categories';
-import { Agentation } from "agentation";
 
 export const metadata = {
   title: 'Home — Indian Language Keyboard Drivers & Typography',
@@ -140,7 +139,6 @@ export default function HomePage() {
           </p>
         ))}
       </section>
-      <Agentation />
     </div>
   );
 }

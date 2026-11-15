@@ -78,8 +78,8 @@ export function ContactForm() {
         </div>
       )}
 
-      <div className="form-group">
-        <label htmlFor="contact-name" className="form-label">
+      <div className="form-group" style={{ marginBottom: '1.15rem' }}>
+        <label htmlFor="contact-name" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-body)', marginBottom: '0.35rem' }}>
           {contactContent.form.fields.nameLabel} <span style={{ color: 'var(--brand)' }}>*</span>
         </label>
         <input
@@ -93,11 +93,12 @@ export function ContactForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           disabled={status === 'submitting'}
+          style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.95rem' }}
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="contact-email" className="form-label">
+      <div className="form-group" style={{ marginBottom: '1.15rem' }}>
+        <label htmlFor="contact-email" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-body)', marginBottom: '0.35rem' }}>
           {contactContent.form.fields.emailLabel} <span style={{ color: 'var(--brand)' }}>*</span>
         </label>
         <input
@@ -111,11 +112,12 @@ export function ContactForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={status === 'submitting'}
+          style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.95rem' }}
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="contact-subject" className="form-label">
+      <div className="form-group" style={{ marginBottom: '1.15rem' }}>
+        <label htmlFor="contact-subject" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-body)', marginBottom: '0.35rem' }}>
           {contactContent.form.fields.subjectLabel} <span style={{ color: 'var(--brand)' }}>*</span>
         </label>
         <input
@@ -128,11 +130,12 @@ export function ContactForm() {
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
           disabled={status === 'submitting'}
+          style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.95rem' }}
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="contact-message" className="form-label">
+      <div className="form-group" style={{ marginBottom: '1.25rem' }}>
+        <label htmlFor="contact-message" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-body)', marginBottom: '0.35rem' }}>
           {contactContent.form.fields.messageLabel} <span style={{ color: 'var(--brand)' }}>*</span>
         </label>
         <textarea
@@ -140,11 +143,12 @@ export function ContactForm() {
           name="message"
           required
           className="form-textarea"
-          rows={5}
+          rows={4}
           placeholder="How can our team assist you with Indian language keyboard drivers?"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           disabled={status === 'submitting'}
+          style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.95rem', resize: 'vertical' }}
         />
       </div>
 
@@ -152,9 +156,20 @@ export function ContactForm() {
         type="submit"
         className="btn btn-primary"
         disabled={status === 'submitting'}
-        style={{ width: '100%', cursor: status === 'submitting' ? 'not-allowed' : 'pointer' }}
+        style={{
+          width: '100%',
+          padding: '0.8rem 1.5rem',
+          borderRadius: '8px',
+          fontWeight: 600,
+          fontSize: '0.95rem',
+          cursor: status === 'submitting' ? 'not-allowed' : 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem',
+        }}
       >
-        {status === 'submitting' ? 'Sending Message…' : contactContent.form.submitLabel}
+        <span>{status === 'submitting' ? 'Sending Message…' : `${contactContent.form.submitLabel} →`}</span>
       </button>
     </form>
   );

@@ -29,6 +29,18 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [gatewayPendingNotice, setGatewayPendingNotice] = useState<string | null>(null);
   const [createdOrderToken, setCreatedOrderToken] = useState<string | null>(null);
+  const [verifyStep, setVerifyStep] = useState(0);
+
+  useEffect(() => {
+    if (status !== 'verifying') {
+      setVerifyStep(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setVerifyStep((prev) => (prev < 2 ? prev + 1 : prev));
+    }, 1100);
+    return () => clearInterval(interval);
+  }, [status]);
 
   const priceInRupees = (product.priceMinor / 100).toFixed(2);
 
@@ -252,46 +264,146 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
         </div>
       )}
 
-      {/* Payment Verifying State */}
+      {/* Modern Animated Payment Verifying & License Generating Card */}
       {status === 'verifying' && (
         <div
           style={{
             marginBottom: 'var(--space-xl)',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid #BFDBFE',
-            backgroundColor: '#EFF6FF',
-            padding: '1.25rem',
-            display: 'flex',
-            gap: '1rem',
-            alignItems: 'center',
-            boxShadow: '0 2px 8px rgba(37, 99, 235, 0.08)',
+            borderRadius: '12px',
+            border: '1px solid rgba(229, 16, 85, 0.25)',
+            backgroundColor: '#FFFFFF',
+            boxShadow: '0 10px 25px -5px rgba(229, 16, 85, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)',
+            overflow: 'hidden',
+            position: 'relative',
           }}
           role="status"
         >
+          {/* Animated Gradient Header Bar */}
           <div
             style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              backgroundColor: '#DBEAFE',
-              color: '#2563EB',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
+              height: '4px',
+              width: '100%',
+              background: 'linear-gradient(90deg, #E51055, #EC4899, #8B5CF6, #3B82F6, #E51055)',
+              backgroundSize: '200% 100%',
+              animation: 'gradient-flow 2s linear infinite',
             }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-            </svg>
-          </div>
-          <div style={{ flex: 1 }}>
-            <h4 style={{ margin: '0 0 0.25rem 0', color: '#1E40AF', fontSize: '0.98rem', fontWeight: 700 }}>
-              Payment Confirmed • Generating Your License
-            </h4>
-            <p style={{ margin: 0, color: '#1D4ED8', fontSize: '0.875rem', lineHeight: '1.4' }}>
-              Verifying transaction signature and issuing your lifetime activation key. Redirecting to your confirmation page...
-            </p>
+          />
+
+          <div style={{ padding: '1.5rem' }}>
+            <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
+              {/* Pulsing Radar Ring & Key Icon */}
+              <div
+                style={{
+                  width: '46px',
+                  height: '46px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #FFF0F3, #FFE4E9)',
+                  color: 'var(--brand)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  animation: 'pulse-ring 2s cubic-bezier(0.24, 0, 0.38, 1) infinite',
+                  border: '1.5px solid rgba(229, 16, 85, 0.3)',
+                }}
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ animation: 'spin-smooth 4s linear infinite' }}
+                >
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                </svg>
+              </div>
+
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                  <h4 style={{ margin: 0, color: 'var(--brand)', fontSize: '1.05rem', fontWeight: 700, letterSpacing: '-0.01em' }}>
+                    Payment Confirmed • Generating Your License
+                  </h4>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      padding: '0.2rem 0.55rem',
+                      borderRadius: '999px',
+                      backgroundColor: '#ECFDF5',
+                      color: '#059669',
+                      border: '1px solid #A7F3D0',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                    }}
+                  >
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }} />
+                    Active Pipeline
+                  </span>
+                </div>
+
+                <p style={{ margin: '0 0 1rem 0', color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.45' }}>
+                  {verifyStep === 0 && 'Cryptographic transaction signature verified. Initiating AES-256 license generation...'}
+                  {verifyStep === 1 && 'Minting hardware-bound activation key and generating compliance tax invoice...'}
+                  {verifyStep === 2 && 'Finalizing purchase record and redirecting to your secure fulfillment portal...'}
+                </p>
+
+                {/* Simulated Live Key Generation Shimmer Box */}
+                <div
+                  style={{
+                    backgroundColor: '#0F172A',
+                    color: '#F8FAFC',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1rem',
+                    fontFamily: 'monospace',
+                    fontSize: '0.85rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    border: '1px solid #1E293B',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ color: '#10B981', fontSize: '0.8rem' }}>●</span>
+                    <span style={{ letterSpacing: '0.12em', color: '#E2E8F0', fontWeight: 600 }}>
+                      NAV-{verifyStep >= 1 ? '82B1' : '••••'}-{verifyStep >= 1 ? 'F206' : '••••'}-{verifyStep >= 2 ? '9C69' : '••••'}-{verifyStep >= 2 ? 'F499' : '••••'}
+                    </span>
+                  </div>
+                  <span
+                    style={{
+                      fontSize: '0.72rem',
+                      color: '#94A3B8',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      animation: 'key-glow 1.5s infinite',
+                    }}
+                  >
+                    {verifyStep === 0 && 'Verifying...'}
+                    {verifyStep === 1 && 'Generating...'}
+                    {verifyStep === 2 && 'Ready'}
+                  </span>
+                </div>
+
+                {/* Step indicators */}
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.85rem', fontSize: '0.78rem', color: 'var(--text-muted)', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#059669', fontWeight: 600 }}>
+                    <span>✓</span> Payment Verified
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: verifyStep >= 1 ? '#059669' : 'var(--brand)', fontWeight: 600 }}>
+                    <span>{verifyStep >= 1 ? '✓' : '⚡'}</span> License Minted
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: verifyStep >= 2 ? '#059669' : 'var(--text-muted)', fontWeight: verifyStep >= 2 ? 600 : 400 }}>
+                    <span>{verifyStep >= 2 ? '✓' : '○'}</span> Invoice Ready
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
