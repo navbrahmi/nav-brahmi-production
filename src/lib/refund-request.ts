@@ -200,8 +200,11 @@ export async function submitRefundRequest(
       toEmail: 'support@brahmicomputing.in',
       payloadRef: refundRequest.id,
     });
+    // Immediately dispatch email via Resend transport
+    const { processEmailOutbox } = await import('./email/outbox');
+    await processEmailOutbox();
   } catch (err: any) {
-    logger.warn('Failed to queue support email notification for refund request', {
+    logger.warn('Failed to queue or send support email notification for refund request', {
       error: err.message,
       refundRequestId: refundRequest.id,
     });
