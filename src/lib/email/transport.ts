@@ -1,10 +1,17 @@
 import { logger } from '../logger';
 
+export interface EmailAttachment {
+  filename: string;
+  content: Buffer | string;
+  contentType?: string;
+}
+
 export interface EmailOptions {
   to: string;
   subject: string;
   text: string;
   html?: string;
+  attachments?: EmailAttachment[];
 }
 
 export interface EmailResult {
@@ -105,6 +112,12 @@ export class ResendEmailTransport implements EmailTransport {
         });
       }
 
+      const attachmentsPayload = options.attachments?.map((att) => ({
+        filename: att.filename,
+        content: Buffer.isBuffer(att.content) ? att.content.toString('base64') : att.content,
+        ...(att.contentType ? { content_type: att.contentType } : {}),
+      }));
+
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -117,6 +130,7 @@ export class ResendEmailTransport implements EmailTransport {
           subject: options.subject,
           text: options.text,
           html: options.html,
+          ...(attachmentsPayload && attachmentsPayload.length > 0 ? { attachments: attachmentsPayload } : {}),
         }),
       });
 

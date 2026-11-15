@@ -6,6 +6,7 @@ import { decryptLicenseKey } from '../license-crypto';
 import { createPurchaseAuthToken } from '../license';
 import { logger } from '../logger';
 import { recordAuditEvent } from '../audit';
+import { generateTaxInvoice } from '../invoice';
 
 export interface ProcessOutboxOptions {
   transport?: EmailTransport;
@@ -59,7 +60,15 @@ export async function processEmailOutbox(
           where: { id: item.payloadRef },
           include: {
             product: true,
-            order: true,
+            order: {
+              include: {
+                payments: {
+                  where: { status: 'CAPTURED' },
+                  take: 1,
+                  orderBy: { createdAt: 'desc' },
+                },
+              },
+            },
           },
         });
 
@@ -110,11 +119,41 @@ export async function processEmailOutbox(
           });
         }
 
+        let attachments: Array<{ filename: string; content: Buffer; contentType: string }> | undefined;
+        if (item.kind === 'LICENSE_DELIVERY' && license.order) {
+          try {
+            const invoice = generateTaxInvoice({
+              orderId: license.order.id,
+              orderToken: license.order.publicToken,
+              customerName: license.order.customerName,
+              customerEmail: license.email,
+              productName: license.product.name,
+              amountMinor: license.order.amountMinor,
+              currency: license.order.currency,
+              paymentId: license.order.payments[0]?.providerPaymentId || null,
+              createdAt: license.order.createdAt,
+            });
+            attachments = [
+              {
+                filename: `${invoice.invoiceNumber}.pdf`,
+                content: invoice.pdfBuffer,
+                contentType: 'application/pdf',
+              },
+            ];
+          } catch (invErr: any) {
+            logger.warn('Failed to generate invoice attachment for license email', {
+              orderId: license.order.id,
+              error: invErr?.message || invErr,
+            });
+          }
+        }
+
         const sendResult = await transport.sendMail({
           to: item.toEmail,
           subject: emailContent.subject,
           text: emailContent.text,
           html: emailContent.html,
+          attachments,
         });
 
         if (sendResult.success) {

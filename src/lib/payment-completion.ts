@@ -345,6 +345,41 @@ export async function markOrderPaid(
         orderId: result.orderId,
       },
     });
+
+    try {
+      const orderRecord = await prisma.order.findUnique({
+        where: { id: result.orderId },
+        include: { product: true },
+      });
+      if (orderRecord) {
+        const { generateTaxInvoice } = await import('./invoice');
+        const invoice = generateTaxInvoice({
+          orderId: orderRecord.id,
+          orderToken: orderRecord.publicToken,
+          customerName: orderRecord.customerName,
+          customerEmail: orderRecord.customerEmail,
+          productName: orderRecord.product.name,
+          amountMinor: orderRecord.amountMinor,
+          currency: orderRecord.currency,
+          paymentId: providerPaymentId,
+          createdAt: orderRecord.createdAt,
+        });
+
+        await recordAuditEvent({
+          type: 'INVOICE_GENERATED',
+          actorType,
+          actorId,
+          refType: 'ORDER',
+          refId: orderRecord.id,
+          metadata: {
+            invoiceNumber: invoice.invoiceNumber,
+            invoiceData: invoice.invoiceData,
+          },
+        });
+      }
+    } catch (invAuditErr: any) {
+      logger.warn('Failed to audit generated invoice', { error: invAuditErr?.message || invAuditErr });
+    }
   }
 
   return result;

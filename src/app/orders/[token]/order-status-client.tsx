@@ -130,7 +130,6 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
             </div>
             <code style={{ fontSize: '0.95rem', fontWeight: 600 }}>{data.publicToken}</code>
           </div>
-          <div>{getStatusBadge(data.initialStatus)}</div>
         </div>
 
         <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1.25rem', marginBottom: '1.25rem' }}>
@@ -215,8 +214,8 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
               </div>
             )}
 
-            {data.downloadUrl && (
-              <div style={{ marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
+              {data.downloadUrl && (
                 <button
                   type="button"
                   onClick={handleDownload}
@@ -226,8 +225,8 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    fontSize: '1rem',
-                    padding: '0.75rem 1.5rem',
+                    fontSize: '0.95rem',
+                    padding: '0.7rem 1.4rem',
                     fontWeight: 600,
                     cursor: downloading ? 'not-allowed' : 'pointer',
                     opacity: downloading ? 0.7 : 1,
@@ -236,10 +235,30 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
                 >
                   <span>{downloading ? '⏳ Preparing Setup.exe...' : '⬇ Download Setup.exe (Windows 11 / 10)'}</span>
                 </button>
-                <p style={{ fontSize: '0.8rem', color: '#14532D', marginTop: '0.4rem', margin: '0.4rem 0 0' }}>
-                  Pre-authorized bootstrapper automatically detects your license key and manages machine activation.
-                </p>
-              </div>
+              )}
+
+              <a
+                href={`/api/orders/${encodeURIComponent(data.publicToken)}/invoice`}
+                download
+                className="btn btn-secondary"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.95rem',
+                  padding: '0.7rem 1.25rem',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                <span>📄 Download Tax Invoice (PDF)</span>
+              </a>
+            </div>
+
+            {data.downloadUrl && (
+              <p style={{ fontSize: '0.8rem', color: '#14532D', margin: '-0.75rem 0 1.25rem' }}>
+                Pre-authorized bootstrapper automatically detects your license key and manages machine activation.
+              </p>
             )}
 
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -305,7 +324,7 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
           <a href="mailto:support@brahmicomputing.in" style={{ color: 'var(--link)', textDecoration: 'underline' }}>
             support@brahmicomputing.in
           </a>{' '}
-          or call <strong>9632819063</strong> with reference <code>{data.publicToken.substring(0, 12)}...</code>
+          or call <strong>+91 98459 80534</strong> with reference <code>{data.publicToken.substring(0, 12)}...</code>
         </p>
       </div>
     </div>
@@ -389,14 +408,14 @@ function RefundRequestSection({ orderToken }: { orderToken: string }) {
                 fontSize: '0.9rem',
               }}
             >
-              <strong>✓ Refund Review Request Submitted (PENDING_REVIEW)</strong>
+              <strong>✓ Refund Review Request Submitted</strong>
               <p style={{ margin: '0.5rem 0 0', lineHeight: '1.5' }}>{submittedResult}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: '1.5' }}>
-                Per confirmed client policy (C-08 & C-18), refund requests are manually evaluated by our engineering
-                support team. Submitting this form does not automatically issue a payment refund or revoke your license.
+                Refund requests are manually evaluated by our technical support team.
+                Submitting this form logs your request for review.
               </div>
 
               {errorMsg && (
