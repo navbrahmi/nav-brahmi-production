@@ -163,8 +163,8 @@ export async function processEmailOutbox(
         });
 
         if (sendResult.success) {
-          await prisma.$transaction(async (tx) => {
-            await tx.emailOutbox.update({
+          try {
+            await prisma.emailOutbox.update({
               where: { id: item.id },
               data: {
                 status: EmailOutboxStatus.SENT,
@@ -174,12 +174,14 @@ export async function processEmailOutbox(
 
             // If order was LICENSE_ISSUED, advance to DELIVERED
             if (license.order && license.order.status === OrderStatus.LICENSE_ISSUED) {
-              await tx.order.update({
+              await prisma.order.update({
                 where: { id: license.order.id },
                 data: { status: OrderStatus.DELIVERED },
               });
             }
-          });
+          } catch (updateErr: any) {
+            logger.warn('Email sent but status update notice', { error: updateErr?.message });
+          }
 
           await recordAuditEvent({
             type: 'EMAIL_DELIVERED',
