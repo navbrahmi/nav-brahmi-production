@@ -161,7 +161,7 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
         },
         modal: {
           ondismiss: function () {
-            setStatus('cancelled');
+            setStatus((prev) => (prev === 'error' ? 'error' : 'cancelled'));
           },
         },
       };
@@ -252,31 +252,142 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
         </div>
       )}
 
-      {/* Error Message */}
-      {errorMessage && (
+      {/* Payment Verifying State */}
+      {status === 'verifying' && (
         <div
-          className="card"
           style={{
             marginBottom: 'var(--space-xl)',
-            borderLeft: '4px solid var(--state-error-text)',
-            backgroundColor: 'var(--state-error-bg)',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid #BFDBFE',
+            backgroundColor: '#EFF6FF',
+            padding: '1.25rem',
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center',
+            boxShadow: '0 2px 8px rgba(37, 99, 235, 0.08)',
           }}
-          role="alert"
+          role="status"
         >
-          <div style={{ color: 'var(--state-error-text)', fontWeight: 600, fontSize: '0.95rem' }}>{errorMessage}</div>
+          <div
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              backgroundColor: '#DBEAFE',
+              color: '#2563EB',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+            </svg>
+          </div>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ margin: '0 0 0.25rem 0', color: '#1E40AF', fontSize: '0.98rem', fontWeight: 700 }}>
+              Payment Confirmed • Generating Your License
+            </h4>
+            <p style={{ margin: 0, color: '#1D4ED8', fontSize: '0.875rem', lineHeight: '1.4' }}>
+              Verifying transaction signature and issuing your lifetime activation key. Redirecting to your confirmation page...
+            </p>
+          </div>
         </div>
       )}
 
-      {/* Cancelled State */}
-      {status === 'cancelled' && (
+      {/* Payment Error / Failed Alert */}
+      {errorMessage && (
         <div
-          className="card card-subtle"
-          style={{ marginBottom: 'var(--space-xl)', borderLeft: '4px solid var(--state-pending-border)' }}
+          style={{
+            marginBottom: 'var(--space-xl)',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid #FECACA',
+            backgroundColor: '#FEF2F2',
+            padding: '1.25rem',
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'flex-start',
+            boxShadow: '0 2px 8px rgba(220, 38, 38, 0.06)',
+          }}
+          role="alert"
+        >
+          <div
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              backgroundColor: '#FEE2E2',
+              color: '#DC2626',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </div>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ margin: '0 0 0.25rem 0', color: '#991B1B', fontSize: '0.98rem', fontWeight: 700 }}>
+              Payment Unsuccessful
+            </h4>
+            <p style={{ margin: '0 0 0.45rem 0', color: '#B91C1C', fontSize: '0.9rem', lineHeight: '1.4' }}>
+              {errorMessage}
+            </p>
+            <p style={{ margin: 0, color: '#7F1D1D', fontSize: '0.825rem', opacity: 0.9 }}>
+              No funds have been debited from your account. You can review your details and retry payment below, or choose another payment method (UPI, Card, or NetBanking).
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Cancelled / Dismissed State (Only shown if no explicit error occurred) */}
+      {!errorMessage && status === 'cancelled' && (
+        <div
+          style={{
+            marginBottom: 'var(--space-xl)',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid #FDE68A',
+            backgroundColor: '#FFFBEB',
+            padding: '1.25rem',
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'flex-start',
+            boxShadow: '0 2px 8px rgba(217, 119, 6, 0.06)',
+          }}
           role="status"
         >
-          <p style={{ margin: 0, color: 'var(--state-pending-text)', fontSize: '0.9rem' }}>
-            Checkout was dismissed before completion. You can retry at any time using the button below.
-          </p>
+          <div
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              backgroundColor: '#FEF3C7',
+              color: '#D97706',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ margin: '0 0 0.25rem 0', color: '#92400E', fontSize: '0.98rem', fontWeight: 700 }}>
+              Checkout Dismissed
+            </h4>
+            <p style={{ margin: 0, color: '#B45309', fontSize: '0.9rem', lineHeight: '1.45' }}>
+              The payment window was closed before completing the purchase. No charges were made. You can resume and retry anytime using the button below.
+            </p>
+          </div>
         </div>
       )}
 
