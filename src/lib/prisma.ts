@@ -34,11 +34,23 @@ function loadEnvFileFallback() {
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
 function getEffectiveDatabaseUrl(): string | undefined {
-  const dbUrl = process.env.DATABASE_URL;
+  let dbUrl = process.env.DATABASE_URL;
   if (!dbUrl) return undefined;
-  if (dbUrl.includes('pooler.supabase.com') && !dbUrl.includes('pgbouncer=true')) {
-    const separator = dbUrl.includes('?') ? '&' : '?';
-    return `${dbUrl}${separator}pgbouncer=true`;
+  if (dbUrl.includes('pooler.supabase.com')) {
+    let modified = false;
+    if (!dbUrl.includes('pgbouncer=true')) {
+      const separator = dbUrl.includes('?') ? '&' : '?';
+      dbUrl = `${dbUrl}${separator}pgbouncer=true`;
+      modified = true;
+    }
+    if (!dbUrl.includes('connection_limit=')) {
+      const separator = dbUrl.includes('?') ? '&' : '?';
+      dbUrl = `${dbUrl}${separator}connection_limit=1`;
+      modified = true;
+    }
+    if (modified) {
+      process.env.DATABASE_URL = dbUrl;
+    }
   }
   return dbUrl;
 }
