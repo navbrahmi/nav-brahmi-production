@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
           : 'https://dev.brahmicomputing.in';
     }
 
-    const recoveryUrl = `${baseUrl.replace(/\/+$/, '')}/api/recovery/redeem?token=${rawRecoveryToken}`;
+    const recoveryUrl = `${baseUrl.replace(/\/+$/, '')}/recover/portal?token=${rawRecoveryToken}`;
 
     const { subject, text, html } = renderLicenseRecoveryEmail({
       customerEmail: email,

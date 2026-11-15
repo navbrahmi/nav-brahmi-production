@@ -29,39 +29,6 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [gatewayPendingNotice, setGatewayPendingNotice] = useState<string | null>(null);
   const [createdOrderToken, setCreatedOrderToken] = useState<string | null>(null);
-  const [glyphIdx, setGlyphIdx] = useState(0);
-  const [progress, setProgress] = useState(25);
-
-  const SCRIPT_GLYPHS = [
-    { script: 'Ashokan Brahmi', char: '𑀅' },
-    { script: 'Devanagari', char: 'अ' },
-    { script: 'Kannada', char: 'ಕ' },
-    { script: 'Bengali', char: 'অ' },
-    { script: 'Gujarati', char: 'ક' },
-    { script: 'Malayalam', char: 'ക' },
-    { script: 'Tamil', char: 'அ' },
-    { script: 'Telugu', char: 'క' },
-  ];
-
-  useEffect(() => {
-    if (status !== 'verifying') {
-      setGlyphIdx(0);
-      setProgress(25);
-      return;
-    }
-    const glyphInterval = setInterval(() => {
-      setGlyphIdx((prev) => (prev + 1) % SCRIPT_GLYPHS.length);
-    }, 650);
-
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => (prev < 92 ? prev + 15 : prev));
-    }, 450);
-
-    return () => {
-      clearInterval(glyphInterval);
-      clearInterval(progressInterval);
-    };
-  }, [status]);
 
   const priceInRupees = (product.priceMinor / 100).toFixed(2);
 
@@ -285,127 +252,42 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
         </div>
       )}
 
-      {/* Modern Indic Script & Windows Keyboard Driver Provisioning Card */}
+      {/* Enterprise Payment Verification Card */}
       {status === 'verifying' && (
         <div
           style={{
             marginBottom: 'var(--space-xl)',
-            borderRadius: '16px',
-            border: '1.5px solid rgba(229, 16, 85, 0.2)',
+            borderRadius: '12px',
+            border: '1.5px solid #E2E8F0',
             backgroundColor: '#FFFFFF',
-            boxShadow: '0 12px 30px -8px rgba(229, 16, 85, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.04)',
-            overflow: 'hidden',
+            padding: '1.75rem 1.5rem',
+            boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.05)',
+            display: 'flex',
+            gap: '1.25rem',
+            alignItems: 'center',
           }}
           role="status"
         >
-          {/* Animated Gradient Accent Bar */}
+          {/* Smooth Enterprise Spinner */}
           <div
             style={{
-              height: '4px',
-              width: '100%',
-              background: 'linear-gradient(90deg, #E51055, #EC4899, #8B5CF6, #3B82F6, #E51055)',
-              backgroundSize: '200% 100%',
-              animation: 'gradient-flow 2s linear infinite',
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              border: '3px solid rgba(229, 16, 85, 0.15)',
+              borderTopColor: 'var(--brand)',
+              animation: 'spin-smooth 0.85s linear infinite',
+              flexShrink: 0,
             }}
           />
 
-          <div style={{ padding: '1.5rem' }}>
-            <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
-              {/* Animated Indic Script Glyph Centerpiece */}
-              <div
-                style={{
-                  width: '58px',
-                  height: '58px',
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, #FFF0F3 0%, #FFE4E9 100%)',
-                  border: '2px solid rgba(229, 16, 85, 0.25)',
-                  boxShadow: '0 8px 20px -4px rgba(229, 16, 85, 0.2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  position: 'relative',
-                  animation: 'pulse-ring 2.5s cubic-bezier(0.24, 0, 0.38, 1) infinite',
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: '1.85rem',
-                    fontWeight: 700,
-                    color: 'var(--brand)',
-                    lineHeight: 1,
-                    userSelect: 'none',
-                    transition: 'all 0.3s ease',
-                  }}
-                >
-                  {SCRIPT_GLYPHS[glyphIdx].char}
-                </span>
-              </div>
-
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                  <h4 style={{ margin: 0, color: 'var(--brand)', fontSize: '1.05rem', fontWeight: 700, letterSpacing: '-0.01em' }}>
-                    Payment Confirmed • Preparing {product.name} Package
-                  </h4>
-                  <span
-                    style={{
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      padding: '0.2rem 0.6rem',
-                      borderRadius: '999px',
-                      backgroundColor: '#ECFDF5',
-                      color: '#059669',
-                      border: '1px solid #A7F3D0',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                    }}
-                  >
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }} />
-                    Provisioning Driver
-                  </span>
-                </div>
-
-                <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.45' }}>
-                  Configuring native Windows keyboard driver for {product.name} and preparing your compliance tax invoice...
-                </p>
-              </div>
-            </div>
-
-            {/* Smooth Loading Progress Bar */}
-            <div
-              style={{
-                width: '100%',
-                height: '6px',
-                backgroundColor: '#F1F5F9',
-                borderRadius: '999px',
-                overflow: 'hidden',
-                margin: '1.25rem 0 0.85rem',
-              }}
-            >
-              <div
-                style={{
-                  height: '100%',
-                  width: `${progress}%`,
-                  background: 'linear-gradient(90deg, #E51055, #EC4899, #8B5CF6)',
-                  borderRadius: '999px',
-                  transition: 'width 0.4s ease-out',
-                }}
-              />
-            </div>
-
-            {/* Step indicators */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem', color: 'var(--text-muted)', flexWrap: 'wrap', gap: '0.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#059669', fontWeight: 600 }}>
-                <span>✓</span> Payment Verified
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: progress >= 50 ? '#059669' : 'var(--brand)', fontWeight: 600 }}>
-                <span>{progress >= 50 ? '✓' : '⚡'}</span> Windows Driver Configured
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: progress >= 80 ? '#059669' : 'var(--text-muted)', fontWeight: progress >= 80 ? 600 : 400 }}>
-                <span>{progress >= 80 ? '✓' : '○'}</span> Redirecting to Fulfillment
-              </div>
-            </div>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ margin: '0 0 0.35rem 0', color: 'var(--text-body)', fontSize: '1.05rem', fontWeight: 700, letterSpacing: '-0.01em' }}>
+              Verifying Payment & Issuing License...
+            </h4>
+            <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.45' }}>
+              Confirming transaction signature and provisioning your software package. Please keep this window open...
+            </p>
           </div>
         </div>
       )}
