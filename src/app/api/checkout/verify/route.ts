@@ -138,12 +138,12 @@ export async function POST(req: NextRequest) {
       isDuplicate: completionResult.isDuplicate,
     });
   } catch (err: any) {
-    logger.error('Unhandled error in checkout verification endpoint', { error: err.message });
+    logger.error('Unhandled error in checkout verification endpoint', { error: err.message, stack: err.stack });
     return NextResponse.json(
       {
         error: {
           code: 'SERVER_ERROR',
-          message: 'An error occurred during payment verification.',
+          message: err?.message || 'An error occurred during payment verification.',
         },
       },
       { status: 500 }

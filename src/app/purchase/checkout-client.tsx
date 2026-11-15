@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -31,6 +31,11 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
   const [createdOrderToken, setCreatedOrderToken] = useState<string | null>(null);
 
   const priceInRupees = (product.priceMinor / 100).toFixed(2);
+
+  // Preload Razorpay checkout script on mount so modal opens instantly
+  useEffect(() => {
+    loadRazorpayScript();
+  }, []);
 
   // Dynamically load Razorpay checkout script if not present
   const loadRazorpayScript = (): Promise<boolean> => {
@@ -183,11 +188,6 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
         className="card card-elevated"
         style={{ marginBottom: 'var(--space-xl)', border: '2px solid var(--border-subtle)' }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-          <span className="badge badge-brand">Order Summary</span>
-          <span className="badge badge-pending">TEST MODE</span>
-        </div>
-
         <h2 style={{ fontSize: '1.4rem', color: 'var(--text-body)', marginBottom: '0.5rem' }}>
           {product.name}
         </h2>
@@ -209,7 +209,7 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
               License Type: Lifetime Single-Machine Driver
             </div>
             <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              Taxes included per client specification
+              Taxes included • Instant activation
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
@@ -282,22 +282,6 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
 
       {/* Customer Input & Pay Form */}
       <form onSubmit={handleCheckoutSubmit} className="card">
-        {process.env.NEXT_PUBLIC_DEMO_PAYMENT_BYPASS === 'true' && (
-          <div
-            style={{
-              backgroundColor: '#FEF3C7',
-              border: '1px solid #F59E0B',
-              borderRadius: '6px',
-              padding: '0.75rem 1rem',
-              marginBottom: '1.25rem',
-              fontSize: '0.85rem',
-              color: '#92400E',
-            }}
-          >
-            <strong>Simulation Test Mode Active:</strong> Razorpay payment is bypassed for local verification. Clicking Pay will simulate a successful test purchase, issue a real license key, and provide Setup.exe download.
-          </div>
-        )}
-
         <h3 style={{ fontSize: '1.15rem', marginBottom: '1rem', color: 'var(--text-body)' }}>
           Customer Information
         </h3>
@@ -353,11 +337,11 @@ export function CheckoutClient({ product }: { product: CheckoutProductProps }) {
           {status === 'awaiting_payment' && 'Awaiting Gateway Payment...'}
           {status === 'verifying' && 'Verifying Payment Signature...'}
           {(status === 'idle' || status === 'cancelled' || status === 'error') &&
-            `Pay ₹${priceInRupees} with Razorpay (TEST MODE)`}
+            `Pay ₹${priceInRupees} with Razorpay`}
         </button>
 
         <div style={{ marginTop: '1rem', textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-          🔒 Payments processed via Razorpay Test Gateway. No live funds are charged during testing.
+          🔒 Secure 256-bit encrypted checkout via Razorpay. Instant digital license delivery.
         </div>
       </form>
     </div>
