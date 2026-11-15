@@ -314,6 +314,14 @@ export async function markOrderPaid(
       logger.warn('Post-commit email outbox check notice', { error: postOutboxErr.message });
     }
 
+    // Immediately dispatch license delivery email via active email transport (e.g. Resend)
+    try {
+      const { processEmailOutbox } = await import('./email/outbox');
+      await processEmailOutbox();
+    } catch (dispatchErr: any) {
+      logger.warn('Immediate email dispatch notice post-commit', { error: dispatchErr.message });
+    }
+
     await recordAuditEvent({
       type: 'PAYMENT_CAPTURED',
       actorType,

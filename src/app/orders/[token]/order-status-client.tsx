@@ -160,7 +160,7 @@ export function OrderStatusClient({ initialData }: { initialData: OrderStatusPro
               ✓ Your License Has Been Issued!
             </h3>
             <p style={{ fontSize: '0.9rem', color: '#14532D', margin: '0 0 1rem', lineHeight: '1.5' }}>
-              Your official software license key is ready. An email copy has also been queued for{' '}
+              Your official software license key is ready. An email confirmation with your license details has been sent to{' '}
               <strong>{data.customerEmail}</strong>.
             </p>
 

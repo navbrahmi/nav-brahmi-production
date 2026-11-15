@@ -131,6 +131,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Immediately trigger email outbox processor
+    try {
+      const { processEmailOutbox } = await import('@/lib/email/outbox');
+      await processEmailOutbox();
+    } catch (emailErr: any) {
+      logger.warn('Immediate email dispatch notice in verify route', { error: emailErr.message });
+    }
+
     return NextResponse.json({
       success: true,
       orderToken: order.publicToken,
