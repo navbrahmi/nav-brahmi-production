@@ -132,8 +132,21 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Queue in EmailOutbox and dispatch via transport
-    const baseUrl = process.env.APP_BASE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    // Resolve base URL dynamically: request host headers auto-adapt between dev.brahmicomputing.in and brahmicomputing.in
+    let baseUrl = process.env.APP_BASE_URL?.trim() || process.env.NEXT_PUBLIC_APP_URL?.trim();
+
+    const requestHost = req.headers.get('x-forwarded-host') || req.headers.get('host');
+    if (requestHost && !requestHost.includes('localhost') && !requestHost.includes('127.0.0.1')) {
+      const proto = req.headers.get('x-forwarded-proto') || 'https';
+      baseUrl = `${proto}://${requestHost}`;
+    } else if (!baseUrl || baseUrl.includes('localhost')) {
+      baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : process.env.NODE_ENV === 'production'
+          ? 'https://brahmicomputing.in'
+          : 'https://dev.brahmicomputing.in';
+    }
+
     const recoveryUrl = `${baseUrl.replace(/\/+$/, '')}/api/recovery/redeem?token=${rawRecoveryToken}`;
 
     const { subject, text, html } = renderLicenseRecoveryEmail({
