@@ -35,8 +35,10 @@ export default async function PurchasePage({
     });
   }
 
-  // Fallback to first active product with confirmed pricing if none specified
-  if (!dbProduct) {
+  // Fallback to first active product with confirmed pricing only when no
+  // specific product was requested. An explicit unknown/inactive product must
+  // never silently resolve to a different product.
+  if (!dbProduct && !requestedProduct) {
     dbProduct = await prisma.product.findFirst({
       where: {
         priceMinor: { not: null, gt: 0 },

@@ -15,7 +15,7 @@ export interface MarkOrderPaidParams {
   amountMinor: number;
   currency: string;
   rawStatus?: string;
-  actorType?: 'SYSTEM' | 'CUSTOMER' | 'ANONYMOUS';
+  actorType?: 'SYSTEM' | 'CUSTOMER' | 'ANONYMOUS' | 'ADMIN';
   actorId?: string;
 }
 

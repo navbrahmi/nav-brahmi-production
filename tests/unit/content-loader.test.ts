@@ -10,14 +10,14 @@ import { resourcesContent } from '../../src/content/resources';
 import { contactContent } from '../../src/content/contact';
 
 describe('Phase 3 Content Loader & Category Verification', () => {
-  it('should load all 13 agreement categories with unique numbers and slugs', () => {
-    assert.strictEqual(productCategories.length, 13, 'Must contain exactly 13 agreement categories');
+  it('should load all 14 agreement categories with unique numbers and slugs', () => {
+    assert.strictEqual(productCategories.length, 14, 'Must contain exactly 14 agreement categories');
 
     const seenNumbers = new Set<number>();
     const seenSlugs = new Set<string>();
 
     for (const cat of productCategories) {
-      assert.ok(cat.categoryNumber >= 1 && cat.categoryNumber <= 13, `Category number out of range: ${cat.categoryNumber}`);
+      assert.ok(cat.categoryNumber >= 1 && cat.categoryNumber <= 14, `Category number out of range: ${cat.categoryNumber}`);
       assert.ok(!seenNumbers.has(cat.categoryNumber), `Duplicate category number: ${cat.categoryNumber}`);
       seenNumbers.add(cat.categoryNumber);
 
@@ -35,14 +35,14 @@ describe('Phase 3 Content Loader & Category Verification', () => {
       assert.ok(cat.logoSvg.startsWith('/logos/'), `Logo SVG must be located in /logos/: ${cat.logoSvg}`);
     }
 
-    assert.strictEqual(seenNumbers.size, 13);
-    assert.strictEqual(seenSlugs.size, 13);
+    assert.strictEqual(seenNumbers.size, 14);
+    assert.strictEqual(seenSlugs.size, 14);
   });
 
   it('should verify valid BCP-47 and ISO 15924 script tags for all categories', () => {
     const validScriptCodes = new Set([
       'Brah', 'Beng', 'Deva', 'Gujr', 'Knda', 'Mlym',
-      'Modi', 'Orya', 'Guru', 'Taml', 'Telu', 'Tglr', 'Shrd'
+      'Modi', 'Orya', 'Guru', 'Taml', 'Gran', 'Telu', 'Tglr', 'Shrd'
     ]);
 
     for (const cat of productCategories) {

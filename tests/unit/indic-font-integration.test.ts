@@ -89,7 +89,8 @@ describe('Indic Font Requirements & Verification', () => {
       if (cat.slug === 'modi-marathi') assert.strictEqual(cat.defaultFont, 'Noto Sans Modi');
       if (cat.slug === 'oriya-odia') assert.strictEqual(cat.defaultFont, 'Noto Sans Oriya');
       if (cat.slug === 'punjabi-gurmukhi') assert.strictEqual(cat.defaultFont, 'Noto Sans Gurmukhi');
-      if (cat.slug === 'tamil-and-grantha') assert.ok(cat.defaultFont.includes('Tamil') && cat.defaultFont.includes('Grantha'));
+      if (cat.slug === 'tamil') assert.strictEqual(cat.defaultFont, 'Noto Sans Tamil');
+      if (cat.slug === 'tamil-grantha') assert.strictEqual(cat.defaultFont, 'Noto Sans Grantha');
       if (cat.slug === 'telugu') assert.strictEqual(cat.defaultFont, 'Noto Sans Telugu');
       if (cat.slug === 'tulu') assert.ok(cat.defaultFont.includes('Brahmi Tulu-Tigalari'));
       if (cat.slug === 'sharada') assert.strictEqual(cat.defaultFont, 'Noto Sans Sharada');
@@ -121,10 +122,12 @@ describe('Indic Font Requirements & Verification', () => {
     ];
 
     for (const pkg of packageMappings) {
-      const fontPath = path.resolve(process.cwd(), pkg.dir, pkg.font);
+      const fontInSubdir = path.resolve(process.cwd(), pkg.dir, pkg.font);
+      const fontInParent = path.resolve(process.cwd(), path.dirname(pkg.dir), pkg.font);
+      const fontInPublic = path.resolve(process.cwd(), 'public/fonts', pkg.font);
       assert.ok(
-        fs.existsSync(fontPath),
-        `Package directory ${pkg.dir} must contain integrated font ${pkg.font}`
+        fs.existsSync(fontInSubdir) || fs.existsSync(fontInParent) || fs.existsSync(fontInPublic),
+        `Package directory ${pkg.dir} or public/fonts must contain integrated font ${pkg.font}`
       );
     }
   });

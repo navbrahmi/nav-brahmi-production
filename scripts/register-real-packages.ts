@@ -33,15 +33,9 @@ const PRODUCT_MAPPINGS: ProductMapping[] = [
   { slug: 'kannada', code: 'KANNADA', folderName: 'Kannada', msklcFolder: 'Kannada', isResolved: true },
   { slug: 'tulu', code: 'TULU', folderName: 'Tulu', msklcFolder: 'Tulu', isResolved: true },
 
-  // Unresolved Product pending client decision C-03:
-  {
-    slug: 'tamil-and-grantha',
-    code: 'TAMIL_AND_GRANTHA',
-    folderName: 'Tamil',
-    msklcFolder: 'Tamil',
-    isResolved: false,
-    unresolvedReason: 'Blocked by C-03: Category 10 in agreement is "Tamil and Tamil Grantha". Delivered as two separate folders ("Tamil" and "Tamil Grantha"). Client confirmation of bundling remains open; product unavailable for checkout until confirmed.',
-  },
+  // Confirmed separate Tamil & Tamil Grantha products:
+  { slug: 'tamil', code: 'TAMIL', folderName: 'Tamil', msklcFolder: 'Tamil', isResolved: true },
+  { slug: 'tamil-grantha', code: 'TAMIL_GRANTHA', folderName: 'Tamil Grantha', msklcFolder: 'Tamil Grantha', isResolved: true },
 ];
 
 async function main() {
@@ -80,9 +74,18 @@ async function main() {
     blockedPackages: [],
   };
 
+  const filterArg = process.argv.find((a) => a.startsWith('--products='));
+  const allowedSlugs = filterArg
+    ? filterArg.replace('--products=', '').split(',').map((s) => s.trim())
+    : null;
+
   const softwareBase = path.resolve(process.cwd(), 'Requirements', 'Software');
 
   for (const mapping of PRODUCT_MAPPINGS) {
+    if (allowedSlugs && !allowedSlugs.includes(mapping.slug)) {
+      continue;
+    }
+
     if (!mapping.isResolved) {
       console.log(`[BLOCKED] ${mapping.slug} (${mapping.code})`);
       console.log(`  Reason: ${mapping.unresolvedReason}\n`);
@@ -139,16 +142,44 @@ async function main() {
         }
       }
 
-      // Check for allowlisted fonts for this specific product in packageDir or parent folder
+      // Check for allowlisted fonts for this specific product in packageDir, parent folder, or public/fonts
       const parentDir = path.dirname(packageDir);
       const approvedFontsForProduct = getProductApprovedFonts(product.slug || '');
+      const copiedTempFonts: string[] = [];
+
+      const findFont = (dir: string, fileName: string): string | null => {
+        if (!fs.existsSync(dir)) return null;
+        try {
+          const entries = fs.readdirSync(dir, { withFileTypes: true });
+          for (const ent of entries) {
+            const fullPath = path.join(dir, ent.name);
+            if (ent.isDirectory()) {
+              const found = findFont(fullPath, fileName);
+              if (found) return found;
+            } else if (ent.isFile() && ent.name.toLowerCase() === fileName.toLowerCase()) {
+              return fullPath;
+            }
+          }
+        } catch {
+          return null;
+        }
+        return null;
+      };
+
       for (const fontName of approvedFontsForProduct) {
         if (fs.existsSync(path.join(packageDir, fontName))) {
           filesToZip.push(fontName);
-        } else if (fs.existsSync(path.join(parentDir, fontName))) {
-          // Copy temporarily into packageDir for inclusion
-          fs.copyFileSync(path.join(parentDir, fontName), path.join(packageDir, fontName));
-          filesToZip.push(fontName);
+        } else {
+          const found =
+            findFont(parentDir, fontName) ||
+            (fs.existsSync(path.join(process.cwd(), 'public', 'fonts', fontName))
+              ? path.join(process.cwd(), 'public', 'fonts', fontName)
+              : null);
+          if (found) {
+            fs.copyFileSync(found, path.join(packageDir, fontName));
+            copiedTempFonts.push(path.join(packageDir, fontName));
+            filesToZip.push(fontName);
+          }
         }
       }
 
@@ -159,6 +190,13 @@ async function main() {
       // Build zip using zip CLI
       const zipCmd = `zip -r -q "${localZipPath}" ${filesToZip.map((f) => `"${f}"`).join(' ')}`;
       execSync(zipCmd, { cwd: packageDir, stdio: 'pipe' });
+
+      // Clean up any temporarily copied fonts from packageDir
+      for (const tempFont of copiedTempFonts) {
+        if (fs.existsSync(tempFont)) {
+          fs.unlinkSync(tempFont);
+        }
+      }
 
       if (!fs.existsSync(localZipPath)) {
         throw new Error(`Failed to create package zip: ${localZipPath}`);

@@ -50,7 +50,7 @@ describe('Product Catalog & Pricing Verification (C-02 & C-03)', () => {
     assert.strictEqual(kannadaProd.folderName, 'Kannada');
     assert.strictEqual(tuluProd.folderName, 'Tulu');
     assert.strictEqual(kannadaProd.categoryNumber, 5);
-    assert.strictEqual(tuluProd.categoryNumber, 12);
+    assert.strictEqual(tuluProd.categoryNumber, 13);
 
     // Check in content categories
     const catKannada = productCategories.find((c) => c.slug === 'kannada');
@@ -63,16 +63,47 @@ describe('Product Catalog & Pricing Verification (C-02 & C-03)', () => {
     assert.deepStrictEqual(catTulu.deliveredFolders, ['Tulu']);
   });
 
-  it('should verify Tamil and Tamil Grantha price is confirmed to ₹480.00 (48000 paise)', () => {
-    const tamilProd = AUTHORITATIVE_PRODUCTS.find((p) => p.slug === 'tamil-and-grantha');
-    assert.ok(tamilProd, 'Tamil and Grantha entry exists in catalog');
-    assert.strictEqual(
-      tamilProd.priceMinor,
-      48000,
-      'Tamil and Grantha must have priceMinor: 48000 paise (₹480.00)'
-    );
-    assert.strictEqual(tamilProd.price, 480.0, 'Tamil and Grantha price in rupees must be 480.00');
-    assert.strictEqual(tamilProd.isCheckoutAllowed, true, 'Checkout must be allowed');
+  it('should verify Tamil and Tamil Grantha are distinct standalone products with confirmed ₹480 price', () => {
+    const tamilProd = AUTHORITATIVE_PRODUCTS.find((p) => p.slug === 'tamil');
+    const granthaProd = AUTHORITATIVE_PRODUCTS.find((p) => p.slug === 'tamil-grantha');
+
+    assert.ok(tamilProd, 'Tamil product record must exist');
+    assert.ok(granthaProd, 'Tamil Grantha product record must exist');
+
+    assert.notStrictEqual(tamilProd.code, granthaProd.code, 'Tamil and Tamil Grantha must have distinct codes');
+    assert.strictEqual(tamilProd.code, 'TAMIL');
+    assert.strictEqual(granthaProd.code, 'TAMIL_GRANTHA');
+
+    assert.strictEqual(tamilProd.priceMinor, 48000, 'Tamil must have priceMinor: 48000 paise (₹480.00)');
+    assert.strictEqual(granthaProd.priceMinor, 48000, 'Tamil Grantha must have priceMinor: 48000 paise (₹480.00)');
+    assert.strictEqual(tamilProd.price, 480.0);
+    assert.strictEqual(granthaProd.price, 480.0);
+
+    assert.strictEqual(tamilProd.isCheckoutAllowed, true);
+    assert.strictEqual(granthaProd.isCheckoutAllowed, true);
+
+    // Check categories
+    const catTamil = productCategories.find((c) => c.slug === 'tamil');
+    const catGrantha = productCategories.find((c) => c.slug === 'tamil-grantha');
+
+    assert.ok(catTamil, 'Category for Tamil must exist');
+    assert.ok(catGrantha, 'Category for Tamil Grantha must exist');
+    assert.notStrictEqual(catTamil.id, catGrantha.id);
+    assert.deepStrictEqual(catTamil.deliveredFolders, ['Tamil']);
+    assert.deepStrictEqual(catGrantha.deliveredFolders, ['Tamil Grantha']);
+  });
+
+  it('should verify catalog mapping preserves 1:1 boundaries for Tamil and Tamil Grantha without mixing', () => {
+    const tamil = AUTHORITATIVE_PRODUCTS.find((p) => p.code === 'TAMIL');
+    const grantha = AUTHORITATIVE_PRODUCTS.find((p) => p.code === 'TAMIL_GRANTHA');
+
+    assert.ok(tamil);
+    assert.ok(grantha);
+
+    assert.ok(!tamil.folderName.toLowerCase().includes('grantha'));
+    assert.ok(grantha.folderName.toLowerCase().includes('grantha'));
+    assert.ok(!tamil.msklcFolder.toLowerCase().includes('grantha'));
+    assert.ok(grantha.msklcFolder.toLowerCase().includes('grantha'));
   });
 
   it('should verify catalog mapping preserves 1:1 boundaries for Kannada and Tulu without mixing', () => {

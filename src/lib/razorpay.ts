@@ -128,6 +128,59 @@ export async function createRazorpayOrder(
 }
 
 /**
+ * Initiates a refund for a payment via Razorpay Payments API.
+ * Ref: https://razorpay.com/docs/api/refunds/
+ */
+export async function refundRazorpayPayment(params: {
+  paymentId: string;
+  amountMinor?: number;
+  notes?: Record<string, string>;
+}): Promise<{ id: string; status: string; amount: number }> {
+  const config = getRazorpayConfig();
+  if (!config) {
+    logger.warn('Razorpay credentials not configured, skipping remote refund call');
+    return { id: `rfnd_mock_${Date.now()}`, status: 'processed', amount: params.amountMinor || 0 };
+  }
+
+  const { paymentId, amountMinor, notes = {} } = params;
+  const authHeader = `Basic ${Buffer.from(`${config.keyId}:${config.keySecret}`).toString('base64')}`;
+
+  const payload: Record<string, any> = { notes };
+  if (amountMinor && amountMinor > 0) {
+    payload.amount = amountMinor;
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+  try {
+    const res = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}/refund`, {
+      method: 'POST',
+      headers: {
+        Authorization: authHeader,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const errDescription = data?.error?.description || data?.error?.code || 'Refund failed';
+      logger.error('Razorpay refund API call failed', {
+        status: res.status,
+        error: errDescription,
+      });
+      throw new Error(`Razorpay refund failed: ${errDescription}`);
+    }
+
+    return { id: data.id, status: data.status, amount: data.amount };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+/**
  * Verifies Razorpay Checkout payment signature server-side.
  * Formula: HMAC-SHA256(order_id + "|" + payment_id, secret) == signature
  * Ref: https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/build-integration#verify-payment-signature
