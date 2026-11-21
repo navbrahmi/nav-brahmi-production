@@ -66,6 +66,7 @@ doc.txt
 *.cab
 *.dll
 *.zip
+!Requirements/windows-driver/Setup.exe
 
 # Client-provided manuals - do not publish
 /docs/manuals/

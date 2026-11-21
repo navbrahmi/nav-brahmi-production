@@ -129,13 +129,6 @@ export default function InstructionsPage() {
         </div>
       </section>
 
-      {/* Placeholder Notice */}
-      <div className="placeholder-notice" role="note">
-        <div>
-          <strong>Media Walkthrough Status:</strong> {instructionsContent.clientNotesPending}
-        </div>
-      </div>
-
       <div style={{ textAlign: 'center', marginTop: 'var(--space-xl)' }}>
         <Link href="/faq" className="btn btn-secondary" style={{ marginRight: '1rem' }}>
           View Frequently Asked Questions →
