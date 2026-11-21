@@ -47,6 +47,8 @@ dist/
 build/
 
 # Confidential client packages
+Requirements/Software
+/Requirements/Software
 /Requirements/Software/
 /Requirements/software/
 /requirements/Software/

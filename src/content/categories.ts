@@ -1,5 +1,5 @@
 /**
- * 13 Agreement Categories mapped to the 14 delivered packages
+ * 14 Agreement Categories, each mapped to its own product package
  * Source: Signed Agreement §02 and Client Delivery (Kreovi-NavBrahmi2026-10-17.zip)
  * Reference: docs/production/13-product-catalog-and-package-matrix.md
  */
@@ -54,7 +54,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'pra-Brah',
     iso15924: 'Brah',
     defaultFont: 'Noto Sans Brahmi',
-    specimenGlyphs: '𑀦𑀯 𑀩𑁆𑀭𑀸𑀳𑁆𑀫𑀻',
+    specimenGlyphs: '𑀅',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-AshokanBrahmi-IndicLanguageTypingMadeEasy-object.svg',
     overview:
@@ -94,7 +94,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'bn-Beng',
     iso15924: 'Beng',
     defaultFont: 'Noto Sans Bengali',
-    specimenGlyphs: 'নব ব্রাহ্মী',
+    specimenGlyphs: 'অ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Bengali-IndicLanguageTypingMadeEasy-Object.svg',
     overview:
@@ -134,7 +134,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'hi-Deva',
     iso15924: 'Deva',
     defaultFont: 'Noto Sans Devanagari',
-    specimenGlyphs: 'नव ब्राह्मी',
+    specimenGlyphs: 'अ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-नव् ब्राह्मी-Devanagari-IndicLanguageTypingMadeEasy-Objects.svg',
     overview:
@@ -174,7 +174,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'gu-Gujr',
     iso15924: 'Gujr',
     defaultFont: 'Noto Sans Gujarati',
-    specimenGlyphs: 'નવ બ્રાહ્મી',
+    specimenGlyphs: 'અ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Gujarati-IndicLanguageTypingMadeEasy-object.svg',
     overview:
@@ -214,7 +214,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'kn-Knda',
     iso15924: 'Knda',
     defaultFont: 'Noto Sans Kannada',
-    specimenGlyphs: 'ನವ್ ಬ್ರಾಹ್ಮಿ',
+    specimenGlyphs: 'ಅ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-ನವ್ ಬ್ರಾಹ್ಮಿ-Kannada-IndicLanguageTypingMadeEasy-Objects.svg',
     overview:
@@ -254,7 +254,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'ml-Mlym',
     iso15924: 'Mlym',
     defaultFont: 'Noto Sans Malayalam',
-    specimenGlyphs: 'നവ് ബ്രാഹ്മി',
+    specimenGlyphs: 'അ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-നവ് ബ്രാഹ്മി-MalayalamLanguageTypingMadeEasy-Objects.svg',
     overview:
@@ -294,7 +294,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'mr-Modi',
     iso15924: 'Modi',
     defaultFont: 'Noto Sans Modi',
-    specimenGlyphs: '𑘡𑘪 𑘤𑘿𑘨𑘰𑘮𑘿𑘦𑘲',
+    specimenGlyphs: '𑘀',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Modi-Marathi-IndicLanguageTypingMadeEasy-Object.svg',
     overview:
@@ -334,7 +334,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'or-Orya',
     iso15924: 'Orya',
     defaultFont: 'Noto Sans Oriya',
-    specimenGlyphs: 'ନବ ବ୍ରାହ୍ମୀ',
+    specimenGlyphs: 'ଅ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Oriya-IndicLanguageTypingMadeEasy-objects.svg',
     overview:
@@ -374,7 +374,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'pa-Guru',
     iso15924: 'Guru',
     defaultFont: 'Noto Sans Gurmukhi',
-    specimenGlyphs: 'ਨਵ ਬ੍ਰਾਹਮੀ',
+    specimenGlyphs: 'ਅ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Punjabi-IndicLanguageTypingMadeEasy-object.svg',
     overview:
@@ -407,32 +407,32 @@ export const productCategories: ProductCategory[] = [
   {
     id: 'cat-10',
     categoryNumber: 10,
-    agreementName: 'Tamil and Tamil Grantha',
-    slug: 'tamil-and-grantha',
-    deliveredFolders: ['Tamil', 'Tamil Grantha'],
-    scriptName: 'Tamil & Tamil Grantha',
+    agreementName: 'Tamil',
+    slug: 'tamil',
+    deliveredFolders: ['Tamil'],
+    scriptName: 'Tamil',
     bcp47Tag: 'ta-Taml',
     iso15924: 'Taml',
-    defaultFont: 'Noto Sans Tamil & Noto Sans Grantha',
-    specimenGlyphs: 'நவ் பிராமி',
+    defaultFont: 'Noto Sans Tamil',
+    specimenGlyphs: 'அ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-நவ் பிராமி-TamilLanguageTypingMadeEasy-Object.svg',
     overview:
-      'The Tamiḻ script is a Brahmic writing system comprising 12 vowels (uyireḻuttu), 18 consonants (meyyeḻuttu), and the special character ஃ (āytha eḻuttu), evolving from ancient Tamil-Brahmi through Pallava and Grantha influences. The Grantha script is a classical South Indian Brahmic script that develops from the Pallava script and is traditionally associated with writing Sanskrit in South India from the 4th century CE onward, reflecting the twin literary and epigraphic traditions of Tamil Nadu.',
+      'The Tamiḻ script is a Brahmic writing system comprising 12 vowels (uyireḻuttu), 18 consonants (meyyeḻuttu), and the special character ஃ (āytha eḻuttu), evolving from ancient Tamil-Brahmi through Pallava and Chola influences. The writing system features pure consonants marked with a pulli (virama) and combined vowel-consonant (uyirmey) syllabic units.',
     features: [
       'Modern Tamil layout with standard pulli (virama) and uyirmey letters',
-      'Grantha script layout for historical and Vedic Sanskrit texts',
+      'Natural typing for all classical and contemporary Tamil literature',
       'Windows language bar integration for rapid script toggling',
-      'Delivered as two dedicated product packages',
+      'Native MSKLC Windows driver installation',
     ],
     specifications: {
       architecturesDelivered: ['x64', 'x86', 'ia64'],
       supportedWindows: 'Windows 11 (64-bit x64)',
       inputMethod: 'Native MSKLC Windows Keyboard Layout',
-      encoding: 'Unicode Tamil (U+0B80–U+0BFF) & Grantha (U+11300–U+1137F)',
+      encoding: 'Unicode Tamil Block (U+0B80–U+0BFF)',
       shortcut: 'Windows Key + Spacebar',
     },
-    images: ['/images/languages/tamil.png', '/images/languages/tamil-grantha.png'],
+    images: ['/images/languages/tamil.png'],
     manuals: [
       {
         title: 'Tamil User Manual',
@@ -440,6 +440,40 @@ export const productCategories: ProductCategory[] = [
         url: '/manuals/Tamil-Manual.pdf',
         size: '911 KB',
       },
+    ],
+    manualAsset: 'Tamil-Manual.pdf',
+    stickerAsset: 'Tamil-Sticker.pdf',
+  },
+  {
+    id: 'cat-11',
+    categoryNumber: 11,
+    agreementName: 'Tamil Grantha',
+    slug: 'tamil-grantha',
+    deliveredFolders: ['Tamil Grantha'],
+    scriptName: 'Tamil Grantha',
+    bcp47Tag: 'ta-Gran',
+    iso15924: 'Gran',
+    defaultFont: 'Noto Sans Grantha',
+    specimenGlyphs: '𑌅',
+    specimenSource: 'CLIENT_MANUAL',
+    logoSvg: '/logos/Final-Logo-Tamil-Grantha-LanguageTypingMadeEasy-Objects.svg',
+    overview:
+      'The Grantha script is a classical South Indian Brahmic script that developed from the Pallava script and was traditionally used by Tamil speakers to write Sanskrit texts and traditional Vedic manuscripts from the 4th century CE onward. It represents an essential writing system for South Indian epigraphy, Sanskrit hymns, and historical manuscripts in Tamil Nadu.',
+    features: [
+      'Comprehensive Grantha script layout for historical and Vedic Sanskrit texts',
+      'Accurate rendering of complex ligature conjuncts and Sanskrit diacritics',
+      'Windows language bar integration for rapid script toggling',
+      'Native MSKLC Windows driver installation',
+    ],
+    specifications: {
+      architecturesDelivered: ['x64', 'x86', 'ia64'],
+      supportedWindows: 'Windows 11 (64-bit x64)',
+      inputMethod: 'Native MSKLC Windows Keyboard Layout',
+      encoding: 'Unicode Grantha Block (U+11300–U+1137F)',
+      shortcut: 'Windows Key + Spacebar',
+    },
+    images: ['/images/languages/tamil-grantha.png'],
+    manuals: [
       {
         title: 'Tamil Grantha User Manual',
         filename: 'Tamil-Grantha-Manual.pdf',
@@ -447,12 +481,12 @@ export const productCategories: ProductCategory[] = [
         size: '726 KB',
       },
     ],
-    manualAsset: 'Tamil-Manual.pdf / TamilGrantha-Manual.pdf',
-    stickerAsset: 'Tamil-Sticker.pdf / TamilGrantha-Sticker.pdf',
+    manualAsset: 'Tamil-Grantha-Manual.pdf',
+    stickerAsset: 'TamilGrantha-Sticker.pdf',
   },
   {
-    id: 'cat-11',
-    categoryNumber: 11,
+    id: 'cat-12',
+    categoryNumber: 12,
     agreementName: 'Telugu',
     slug: 'telugu',
     deliveredFolders: ['Telugu'],
@@ -460,7 +494,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'te-Telu',
     iso15924: 'Telu',
     defaultFont: 'Noto Sans Telugu',
-    specimenGlyphs: 'నవ్ బ్రాహ్మి',
+    specimenGlyphs: 'అ',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-నవ్ బ్రాహ్మి-TeluguLanguageTypingMadeEasy-Objects.svg',
     overview:
@@ -491,8 +525,8 @@ export const productCategories: ProductCategory[] = [
     stickerAsset: 'Telugu-Sticker.pdf',
   },
   {
-    id: 'cat-12',
-    categoryNumber: 12,
+    id: 'cat-13',
+    categoryNumber: 13,
     agreementName: 'Tulu (Tigalari)',
     slug: 'tulu',
     deliveredFolders: ['Tulu'],
@@ -500,7 +534,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'tcy-Tglr',
     iso15924: 'Tglr',
     defaultFont: 'Brahmi Tulu-Tigalari 2026 by Nav Brahmi',
-    specimenGlyphs: '𑎡𑎰 𑎪𑎳𑎵𑎱𑎬',
+    specimenGlyphs: '𑎀',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Tulu-LanguageTypingMadeEasy-Object.svg',
     overview:
@@ -531,8 +565,8 @@ export const productCategories: ProductCategory[] = [
     stickerAsset: 'Tulu-Sticker.pdf',
   },
   {
-    id: 'cat-13',
-    categoryNumber: 13,
+    id: 'cat-14',
+    categoryNumber: 14,
     agreementName: 'Sharada (Kashmiri)',
     slug: 'sharada',
     deliveredFolders: ['Sharada'],
@@ -540,7 +574,7 @@ export const productCategories: ProductCategory[] = [
     bcp47Tag: 'ks-Shrd',
     iso15924: 'Shrd',
     defaultFont: 'Noto Sans Sharada',
-    specimenGlyphs: '𑆤𑆮 𑆧𑇀𑆫𑆳𑆲𑇀𑆩𑆵',
+    specimenGlyphs: '𑆃',
     specimenSource: 'CLIENT_MANUAL',
     logoSvg: '/logos/Final-Logo-Sharada-IndicLanguageTypingMadeEasy-Objects.svg',
     overview:

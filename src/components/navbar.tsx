@@ -64,9 +64,9 @@ export function Navbar() {
           onClick={() => setIsOpen(false)}
         >
           <Image
-            src="/logos/NavBrahmi-Logo.svg"
+            src="/logos/nb-logo-white.png"
             alt="Nav Brahmi 3x3 Monitor Logo"
-            width={40}
+            width={48}
             height={44}
             className="header-brand-logo"
             priority

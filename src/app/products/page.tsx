@@ -14,10 +14,10 @@ export const metadata = {
 
 export default async function ProductsPage() {
   // Fetch real database products if configured, otherwise handle gracefully
-  let dbProducts: Array<{ slug: string | null; priceMinor: number | null; price: number }> = [];
+  let dbProducts: Array<{ slug: string | null; priceMinor: number | null; price: number; isActive: boolean }> = [];
   try {
     dbProducts = await prisma.product.findMany({
-      select: { slug: true, priceMinor: true, price: true },
+      select: { slug: true, priceMinor: true, price: true, isActive: true },
     });
   } catch (err) {
     // If DB is offline during build/static generation, handle gracefully
@@ -44,10 +44,12 @@ export default async function ProductsPage() {
         <div className="monitor-grid">
           {productCategories.map((cat) => {
             const dbProd = dbProductMap.get(cat.slug);
-            let cardPrice = '₹480.00';
-            if (dbProd?.priceMinor !== null && dbProd?.priceMinor !== undefined) {
+            let cardPrice = 'Price pending';
+            if (dbProd && !dbProd.isActive) {
+              cardPrice = 'Unavailable';
+            } else if (dbProd?.priceMinor !== null && dbProd?.priceMinor !== undefined && dbProd.priceMinor > 0) {
               cardPrice = `₹${(dbProd.priceMinor / 100).toFixed(2)}`;
-            } else if (dbProd?.price !== null && dbProd?.price !== undefined) {
+            } else if (dbProd?.price !== null && dbProd?.price !== undefined && dbProd.price > 0) {
               cardPrice = `₹${dbProd.price.toFixed(2)}`;
             }
 
@@ -69,7 +71,7 @@ export default async function ProductsPage() {
                   {cat.overview.slice(0, 120)}…
                 </p>
                 <span style={{ fontSize: '0.875rem', color: 'var(--link)', fontWeight: 600, marginTop: 'auto', paddingTop: '0.75rem' }}>
-                  View details & purchase →
+                  {dbProd && !dbProd.isActive ? 'View details →' : 'View details & purchase →'}
                 </span>
               </Link>
             );

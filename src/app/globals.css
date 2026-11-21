@@ -519,7 +519,8 @@ a:hover {
 
 .monitor-card-script-sample {
   font-family: var(--font-script);
-  font-size: 1.4rem;
+  font-size: 2.75rem;
+  line-height: 1.2;
   color: var(--brand);
   margin-bottom: var(--space-xs);
 }
@@ -871,6 +872,10 @@ a:hover {
   font-size: 16px; /* 16px prevents iOS Safari auto-zoom */
   font-family: inherit;
   transition: all 0.15s ease;
+}
+
+.input-field.font-script-tulu {
+  font-family: 'Brahmi Tulu-Tigalari', var(--font-script);
 }
 
 .input-field:focus {

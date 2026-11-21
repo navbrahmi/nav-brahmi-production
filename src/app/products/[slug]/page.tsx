@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { productCategories } from '../../../content/categories';
 import { prisma } from '../../../lib/prisma';
 import type { Metadata } from 'next';
@@ -41,6 +41,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CategoryDetailPage({ params }: PageProps) {
   const { slug } = await params;
+  if (slug === 'tamil-and-grantha') {
+    redirect('/products/tamil');
+  }
   const category = productCategories.find((c) => c.slug === slug);
 
   if (!category) {
@@ -48,19 +51,20 @@ export default async function CategoryDetailPage({ params }: PageProps) {
   }
 
   // Attempt to read price from database
-  let dbProduct: { priceMinor: number | null; price: number } | null = null;
+  let dbProduct: { priceMinor: number | null; price: number; isActive: boolean } | null = null;
   try {
     dbProduct = await prisma.product.findFirst({
       where: { slug: category.slug },
-      select: { priceMinor: true, price: true },
+      select: { priceMinor: true, price: true, isActive: true },
     });
   } catch (err) {
     dbProduct = null;
   }
 
-  const hasConfirmedPrice =
-    dbProduct?.priceMinor !== null &&
-    dbProduct?.priceMinor !== undefined &&
+  const isPurchasable =
+    dbProduct?.isActive === true &&
+    dbProduct.priceMinor !== null &&
+    dbProduct.priceMinor !== undefined &&
     dbProduct.priceMinor > 0;
 
   return (
@@ -360,7 +364,7 @@ export default async function CategoryDetailPage({ params }: PageProps) {
           License Purchase: {category.agreementName}
         </h2>
 
-        {hasConfirmedPrice ? (
+        {isPurchasable ? (
           <div style={{ margin: '1rem 0' }}>
             <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-body)' }}>
               ₹{((dbProduct?.priceMinor || 0) / 100).toFixed(2)}
@@ -372,13 +376,13 @@ export default async function CategoryDetailPage({ params }: PageProps) {
         ) : (
           <div className="placeholder-notice" role="note">
             <div>
-              <strong>Pricing Notice:</strong> Official retail price is ₹480 (tax-inclusive). Per project rules, prices derive strictly from the database.
+              <strong>Availability Notice:</strong> This product is not currently available for purchase. Pricing and driver package availability are managed from the database.
             </div>
           </div>
         )}
 
         <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {hasConfirmedPrice ? (
+          {isPurchasable ? (
             <Link
               href={`/purchase?product=${category.slug}`}
               className="btn btn-primary"
@@ -394,7 +398,7 @@ export default async function CategoryDetailPage({ params }: PageProps) {
               aria-disabled="true"
               style={{ width: '100%', maxWidth: '320px', cursor: 'not-allowed', opacity: 0.6 }}
             >
-              Price & Checkout Pending Confirmation
+              Currently Unavailable
             </button>
           )}
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>

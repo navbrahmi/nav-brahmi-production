@@ -7,7 +7,7 @@ import { productCategories } from '../content/categories';
 export const metadata = {
   title: 'Home — Indian Language Keyboard Drivers & Typography',
   description:
-    'Nav Brahmi provides native Windows keyboard layout drivers and Unicode typography for 13 classical and modern Indian language categories.',
+    'Nav Brahmi provides native Windows keyboard layout drivers and Unicode typography for 14 classical and modern Indian language categories.',
 };
 
 export default function HomePage() {
@@ -26,7 +26,7 @@ export default function HomePage() {
 
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
               <Link href="/products" className="btn btn-primary">
-                Explore All 13 Categories →
+                Explore All {productCategories.length} Categories →
               </Link>
               <Link href="/instructions" className="btn btn-secondary">
                 Installation Guide
@@ -60,7 +60,7 @@ export default function HomePage() {
           }}
         >
           <Image
-            src="/images/NB-KB-for-FontPage.gif"
+            src="/images/NB-KB-for-HomePage-26FramePerSec.gif"
             alt="Nav Brahmi Patented Bilingual Keyboard Layout for Indian Languages"
             width={1086}
             height={506}
@@ -111,7 +111,7 @@ export default function HomePage() {
 
         <div style={{ textAlign: 'center', marginTop: 'var(--space-lg)' }}>
           <Link href="/products" className="btn btn-secondary">
-            View All 13 Language Categories & Packages ({productCategories.length}) →
+            View All {productCategories.length} Language Categories & Driver Packages →
           </Link>
         </div>
       </section>

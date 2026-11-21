@@ -74,9 +74,9 @@ export const homeContent: HomePageContent = {
   overview: {
     heading: 'Overview of Work & Products',
     body:
-      'Nav Brahmi provides dedicated, native Microsoft Windows keyboard layout drivers for 13 official language categories, spanning classical epigraphic scripts like Ashokan Brahmi, Sharada, Modi, and Tigalari, as well as major modern Indian languages.',
+      'Nav Brahmi provides dedicated, native Microsoft Windows keyboard layout drivers for 14 official language categories, spanning classical epigraphic scripts like Ashokan Brahmi, Sharada, Modi, and Tigalari, as well as major modern Indian languages.',
     statSummary: {
-      categoriesCount: 13,
+      categoriesCount: 14,
       productsDelivered: 14,
       operatingSystem: 'Microsoft Windows 11 (64-bit x64)',
       standard: 'Full Unicode Compliance',
@@ -85,6 +85,6 @@ export const homeContent: HomePageContent = {
   motifGrid: {
     heading: 'Script & Language Catalog',
     subheading:
-      'Explore the 13 language categories featuring the authentic 3×3 monitor motif from the official Nav Brahmi identity.',
+      'Explore the 14 language categories featuring the authentic 3×3 monitor motif from the official Nav Brahmi identity.',
   },
 };
