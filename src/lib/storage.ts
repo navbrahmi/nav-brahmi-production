@@ -152,6 +152,29 @@ export async function headObject(objectKey: string): Promise<{ sizeBytes: number
 }
 
 /**
+ * Retrieves raw buffer for an object from storage (B2/R2).
+ */
+export async function getObjectBuffer(objectKey: string): Promise<Buffer | null> {
+  const { s3Client, bucketName } = getStorageClient();
+
+  try {
+    const command = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: objectKey,
+    });
+    const response = await s3Client.send(command);
+    if (!response.Body) return null;
+    const byteArray = await response.Body.transformToByteArray();
+    return Buffer.from(byteArray);
+  } catch (err: any) {
+    if (err?.$metadata?.httpStatusCode === 404 || err.name === 'NotFound' || err.Code === 'NoSuchKey') {
+      return null;
+    }
+    throw err;
+  }
+}
+
+/**
  * Upload helper used strictly by administration/sync scripts.
  */
 export async function uploadObject(

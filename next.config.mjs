@@ -35,6 +35,9 @@ function buildCspHeader(env = process.env) {
 
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracingIncludes: {
+    '/api/**/*': ['./Requirements/windows-driver/**/*'],
+  },
   async headers() {
     return [
       {

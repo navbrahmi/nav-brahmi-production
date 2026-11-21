@@ -29,7 +29,6 @@ export interface InstructionsContent {
     issue: string;
     resolution: string;
   }[];
-  clientNotesPending: string;
 }
 
 export const instructionsContent: InstructionsContent = {
@@ -89,6 +88,4 @@ export const instructionsContent: InstructionsContent = {
         'Install the corresponding Unicode font family included with your package. Ensure your word processor (e.g. Word, LibreOffice, or browser) is configured to use the Unicode font.',
     },
   ],
-  clientNotesPending:
-    'PLACEHOLDER: Pending client confirmation of final installer step-by-step screenshots and video walkthrough (C-17, C-06)',
 };

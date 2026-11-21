@@ -7,6 +7,7 @@ import { verifyActivationToken } from '@/lib/keys';
 import { decryptLicenseKey } from '@/lib/license-crypto';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
+import { getObjectBuffer } from '@/lib/storage';
 
 export const dynamic = 'force-dynamic';
 
@@ -140,16 +141,42 @@ async function serveInstaller(
     });
 
     const filename = 'Setup.exe';
-    const filePath = path.resolve(process.cwd(), 'Requirements', 'windows-driver', filename);
+    const localPaths = [
+      path.resolve(process.cwd(), 'Requirements', 'windows-driver', filename),
+      path.resolve('/tmp', filename),
+    ];
 
-    if (!fs.existsSync(filePath)) {
+    let fileBuffer: Buffer | null = null;
+    for (const p of localPaths) {
+      if (fs.existsSync(p)) {
+        try {
+          fileBuffer = fs.readFileSync(p);
+          break;
+        } catch {}
+      }
+    }
+
+    // Cloud fallback: fetch master Setup.exe bootstrapper from B2 storage if absent locally
+    if (!fileBuffer) {
+      try {
+        const b2Buffer = await getObjectBuffer('bootstrapper/Setup.exe');
+        if (b2Buffer && b2Buffer.length > 0) {
+          fileBuffer = b2Buffer;
+          try {
+            fs.writeFileSync(path.resolve('/tmp', filename), b2Buffer);
+          } catch {}
+        }
+      } catch (storageErr: any) {
+        logger.error('Failed to retrieve Setup.exe from cloud storage', { error: storageErr?.message });
+      }
+    }
+
+    if (!fileBuffer) {
       return NextResponse.json(
         { error: 'Installer binary not available on server.' },
         { status: 404 }
       );
     }
-
-    let fileBuffer = fs.readFileSync(filePath);
 
     // Attach signed authorization payload block to Setup.exe
     const payloadObj = {
@@ -164,7 +191,7 @@ async function serveInstaller(
     );
     fileBuffer = Buffer.concat([fileBuffer, payloadBlock]);
 
-    return new NextResponse(fileBuffer, {
+    return new NextResponse(new Uint8Array(fileBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.microsoft.portable-executable',
