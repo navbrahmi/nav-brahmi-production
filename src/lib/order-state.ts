@@ -53,8 +53,8 @@ export const VALID_ORDER_TRANSITIONS: Record<OrderStatus, readonly OrderStatus[]
   REFUNDED: [OrderStatus.REVOKED],
   DISPUTED: [OrderStatus.REVOKED, OrderStatus.REFUNDED, OrderStatus.NEEDS_ATTENTION],
   REVOKED: [], // Terminal
-  FAILED: [OrderStatus.PAYMENT_PENDING], // Allows customer retry from beginning
-  EXPIRED: [OrderStatus.PAYMENT_PENDING], // Allows customer retry
+  FAILED: [OrderStatus.PAYMENT_PENDING, OrderStatus.PAID], // Allows customer retry or direct successful capture on retry
+  EXPIRED: [OrderStatus.PAYMENT_PENDING, OrderStatus.PAID], // Allows customer retry or direct capture
 };
 
 export class IllegalOrderStateTransitionError extends Error {

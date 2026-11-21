@@ -54,11 +54,15 @@ describe('Order State Machine Transitions (docs/production/06 §3)', () => {
     );
   });
 
-  it('should allow transition to failure/expiration from pending states', () => {
+  it('should allow transition to failure/expiration from pending states and recovery to PAID upon retry', () => {
     assert.strictEqual(isValidOrderTransition(OrderStatus.CREATED, OrderStatus.EXPIRED), true);
     assert.strictEqual(isValidOrderTransition(OrderStatus.PAYMENT_PENDING, OrderStatus.FAILED), true);
     assert.strictEqual(isValidOrderTransition(OrderStatus.PAYMENT_PENDING, OrderStatus.EXPIRED), true);
     assert.strictEqual(isValidOrderTransition(OrderStatus.PAYMENT_PENDING, OrderStatus.PAYMENT_MISMATCH), true);
+    // Allow retry recovery
+    assert.strictEqual(isValidOrderTransition(OrderStatus.FAILED, OrderStatus.PAID), true);
+    assert.strictEqual(isValidOrderTransition(OrderStatus.FAILED, OrderStatus.PAYMENT_PENDING), true);
+    assert.strictEqual(isValidOrderTransition(OrderStatus.EXPIRED, OrderStatus.PAID), true);
   });
 
   it('should treat REVOKED as a terminal state with no outbound transitions', () => {
